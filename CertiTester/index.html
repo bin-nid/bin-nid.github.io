@@ -1007,7 +1007,7 @@
 
         .question-text table th,
         .question-text table td {
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--primary-color);
             padding: 0.75rem;
             text-align: left;
             vertical-align: top;
@@ -1017,7 +1017,7 @@
             background-color: #f8f9fa;
             font-weight: 600;
             color: var(--text-primary);
-            border-bottom: 2px solid var(--primary-color);
+            border: 2px solid var(--primary-color);
         }
 
         .question-text table tr:nth-child(even) {
@@ -1030,16 +1030,16 @@
 
         .question-text table td:first-child,
         .question-text table th:first-child {
-            border-left: 2px solid var(--primary-color);
+            border: 2px solid var(--primary-color);
         }
 
         .question-text table td:last-child,
         .question-text table th:last-child {
-            border-right: 2px solid var(--primary-color);
+            border: 2px solid var(--primary-color);
         }
 
         .question-text table tr:last-child td {
-            border-bottom: 2px solid var(--primary-color);
+            border: 2px solid var(--primary-color);
         }
 
         /* 响应式表格 */
@@ -1083,6 +1083,13 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+        }
+
+        /* 这是实现响应式图片的关键CSS */
+        .responsive-img {
+            max-width: 100%;
+            height: auto;
+            display: block; /* 移除图片下方的微小间隙 */
         }
     </style>
 </head>
