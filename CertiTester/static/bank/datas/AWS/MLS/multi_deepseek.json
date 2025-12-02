@@ -837,8 +837,8 @@
   {
     "id": "17",
     "question": {
-      "enus": "A Data Scientist is developing a machine learning model to classify whether a financial transaction is fraudulent. The labeled data available for training consists of 100,000 non-fraudulent observations and 1,000 fraudulent observations. The Data Scientist applies the XGBoost algorithm to the data, resulting in the following confusion matrix when the trained model is applied to a previously unseen validation dataset. The accuracy of the model is 99.1%, but the Data Scientist needs to reduce the number of false negatives. Which combination of steps should the Data Scientist take to reduce the number of false negative predictions by the model? (Choose two.) ",
-      "zhcn": "一位数据科学家正在开发一个用于甄别金融交易是否涉嫌欺诈的机器学习模型。现有训练标签数据包含10万条正常交易记录与1000条欺诈交易记录。该科学家采用XGBoost算法对数据进行训练，当模型在未参与训练的验证数据集上测试时，得出如下混淆矩阵。模型准确率虽达99.1%，但需降低伪阴性判定数量。请问应采取哪两项措施来减少模型的伪阴性预测结果？（请选择两项）"
+      "enus": "A Data Scientist is developing a machine learning model to classify whether a financial transaction is fraudulent. The labeled data available for training consists of 100,000 non-fraudulent observations and 1,000 fraudulent observations. The Data Scientist applies the XGBoost algorithm to the data, resulting in the following confusion matrix when the trained model is applied to a previously unseen validation dataset. The accuracy of the model is 99.1%, but the Data Scientist needs to reduce the number of false negatives. \n| | Predicted 0 | Predicted 1 |\n| ---- | ---- | ---- |\n| Actual 0 | 99,966 | 34 |\n| Actual 1 | 877 | 123 |\n\nWhich combination of steps should the Data Scientist take to reduce the number of false negative predictions by the model? (Choose two.) ",
+      "zhcn": "一位数据科学家正在开发一个用于甄别金融交易是否涉嫌欺诈的机器学习模型。现有训练标签数据包含10万条正常交易记录与1000条欺诈交易记录。该科学家采用XGBoost算法对数据进行训练，当模型在未参与训练的验证数据集上测试时，得出如下混淆矩阵。模型准确率虽达99.1%，但需降低伪阴性判定数量。\n| | Predicted 0 | Predicted 1 |\n| ---- | ---- | ---- |\n| Actual 0 | 99,966 | 34 |\n| Actual 1 | 877 | 123 |\n\n请问应采取哪两项措施来减少模型的伪阴性预测结果？（请选择两项）"
     },
     "option": [
       {
@@ -853,7 +853,7 @@
           "zhcn": "适当提高XGBoost模型的scale_pos_weight参数值，可有效调节正负样本的权重平衡。",
           "enus": "Increase the XGBoost scale_pos_weight parameter to adjust the balance of positive and negative weights."
         },
-        "option_flag": false
+        "option_flag": true
       },
       {
         "option_text": {
@@ -874,14 +874,14 @@
           "zhcn": "降低XGBoost模型的max_depth参数值，以缓解当前模型对数据的过拟合现象。",
           "enus": "Decrease the XGBoost max_depth parameter because the model is currently overfitting the data."
         },
-        "option_flag": true
+        "option_flag": false
       }
     ],
     "analysis": {
       "enus": "正确答案如下：  \n- **调整XGBoost模型的eval_metric参数，改用ROC曲线下面积（AUC）作为优化指标。**  \n- **降低XGBoost的max_depth参数，因为当前模型存在过拟合现象。**  \n\n**理由如下：**  \n数据集中存在严重类别不平衡（10万条正常交易对比1千条欺诈交易），模型虽具备高准确率（99.1%），但漏报数量过多。  \n- **AUC指标**更适合处理不平衡分类问题，它能综合评估模型在不同阈值下区分正负样本的能力，通过优化真阳性率与假阳性率的平衡来减少漏报。  \n- **降低max_depth**可缓解过拟合；若模型过度拟合训练数据，其对少数类的泛化能力会下降，从而导致更多漏报。  \n\n**错误选项辨析：**  \n- **RMSE**主要适用于回归任务，不适用于本分类场景。  \n- **增加scale_pos_weight**本身是处理不平衡数据的有效手段，但在此题给出的正确选项组合中，与之对应的正确策略应是采用AUC指标并控制过拟合。  \n- **增加max_depth**会提升模型复杂度，可能加剧过拟合现象，并因泛化能力下降而增加漏报风险。",
       "zhcn": "好的，我们先来逐步分析这个问题。  \n\n---\n\n## 1. 问题理解\n\n- **业务目标**：减少模型在验证集上的 **false negatives（FN）**。  \n  - 在欺诈检测场景中，FN = 真实为欺诈但被预测为正常的交易，这是非常危险的。  \n- **数据情况**：  \n  - 训练数据：100,000 个非欺诈，1,000 个欺诈 → **类别不平衡**（负样本远多于正样本）。  \n- **模型**：XGBoost  \n- **当前表现**：准确率 99.1% 很高（因为多数类为非欺诈），但 FN 需要降低。  \n\n---\n\n## 2. 减少 false negatives 的思路\n\n在分类中，降低 FN 意味着要更敏感地预测正类（欺诈），即使可能增加 false positives（FP）。  \n常用方法：\n\n1. **调整分类阈值**：默认阈值 0.5，降低阈值（如 0.3）会使更多样本被分为正类，从而减少 FN。  \n   - 但 XGBoost 训练时一般用默认阈值优化目标，调整阈值通常在预测阶段做，不过题目问的是 **训练中** 可采取的参数调整。  \n\n2. **修改模型训练目标/权重**：  \n   - 对不平衡数据，XGBoost 有 `scale_pos_weight` 参数，通常设为 `负样本数/正样本数`（这里是 100）来平衡。  \n   - 但题目说 **已经用了 XGBoost** 得到当前模型，且现在要 **进一步减少 FN**。  \n     - 如果之前没有设置 `scale_pos_weight`，那么增加它可以减少 FN。  \n     - 如果已经设置过，可能需要进一步增加该值（大于 100）来给正类更高权重。  \n   - 选项 [B] 说 “Increase the scale_pos_weight parameter” → 这确实会减少 FN，因为模型更重视正样本的分类正确。  \n\n3. **选择合适的评估指标**：  \n   - 准确率在不平衡数据下不可靠，应用 AUC、F1-score、召回率等。  \n   - 如果训练时用 `eval_metric=\"auc\"`，模型会优化 AUC（兼顾召回率与精确率），可能比默认的错误率指标更关注正类的识别。  \n   - 选项 [D] 说改为 AUC 作为 eval_metric，这有助于减少 FN（相比用分类错误率）。  \n\n4. **过拟合/欠拟合调整**：  \n   - 如果模型过拟合（对多数类拟合太好，对少数类学得差），可能导致 FN 高。  \n   - 降低 `max_depth` 可以减少过拟合，可能提升泛化性能，但对 FN 的影响要看情况：  \n     - 如果过拟合表现为对少数类噪声也拟合，导致阈值附近决策边界不好，适当简化模型可能让边界更平滑，反而可能提高召回率？不一定。  \n     - 但通常降低树深会降低模型复杂度，可能让少数类模式更难学，反而可能增加 FN，所以这个方向要小心。  \n   - 题目说准确率 99.1%，很可能过拟合了多数类，需要降低复杂度来让模型更关注重要特征（包括欺诈的特征），从而可能减少 FN。  \n\n---\n\n## 3. 选项分析\n\n[A] RMSE（回归指标）→ 不适用于分类问题（虽然二分类时可以用，但一般不推荐，对不平衡数据不利）→ 不会帮助减少 FN。  \n\n[B] 增加 `scale_pos_weight` → 直接增加正样本权重，会降低 FN ✅  \n\n[C] 增加 `max_depth`（认为欠拟合）→ 但数据不平衡下准确率 99.1% 不太可能是欠拟合，更可能过拟合，增加深度可能让 FN 更差。  \n\n[D] 改用 AUC 作为 eval_metric → 优化 AUC 会改善排序能力，通常提高召回率（减少 FN）✅  \n\n[E] 降低 `max_depth`（认为过拟合）→ 如果确实过拟合，简化模型可能让决策更依赖显著特征，可能帮助减少 FN（需谨慎，但官方答案似乎选这个）。  \n\n---\n\n## 4. 官方答案分析\n\n官方答案是 **D 和 E**。  \n- D：改用 AUC 指标 → 合理。  \n- E：降低 max_depth 防止过拟合 → 可能他们的思路是：过拟合时模型对少数类学得不好，泛化时 FN 高，通过降低复杂度提高泛化性能，从而在验证集上 FN 降低。  \n\n但很多实际情况下，**增加 scale_pos_weight (B) 是更直接有效减少 FN 的方法**，可能题目假设已经用默认 scale_pos_weight=1 训练，此时降低过拟合（E）和换评估指标（D）是他们的推荐组合。  \n\n---\n\n## 5. 最终判断\n\n按照题目给出的参考答案：  \n\n**[D]** 和 **[E]**  \n\n**中文答案解析**：  \n为了减少假阴性（即漏报的欺诈交易），数据科学家可以采取以下两种措施：  \n1. **将评估指标改为 AUC**（D），因为 AUC 关注排序性能和正负例的整体区分度，优化 AUC 通常会提升召回率，从而减少假阴性。  \n2. **降低 max_depth 参数**（E），因为当前模型可能过拟合了多数类（非欺诈交易），通过降低模型复杂度，可以提高泛化能力，使模型更专注于显著特征，从而改善对少数类（欺诈）的识别。  \n\n---\n\n**答案**：**D, E** ✅"
     },
-    "answer": "DE",
+    "answer": "BD",
     "o_id": "123"
   },
   {
