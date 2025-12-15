@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "id": "21",
     "question": {
       "enus": "A Machine Learning Specialist is configuring Amazon SageMaker so multiple Data Scientists can access notebooks, train models, and deploy endpoints. To ensure the best operational performance, the Specialist needs to be able to track how often the Scientists are deploying models, GPU and CPU utilization on the deployed SageMaker endpoints, and all errors that are generated when an endpoint is invoked. Which services are integrated with Amazon SageMaker to track this information? (Choose two.) ",
       "zhcn": "亚马逊机器学习专家正在配置Amazon SageMaker平台，以便多位数据科学家能够访问笔记本书写环境、训练模型并部署服务终端。为保障系统的最佳运行效能，该专家需持续追踪科学家们部署模型的频率、已部署SageMaker终端上的GPU与CPU资源利用率，以及终端调用时产生的所有错误信息。下列哪两项服务与Amazon SageMaker原生集成，可协助实现上述监控目标？（请选择两项正确答案）"
@@ -50,7 +50,7 @@
     "o_id": "21"
   },
   {
-    "id": "2",
+    "id": "27",
     "question": {
       "enus": "A Machine Learning Specialist is creating a new natural language processing application that processes a dataset comprised of 1 million sentences. The aim is to then run Word2Vec to generate embeddings of the sentences and enable different types of predictions. Here is an example from the dataset: \"The quck BROWN FOX jumps over the lazy dog.` Which of the following are the operations the Specialist needs to perform to correctly sanitize and prepare the data in a repeatable manner? (Choose three.) ",
       "zhcn": "一位机器学习专家正在开发一款新型自然语言处理应用，需处理包含百万句量的数据集。该项目旨在通过Word2Vec技术生成语句的嵌入向量，以支持多种预测功能。现有一则数据示例：\"The quck BROWN FOX jumps over the lazy dog.\" 请选出专家需采用哪三项操作，方能以可复现的方式正确完成数据清洗与预处理？"
@@ -107,7 +107,7 @@
     "o_id": "27"
   },
   {
-    "id": "3",
+    "id": "29",
     "question": {
       "enus": "An insurance company is developing a new device for vehicles that uses a camera to observe drivers' behavior and alert them when they appear distracted. The company created approximately 10,000 training images in a controlled environment that a Machine Learning Specialist will use to train and evaluate machine learning models. During the model evaluation, the Specialist notices that the training error rate diminishes faster as the number of epochs increases and the model is not accurately inferring on the unseen test images. Which of the following should be used to resolve this issue? (Choose two.) ",
       "zhcn": "一家保险公司正在研发一款车载新型装置，该装置通过摄像头监测驾驶员行为，并在察觉其分心时发出警示。公司已在受控环境中创建了约一万张训练图像，供机器学习专家用于训练和评估模型。专家在模型评估过程中发现，随着训练周期增加，训练误差率下降速度过快，且模型对未见过测试图像的推断结果欠佳。应采取以下哪两项措施解决此问题？（请选择两项答案）"
@@ -157,10 +157,10 @@
     "o_id": "29"
   },
   {
-    "id": "4",
+    "id": "30",
     "question": {
       "enus": "When submitting Amazon SageMaker training jobs using one of the built-in algorithms, which common parameters MUST be specified? (Choose three.) ",
-      "zhcn": "在使用亚马逊SageMaker内置算法提交训练任务时，必须指定以下哪三个通用参数？（请选择三项。）"
+      "zhcn": "在使用Amazon SageMaker内置算法提交训练任务时，必须指定以下哪三个通用参数？（请选择三项。）"
     },
     "option": [
       {
@@ -179,7 +179,7 @@
       },
       {
         "option_text": {
-          "zhcn": "亚马逊SageMaker可代用户执行任务时所承担的IAM角色。",
+          "zhcn": "Amazon SageMaker可代用户执行任务时所承担的IAM角色。",
           "enus": "The IAM role that Amazon SageMaker can assume to perform tasks on behalf of the users."
         },
         "option_flag": false
@@ -214,7 +214,7 @@
     "o_id": "30"
   },
   {
-    "id": "5",
+    "id": "33",
     "question": {
       "enus": "A gaming company has launched an online game where people can start playing for free, but they need to pay if they choose to use certain features. The company needs to build an automated system to predict whether or not a new user will become a paid user within 1 year. The company has gathered a labeled dataset from 1 million users. The training dataset consists of 1,000 positive samples (from users who ended up paying within 1 year) and 999,000 negative samples (from users who did not use any paid features). Each data sample consists of 200 features including user age, device, location, and play patterns. Using this dataset for training, the Data Science team trained a random forest model that converged with over 99% accuracy on the training set. However, the prediction results on a test dataset were not satisfactory Which of the following approaches should the Data Science team take to mitigate this issue? (Choose two.) ",
       "zhcn": "一家游戏公司推出了一款在线游戏，玩家可免费进入体验，但若想使用特定功能则需付费。该公司需构建一套自动化系统，用于预测新用户是否会在一年内转化为付费用户。目前公司已收集了来自100万名用户的标注数据集，其中训练集包含1000个正样本（即一年内最终付费的用户）和999,000个负样本（未使用任何付费功能的用户）。每个数据样本涵盖200项特征，包括用户年龄、设备、地理位置及游戏行为模式。数据科学团队利用该数据集训练随机森林模型，在训练集上收敛后准确率超过99%，但在测试集上的预测效果却不理想。为改善此问题，数据科学团队应采取以下哪两种措施？（请选择两项）"
@@ -264,10 +264,10 @@
     "o_id": "33"
   },
   {
-    "id": "6",
+    "id": "38",
     "question": {
       "enus": "A company is observing low accuracy while training on the default built-in image classification algorithm in Amazon SageMaker. The Data Science team wants to use an Inception neural network architecture instead of a ResNet architecture. Which of the following will accomplish this? (Choose two.) ",
-      "zhcn": "某公司在使用亚马逊SageMaker内置默认图像分类算法进行训练时发现准确率偏低。数据科学团队希望采用Inception神经网络架构替代原有的ResNet架构。下列哪两项措施能够实现这一目标？（请选择两个正确答案。）"
+      "zhcn": "某公司在使用Amazon SageMaker内置默认图像分类算法进行训练时发现准确率偏低。数据科学团队希望采用Inception神经网络架构替代原有的ResNet架构。下列哪两项措施能够实现这一目标？（请选择两个正确答案。）"
     },
     "option": [
       {
@@ -300,7 +300,7 @@
       },
       {
         "option_text": {
-          "zhcn": "将初始网络代码下载并利用apt-get安装至亚马逊EC2实例，随后将该实例配置为亚马逊SageMaker平台中的Jupyter笔记本运行环境。",
+          "zhcn": "将初始网络代码下载并利用apt-get安装至亚马逊EC2实例，随后将该实例配置为Amazon SageMaker平台中的Jupyter笔记本运行环境。",
           "enus": "Download and apt-get install the inception network code into an Amazon EC2 instance and use this instance as a Jupyter notebook in  Amazon SageMaker."
         },
         "option_flag": false
@@ -314,7 +314,7 @@
     "o_id": "38"
   },
   {
-    "id": "7",
+    "id": "44",
     "question": {
       "enus": "A Machine Learning Specialist has created a deep learning neural network model that performs well on the training data but performs poorly on the test data. Which of the following methods should the Specialist consider using to correct this? (Choose three.) ",
       "zhcn": "一位机器学习专家构建了一个深度学习神经网络模型，该模型在训练数据上表现优异，但在测试数据上表现欠佳。请问该专家应考虑采用以下哪些方法来解决此问题？（选择三项。）"
@@ -371,7 +371,7 @@
     "o_id": "44"
   },
   {
-    "id": "8",
+    "id": "68",
     "question": {
       "enus": "An agency collects census information within a country to determine healthcare and social program needs by province and city. The census form collects responses for approximately 500 questions from each citizen. Which combination of algorithms would provide the appropriate insights? (Choose two.) ",
       "zhcn": "某国普查机构为掌握各省市医疗与社会福利需求，定期开展人口普查。普查问卷涵盖近500项居民信息采集项。下列哪两种算法组合最适用于此类数据分析？（请选择两项）"
@@ -421,7 +421,7 @@
     "o_id": "68"
   },
   {
-    "id": "9",
+    "id": "72",
     "question": {
       "enus": "A Data Scientist is building a model to predict customer churn using a dataset of 100 continuous numerical features. The Marketing team has not provided any insight about which features are relevant for churn prediction. The Marketing team wants to interpret the model and see the direct impact of relevant features on the model outcome. While training a logistic regression model, the Data Scientist observes that there is a wide gap between the training and validation set accuracy. Which methods can the Data Scientist use to improve the model performance and satisfy the Marketing team's needs? (Choose two.) ",
       "zhcn": "一位数据科学家正在利用包含100个连续数值特征的数据集构建客户流失预测模型。市场营销团队未提供任何关于哪些特征与流失预测相关的指导。该团队希望解读模型，并观察相关特征对模型结果的直接影响。在训练逻辑回归模型时，数据科学家发现训练集与验证集的准确率存在显著差异。此时，数据科学家可采用哪两种方法来提升模型性能并满足市场营销团队的需求？"
@@ -471,7 +471,7 @@
     "o_id": "72"
   },
   {
-    "id": "10",
+    "id": "74",
     "question": {
       "enus": "A Machine Learning team runs its own training algorithm on Amazon SageMaker. The training algorithm requires external assets. The team needs to submit both its own algorithm code and algorithm-specific parameters to Amazon SageMaker. What combination of services should the team use to build a custom algorithm in Amazon SageMaker? (Choose two.) ",
       "zhcn": "某机器学习团队在Amazon SageMaker平台上运行自研的训练算法。该训练过程需调用外部资源，因此团队既要提交自有算法代码，又需配置算法专属参数。若要在Amazon SageMaker中构建定制化算法，应选择哪两项服务组合？（请选出两个正确答案）"
@@ -521,7 +521,7 @@
     "o_id": "74"
   },
   {
-    "id": "11",
+    "id": "77",
     "question": {
       "enus": "A Machine Learning Specialist needs to move and transform data in preparation for training. Some of the data needs to be processed in near- real time, and other data can be moved hourly. There are existing Amazon EMR MapReduce jobs to clean and feature engineering to perform on the data. Which of the following services can feed data to the MapReduce jobs? (Choose two.) ",
       "zhcn": "一位机器学习专家需要迁移和转换数据以准备训练模型。部分数据需近实时处理，其余数据可每小时批量传输。现有Amazon EMR MapReduce任务负责数据清洗与特征工程。下列哪两项服务可为MapReduce任务提供数据源？（请选择两项答案）"
@@ -571,7 +571,7 @@
     "o_id": "77"
   },
   {
-    "id": "12",
+    "id": "87",
     "question": {
       "enus": "A Data Scientist needs to analyze employment data. The dataset contains approximately 10 million observations on people across 10 different features. During the preliminary analysis, the Data Scientist notices that income and age distributions are not normal. While income levels shows a right skew as expected, with fewer individuals having a higher income, the age distribution also shows a right skew, with fewer older individuals participating in the workforce. Which feature transformations can the Data Scientist apply to fix the incorrectly skewed data? (Choose two.) ",
       "zhcn": "数据科学家需对就业数据进行分析。该数据集包含约1000万条人员记录，涉及十个特征变量。初步分析发现收入与年龄的分布形态有违常态：收入水平如预期呈现右偏分布，即高收入群体占比递减；然而年龄分布同样出现右偏，表明劳动力市场中高龄参与者比例异常偏低。为修正这种非常规偏态分布，数据科学家可采用哪两种特征转换方法？（请选择两项）"
@@ -621,7 +621,7 @@
     "o_id": "87"
   },
   {
-    "id": "13",
+    "id": "94",
     "question": {
       "enus": "A health care company is planning to use neural networks to classify their X-ray images into normal and abnormal classes. The labeled data is divided into a training set of 1,000 images and a test set of 200 images. The initial training of a neural network model with 50 hidden layers yielded 99% accuracy on the training set, but only 55% accuracy on the test set. What changes should the Specialist consider to solve this issue? (Choose three.) ",
       "zhcn": "一家医疗保健公司计划运用神经网络技术，将其X光图像分类为正常与异常两类。现有标注数据被划分为包含1000张图像的训练集和200张图像的测试集。在采用含50个隐藏层的神经网络进行初步训练后，模型在训练集上准确率达到99%，但在测试集上仅取得55%的准确率。为改善这一状况，专家应考虑采取哪些调整措施？（请选择三项）"
@@ -678,7 +678,7 @@
     "o_id": "94"
   },
   {
-    "id": "14",
+    "id": "97",
     "question": {
       "enus": "A large company has developed a BI application that generates reports and dashboards using data collected from various operational metrics. The company wants to provide executives with an enhanced experience so they can use natural language to get data from the reports. The company wants the executives to be able ask questions using written and spoken interfaces. Which combination of services can be used to build this conversational interface? (Choose three.) ",
       "zhcn": "某大型企业开发了一套商业智能应用，通过整合多维度运营指标数据生成报表与可视化看板。为提升高管的使用体验，公司计划构建自然语言交互功能，使其能通过书面或语音方式直接查询报表数据。下列哪三种服务组合可用于构建此类对话式交互界面？（请选择三项）"
@@ -735,7 +735,7 @@
     "o_id": "97"
   },
   {
-    "id": "15",
+    "id": "116",
     "question": {
       "enus": "A machine learning (ML) specialist wants to secure calls to the Amazon SageMaker Service API. The specialist has configured Amazon VPC with a VPC interface endpoint for the Amazon SageMaker Service API and is attempting to secure trafic from specific sets of instances and IAM users. The VPC is configured with a single public subnet. Which combination of steps should the ML specialist take to secure the trafic? (Choose two.) ",
       "zhcn": "一位机器学习专家需确保对Amazon SageMaker服务API的调用安全。该专家已为Amazon SageMaker服务API配置了具备VPC接口端点的Amazon VPC，并试图限制来自特定实例组和IAM用户的流量。该VPC目前仅配置一个公共子网。请问该机器学习专家应采取哪两项组合措施来保障流量安全？（请选择两项）"
@@ -785,7 +785,7 @@
     "o_id": "116"
   },
   {
-    "id": "16",
+    "id": "118",
     "question": {
       "enus": "A logistics company needs a forecast model to predict next month's inventory requirements for a single item in 10 warehouses. A machine learning specialist uses Amazon Forecast to develop a forecast model from 3 years of monthly data. There is no missing data. The specialist selects the DeepAR+ algorithm to train a predictor. The predictor means absolute percentage error (MAPE) is much larger than the MAPE produced by the current human forecasters. Which changes to the CreatePredictor API call could improve the MAPE? (Choose two.) ",
       "zhcn": "一家物流公司需要一种预测模型，用以预估未来一个月内10个仓库对某单一商品的库存需求。一位机器学习专家运用Amazon Forecast服务平台，基于三年间的月度数据构建预测模型。数据集完整无缺失。该专家选用DeepAR+算法训练预测器，但所得预测器的平均绝对百分比误差（MAPE）远高于现行人工预测的误差值。请问对CreatePredictor API调用进行哪些调整可改善MAPE指标？（请选择两项正确方案）"
@@ -835,7 +835,7 @@
     "o_id": "118"
   },
   {
-    "id": "17",
+    "id": "123",
     "question": {
       "enus": "A Data Scientist is developing a machine learning model to classify whether a financial transaction is fraudulent. The labeled data available for training consists of 100,000 non-fraudulent observations and 1,000 fraudulent observations. The Data Scientist applies the XGBoost algorithm to the data, resulting in the following confusion matrix when the trained model is applied to a previously unseen validation dataset. The accuracy of the model is 99.1%, but the Data Scientist needs to reduce the number of false negatives. \n| | Predicted 0 | Predicted 1 |\n| ---- | ---- | ---- |\n| Actual 0 | 99,966 | 34 |\n| Actual 1 | 877 | 123 |\n\nWhich combination of steps should the Data Scientist take to reduce the number of false negative predictions by the model? (Choose two.) ",
       "zhcn": "一位数据科学家正在开发一个用于甄别金融交易是否涉嫌欺诈的机器学习模型。现有训练标签数据包含10万条正常交易记录与1000条欺诈交易记录。该科学家采用XGBoost算法对数据进行训练，当模型在未参与训练的验证数据集上测试时，得出如下混淆矩阵。模型准确率虽达99.1%，但需降低伪阴性判定数量。\n| | Predicted 0 | Predicted 1 |\n| ---- | ---- | ---- |\n| Actual 0 | 99,966 | 34 |\n| Actual 1 | 877 | 123 |\n\n请问应采取哪两项措施来减少模型的伪阴性预测结果？（请选择两项）"
@@ -885,7 +885,7 @@
     "o_id": "123"
   },
   {
-    "id": "18",
+    "id": "125",
     "question": {
       "enus": "A financial company is trying to detect credit card fraud. The company observed that, on average, 2% of credit card transactions were fraudulent. A data scientist trained a classifier on a year's worth of credit card transactions data. The model needs to identify the fraudulent transactions (positives) from the regular ones (negatives). The company's goal is to accurately capture as many positives as possible. Which metrics should the data scientist use to optimize the model? (Choose two.) ",
       "zhcn": "一家金融公司正致力于检测信用卡欺诈行为。据观察，信用卡交易中平均约有2%存在欺诈情况。数据科学家基于全年信用卡交易数据训练了一个分类模型，该模型需从常规交易（负类）中准确识别欺诈交易（正类）。公司的核心目标是尽可能全面地捕捉所有正类样本。请问数据科学家应优先采用哪两项指标来优化模型？（请选择两项）"
@@ -935,7 +935,7 @@
     "o_id": "125"
   },
   {
-    "id": "19",
+    "id": "131",
     "question": {
       "enus": "A financial services company wants to adopt Amazon SageMaker as its default data science environment. The company's data scientists run machine learning (ML) models on confidential financial data. The company is worried about data egress and wants an ML engineer to secure the environment. Which mechanisms can the ML engineer use to control data egress from SageMaker? (Choose three.) ",
       "zhcn": "一家金融服务公司计划将Amazon SageMaker确定为其标准数据科学环境。该公司的数据科学家需基于机密财务数据运行机器学习模型。由于担忧数据外泄风险，公司希望机器学习工程师能够加固此环境。请问该机器学习工程师可采用以下哪三种机制来控制SageMaker的数据外泄？（请选择三项）"
@@ -992,7 +992,57 @@
     "o_id": "131"
   },
   {
-    "id": "20",
+    "id": "154",
+    "question": {
+      "enus": "A machine learning specialist needs to analyze comments on a news website with users across the globe. The specialist must find the most discussed topics in the comments that are in either English or Spanish. What steps could be used to accomplish this task? (Choose two.) ",
+      "zhcn": "一位机器学习专家需要分析某全球性新闻网站的用户评论。该专家必须从英文或西班牙文评论中找出最受热议的话题。下列哪两个步骤可用于完成此任务？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "运用Amazon SageMaker平台的BlazingText算法，可跨越语言界限自主识别文本主题。请依此展开分析。",
+          "enus": "Use an Amazon SageMaker BlazingText algorithm to find the topics independently from language. Proceed with the analysis."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "如确有必要，可采用Amazon SageMaker序列到序列算法将西班牙语内容译为英文。同时运用SageMaker潜在狄利克雷分布（LDA）算法进行主题挖掘。",
+          "enus": "Use an Amazon SageMaker seq2seq algorithm to translate from Spanish to English, if necessary. Use a SageMaker Latent Dirichlet  Allocation (LDA) algorithm to find the topics."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "如需要，可使用Amazon Translate将西班牙语译为英语，并运用Amazon Comprehend主题建模功能进行主题分析。",
+          "enus": "Use Amazon Translate to translate from Spanish to English, if necessary. Use Amazon Comprehend topic modeling to find the topics."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "如需要，可使用Amazon Translate将西班牙语内容译为英语，并运用Amazon Lex从文本中提取主题信息。",
+          "enus": "Use Amazon Translate to translate from Spanish to English, if necessary. Use Amazon Lex to extract topics form the content."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "如需要，可使用Amazon Translate将西班牙语内容译为英语。随后运用Amazon SageMaker神经主题模型（NTM）进行主题挖掘。",
+          "enus": "Use Amazon Translate to translate from Spanish to English, if necessary. Use Amazon SageMaker Neural Topic Model (NTM) to find the  topics."
+        },
+        "option_flag": true
+      }
+    ],
+    "analysis": {
+      "enus": "参考来源：https://docs.aws.amazon.com/sagemaker/latest/dg/lda.html",
+      "zhcn": "我们先看题目要求：  \n\n1. 分析新闻网站评论（英文或西班牙语）  \n2. 找出最受讨论的话题  \n3. 需要处理两种语言，但最终要统一分析  \n\n---\n\n**关键点**：  \n- 语言统一：需要把西班牙语翻译成英语（或反之），才能一起做主题建模。  \n- 主题建模（topic modeling）可用 Amazon Comprehend 主题建模（托管服务）或 SageMaker 的 LDA/NTM（需自己部署模型）。  \n- 选项必须符合“步骤可行”且“服务合理”的原则。  \n\n---\n\n**逐项分析**：  \n\n**[A] SageMaker BlazingText**  \n- BlazingText 主要用于文本分类或词向量，不是无监督的主题建模，不能直接“找主题”，所以不合适。  \n\n**[B] SageMaker seq2seq + LDA**  \n- seq2seq 在 SageMaker 里通常用于机器翻译，但 Amazon 有专门的 **Amazon Translate** 服务（托管，更简单），没必要用 seq2seq 自己搞翻译。技术上可行，但不是最佳实践，且题目可能倾向托管方案。  \n\n**[C] Amazon Translate + Amazon Comprehend 主题建模**  \n- 完全托管，先用 Translate 统一语言，再用 Comprehend 的主题建模功能，合理且简单。  \n\n**[D] Amazon Translate + Amazon Lex**  \n- Lex 是聊天机器人框架，用于意图识别和槽位提取，不适合对大量评论做无监督主题发现，不合适。  \n\n**[E] Amazon Translate + SageMaker NTM**  \n- NTM 是神经网络主题模型，可以用于主题建模，但需要自己处理训练/部署，Comprehend 是更直接的无代码方案。技术上可行，但题目可能倾向选托管方案（C）和另一个可行方案（E 或 B）。  \n\n---\n\n**官方答案给 C**，说明他们优先选全托管方案。  \n第二项可能选 **E**，因为 NTM 是 SageMaker 提供的主题建模算法，虽然要自己用，但也是合理步骤。  \nB 用 seq2seq 翻译显得绕路，所以不选。  \n\n---\n\n**最终答案**：**C 和 E**（如果官方答案是单选，则只选 C，但题目说 Choose two，所以第二项选 E 合理）。  \n\n但根据常见题库，这道题很多地方答案是 **C 和 E**。"
+    },
+    "answer": "CE",
+    "o_id": "154"
+  },
+  {
+    "id": "156",
     "question": {
       "enus": "A company supplies wholesale clothing to thousands of retail stores. A data scientist must create a model that predicts the daily sales volume for each item for each store. The data scientist discovers that more than half of the stores have been in business for less than 6 months. Sales data is highly consistent from week to week. Daily data from the database has been aggregated weekly, and weeks with no sales are omitted from the current dataset. Five years (100 MB) of sales data is available in Amazon S3. Which factors will adversely impact the performance of the forecast model to be developed, and which actions should the data scientist take to mitigate them? (Choose two.) ",
       "zhcn": "一家公司向数千家零售门店供应服装批发业务。某数据科学家需构建一个模型，用于预测各门店每款商品的日销售量。该科学家发现，超过半数的门店开业时间不足六个月。销售数据在周与周之间呈现高度一致性。数据库中的每日数据已按周进行汇总，且当前数据集中已剔除无销售记录的周次。亚马逊S3平台存有五年累计100MB的销售数据。哪些因素会对拟开发的预测模型性能产生不利影响？数据科学家应采取哪两项措施来缓解这些影响？（请选择两项）"
@@ -1042,10 +1092,10 @@
     "o_id": "156"
   },
   {
-    "id": "21",
+    "id": "157",
     "question": {
       "enus": "An ecommerce company is automating the categorization of its products based on images. A data scientist has trained a computer vision model using the Amazon SageMaker image classification algorithm. The images for each product are classified according to specific product lines. The accuracy of the model is too low when categorizing new products. All of the product images have the same dimensions and are stored within an Amazon S3 bucket. The company wants to improve the model so it can be used for new products as soon as possible. Which steps would improve the accuracy of the solution? (Choose three.) ",
-      "zhcn": "一家电商公司正致力于根据商品图片实现产品分类的自动化。数据科学家运用亚马逊SageMaker平台的图像分类算法，训练出计算机视觉模型。每件商品的图像均按特定产品线进行分类。但在对新商品进行分类时，该模型的准确率始终不尽如人意。所有商品图像尺寸统一，并存储于亚马逊S3存储桶中。公司希望尽快优化模型以适用于新品分类。下列哪三项措施能有效提升该解决方案的准确率？"
+      "zhcn": "一家电商公司正致力于根据商品图片实现产品分类的自动化。数据科学家运用Amazon SageMaker平台的图像分类算法，训练出计算机视觉模型。每件商品的图像均按特定产品线进行分类。但在对新商品进行分类时，该模型的准确率始终不尽如人意。所有商品图像尺寸统一，并存储于亚马逊S3存储桶中。公司希望尽快优化模型以适用于新品分类。下列哪三项措施能有效提升该解决方案的准确率？"
     },
     "option": [
       {
@@ -1099,7 +1149,7 @@
     "o_id": "157"
   },
   {
-    "id": "22",
+    "id": "159",
     "question": {
       "enus": "A company that manufactures mobile devices wants to determine and calibrate the appropriate sales price for its devices. The company is collecting the relevant data and is determining data features that it can use to train machine learning (ML) models. There are more than 1,000 features, and the company wants to determine the primary features that contribute to the sales price. Which techniques should the company use for feature selection? (Choose three.) ",
       "zhcn": "一家移动设备制造商欲为其产品制定并校准合宜的销售价格。该公司正在收集相关数据，并确定可用于训练机器学习模型的数据特征。现有特征数量逾千项，公司需要找出影响售价的核心特征。请问应采用哪三种特征筛选技术？（请选择三项。）"
@@ -1156,7 +1206,7 @@
     "o_id": "159"
   },
   {
-    "id": "23",
+    "id": "163",
     "question": {
       "enus": "A machine learning specialist is developing a regression model to predict rental rates from rental listings. A variable named Wall_Color represents the most prominent exterior wall color of the property. The following is the sample data, excluding all other variables: The specialist chose a model that needs numerical input data. Which feature engineering approaches should the specialist use to allow the regression model to learn from the Wall_Color data? (Choose two.) ",
       "zhcn": "一位机器学习专家正在开发一个回归模型，旨在通过租赁房源信息预测租金价格。其中变量\"Wall_Color\"代表物业外立面最显著的墙体颜色。以下是剔除其他变量后的样本数据：该专家选择的模型需要数值型输入数据。为使回归模型能够从\"Wall_Color\"数据中学习，应采用哪两种特征工程方法？（请选择两项。）"
@@ -1206,7 +1256,7 @@
     "o_id": "163"
   },
   {
-    "id": "24",
+    "id": "168",
     "question": {
       "enus": "A data engineer at a bank is evaluating a new tabular dataset that includes customer data. The data engineer will use the customer data to create a new model to predict customer behavior. After creating a correlation matrix for the variables, the data engineer notices that many of the 100 features are highly correlated with each other. Which steps should the data engineer take to address this issue? (Choose two.) ",
       "zhcn": "某银行数据工程师正在评估一份包含客户数据的新表格数据集，计划利用这些数据构建预测客户行为的模型。在生成变量相关性矩阵后，该工程师发现100个特征中有许多存在高度相关性。为处理此情况，数据工程师应采取以下哪两项措施？（请选择两项）"
@@ -1256,7 +1306,7 @@
     "o_id": "168"
   },
   {
-    "id": "25",
+    "id": "170",
     "question": {
       "enus": "A retail company is selling products through a global online marketplace. The company wants to use machine learning (ML) to analyze customer feedback and identify specific areas for improvement. A developer has built a tool that collects customer reviews from the online marketplace and stores them in an Amazon S3 bucket. This process yields a dataset of 40 reviews. A data scientist building the ML models must identify additional sources of data to increase the size of the dataset. Which data sources should the data scientist use to augment the dataset of reviews? (Choose three.) ",
       "zhcn": "一家零售企业正通过全球在线商城销售产品。该公司希望运用机器学习技术分析客户反馈，以确定需要改进的具体环节。开发人员已构建工具，从在线商城采集客户评价并存储至亚马逊S3存储桶，初步获得包含40条评论的数据集。为扩充数据集规模，机器学习模型构建者需寻找更多数据源。下列哪些数据源可用于增强评论数据集？（请选择三项）"
@@ -1313,7 +1363,7 @@
     "o_id": "170"
   },
   {
-    "id": "26",
+    "id": "176",
     "question": {
       "enus": "A machine learning (ML) specialist needs to extract embedding vectors from a text series. The goal is to provide a ready-to-ingest feature space for a data scientist to develop downstream ML predictive models. The text consists of curated sentences in English. Many sentences use similar words but in different contexts. There are questions and answers among the sentences, and the embedding space must differentiate between them. Which options can produce the required embedding vectors that capture word context and sequential QA information? (Choose two.) ",
       "zhcn": "机器学习专家需要从一系列文本中提取嵌入向量，其目标是为数据科学家提供可直接输入的特征空间，用以开发下游的机器学习预测模型。该文本由经过筛选的英文句子组成，许多句子虽使用相似词汇但语境各异。文本中穿插着提问与回答，而嵌入空间必须能对二者加以区分。下列哪些方案能够生成符合要求的嵌入向量，既能捕捉词汇语境又能保留问答序列信息？（请选择两项。）"
@@ -1349,7 +1399,7 @@
       },
       {
         "option_text": {
-          "zhcn": "亚马逊SageMaker平台BlazingText算法在批量Skip-gram模式下，与定制循环神经网络（RNN）的融合运用。",
+          "zhcn": "Amazon SageMaker平台BlazingText算法在批量Skip-gram模式下，与定制循环神经网络（RNN）的融合运用。",
           "enus": "Combination of the Amazon SageMaker BlazingText algorithm in Batch Skip-gram mode with a custom recurrent neural network (RNN)"
         },
         "option_flag": false
@@ -1363,7 +1413,7 @@
     "o_id": "176"
   },
   {
-    "id": "27",
+    "id": "180",
     "question": {
       "enus": "A company has an ecommerce website with a product recommendation engine built in TensorFlow. The recommendation engine endpoint is hosted by Amazon SageMaker. Three compute-optimized instances support the expected peak load of the website. Response times on the product recommendation page are increasing at the beginning of each month. Some users are encountering errors. The website receives the majority of its trafic between 8 AM and 6 PM on weekdays in a single time zone. Which of the following options are the MOST effective in solving the issue while keeping costs to a minimum? (Choose two.) ",
       "zhcn": "某公司电商网站内置了一套基于TensorFlow构建的商品推荐引擎，其服务端点由Amazon SageMaker托管。为应对网站预期峰值流量，当前配置了三台计算优化型实例。每月初，商品推荐页面的响应时间持续延长，部分用户开始遭遇系统报错。该网站流量主要集中在同一时区工作日的上午8点至下午6点。在控制成本的前提下，下列哪两项措施能最高效解决此问题？（请选择两项）"
@@ -1413,7 +1463,7 @@
     "o_id": "180"
   },
   {
-    "id": "28",
+    "id": "182",
     "question": {
       "enus": "A data scientist is reviewing customer comments about a company's products. The data scientist needs to present an initial exploratory analysis by using charts and a word cloud. The data scientist must use feature engineering techniques to prepare this analysis before starting a natural language processing (NLP) model. Which combination of feature engineering techniques should the data scientist use to meet these requirements? (Choose two.) ",
       "zhcn": "一位数据分析师正在审阅客户对公司产品的评价。为完成初步探索性分析，该分析师需借助图表与文字云进行呈现。在启动自然语言处理模型之前，必须通过特征工程技术完成数据预处理。请问为满足上述需求，该分析师应采用哪两种特征工程技术？（请选择两项）"
@@ -1463,7 +1513,7 @@
     "o_id": "182"
   },
   {
-    "id": "29",
+    "id": "186",
     "question": {
       "enus": "A data engineer is using AWS Glue to create optimized, secure datasets in Amazon S3. The data science team wants the ability to access the ETL scripts directly from Amazon SageMaker notebooks within a VPC. After this setup is complete, the data science team wants the ability to run the AWS Glue job and invoke the SageMaker training job. Which combination of steps should the data engineer take to meet these requirements? (Choose three.) ",
       "zhcn": "一位数据工程师正利用AWS Glue在Amazon S3中创建经过优化且安全的数据集。数据科学团队需要能够通过VPC内的Amazon SageMaker笔记本直接访问ETL脚本。完成此设置后，数据科学团队还需具备运行AWS Glue任务并调用SageMaker训练任务的能力。为满足这些需求，该数据工程师应采取哪三项步骤组合？（请选择三项）"
@@ -1520,7 +1570,7 @@
     "o_id": "186"
   },
   {
-    "id": "30",
+    "id": "189",
     "question": {
       "enus": "An ecommerce company wants to use machine learning (ML) to monitor fraudulent transactions on its website. The company is using Amazon SageMaker to research, train, deploy, and monitor the ML models. The historical transactions data is in a .csv file that is stored in Amazon S3. The data contains features such as the user's IP address, navigation time, average time on each page, and the number of clicks for each session. There is no label in the data to indicate if a transaction is anomalous. Which models should the company use in combination to detect anomalous transactions? (Choose two.) ",
       "zhcn": "一家电子商务公司希望借助机器学习技术监测其网站上的欺诈交易。该公司正使用Amazon SageMaker进行机器学习模型的研究、训练、部署与监控。历史交易数据存储于Amazon S3的.csv格式文件中，包含用户IP地址、浏览时长、页面平均停留时间及单次会话点击量等特征。由于数据未标注交易是否异常，请问该公司应采用哪两种模型组合来实现异常交易检测？（请选择两项）"
@@ -1570,10 +1620,10 @@
     "o_id": "189"
   },
   {
-    "id": "31",
+    "id": "190",
     "question": {
       "enus": "A healthcare company is using an Amazon SageMaker notebook instance to develop machine learning (ML) models. The company's data scientists will need to be able to access datasets stored in Amazon S3 to train the models. Due to regulatory requirements, access to the data from instances and services used for training must not be transmitted over the internet. Which combination of steps should an ML specialist take to provide this access? (Choose two.) ",
-      "zhcn": "一家医疗公司正借助亚马逊SageMaker笔记本来开发机器学习模型。为确保数据科学家能够访问存储在亚马逊S3中用于训练模型的数据集，同时遵循监管要求（训练所用实例与服务的数据传输不得经由互联网），机器学习专家应采取哪两项措施实现此目标？（请选择两项）"
+      "zhcn": "一家医疗公司正借助Amazon SageMaker笔记本来开发机器学习模型。为确保数据科学家能够访问存储在亚马逊S3中用于训练模型的数据集，同时遵循监管要求（训练所用实例与服务的数据传输不得经由互联网），机器学习专家应采取哪两项措施实现此目标？（请选择两项）"
     },
     "option": [
       {
@@ -1620,7 +1670,7 @@
     "o_id": "190"
   },
   {
-    "id": "32",
+    "id": "191",
     "question": {
       "enus": "A machine learning (ML) specialist at a retail company is forecasting sales for one of the company's stores. The ML specialist is using data from the past 10 years. The company has provided a dataset that includes the total amount of money in sales each day for the store. Approximately 5% of the days are missing sales data. The ML specialist builds a simple forecasting model with the dataset and discovers that the model performs poorly. The performance is poor around the time of seasonal events, when the model consistently predicts sales figures that are too low or too high. Which actions should the ML specialist take to try to improve the model's performance? (Choose two.) ",
       "zhcn": "某零售公司的机器学习专家正在为旗下门店进行销售额预测。该专家采用了过去十年的历史数据，公司提供的数据集包含该门店每日销售总额，其中约5%的日期存在销售数据缺失。专家基于此数据集构建了一个简易预测模型，但发现模型在季节性活动期间表现不佳——其预测值总是系统性偏离实际值，或明显偏高或偏低。若要提升模型性能，该专家应采取哪两项改进措施？（请选择两项）"
@@ -1670,10 +1720,10 @@
     "o_id": "191"
   },
   {
-    "id": "33",
+    "id": "199",
     "question": {
       "enus": "A manufacturing company needs to identify returned smartphones that have been damaged by moisture. The company has an automated process that produces 2,000 diagnostic values for each phone. The database contains more than five million phone evaluations. The evaluation process is consistent, and there are no missing values in the data. A machine learning (ML) specialist has trained an Amazon SageMaker linear learner ML model to classify phones as moisture damaged or not moisture damaged by using all available features. The model's F1 score is 0.6. Which changes in model training would MOST likely improve the model's F1 score? (Choose two.) ",
-      "zhcn": "一家制造公司需要甄别因受潮而损坏的退货智能手机。该公司采用自动化流程，为每部手机生成2000项诊断数据。数据库中已收录超过五百万次手机检测记录，评估流程标准统一，且数据无任何缺失。一位机器学习专家利用全部可用特征，训练了亚马逊SageMaker线性学习器模型，用以将手机划分为\"受潮损坏\"与\"未受潮损坏\"两类。当前模型的F1得分为0.6。若要提升该模型的F1得分，以下哪两项训练调整最可能见效？（请选择两项）"
+      "zhcn": "一家制造公司需要甄别因受潮而损坏的退货智能手机。该公司采用自动化流程，为每部手机生成2000项诊断数据。数据库中已收录超过五百万次手机检测记录，评估流程标准统一，且数据无任何缺失。一位机器学习专家利用全部可用特征，训练了Amazon SageMaker线性学习器模型，用以将手机划分为\"受潮损坏\"与\"未受潮损坏\"两类。当前模型的F1得分为0.6。若要提升该模型的F1得分，以下哪两项训练调整最可能见效？（请选择两项）"
     },
     "option": [
       {
@@ -1720,7 +1770,7 @@
     "o_id": "199"
   },
   {
-    "id": "34",
+    "id": "206",
     "question": {
       "enus": "A company wants to deliver digital car management services to its customers. The company plans to analyze data to predict the likelihood of users changing cars. The company has 10 TB of data that is stored in an Amazon Redshift cluster. The company's data engineering team is using Amazon SageMaker Studio for data analysis and model development. Only a subset of the data is relevant for developing the machine learning models. The data engineering team needs a secure and cost-effective way to export the data to a data repository in Amazon S3 for model development. Which solutions will meet these requirements? (Choose two.) ",
       "zhcn": "一家公司希望为客户提供数字化汽车管理服务，并计划通过数据分析预测用户的换车可能性。该公司拥有10 TB数据存储于Amazon Redshift集群中，数据工程团队正使用Amazon SageMaker Studio进行数据分析与模型开发。由于仅需部分数据用于机器学习模型开发，该团队需要一种安全且经济高效的方式，将数据导出至Amazon S3的数据存储库以供模型开发。下列哪两种解决方案符合这些要求？（请选择两项）"
@@ -1770,7 +1820,7 @@
     "o_id": "206"
   },
   {
-    "id": "35",
+    "id": "215",
     "question": {
       "enus": "A sports broadcasting company is planning to introduce subtitles in multiple languages for a live broadcast. The commentary is in English. The company needs the transcriptions to appear on screen in French or Spanish, depending on the broadcasting country. The transcriptions must be able to capture domain-specific terminology, names, and locations based on the commentary context. The company needs a solution that can support options to provide tuning data. Which combination of AWS services and features will meet these requirements with the LEAST operational overhead? (Choose two.) ",
       "zhcn": "一家体育转播公司计划为直播节目引入多语言字幕服务。其解说词为英文内容，需根据播出国家在屏幕上显示法语或西班牙语字幕。译文必须能够准确捕捉基于解说语境的领域专有术语、人名及地名。该公司需要一套支持提供调优数据选项的解决方案。以下哪两种AWS服务与功能的组合能以最小运维投入满足上述需求？（请选择两项。）"
@@ -1820,7 +1870,7 @@
     "o_id": "215"
   },
   {
-    "id": "36",
+    "id": "222",
     "question": {
       "enus": "A data scientist at a financial services company used Amazon SageMaker to train and deploy a model that predicts loan defaults. The model analyzes new loan applications and predicts the risk of loan default. To train the model, the data scientist manually extracted loan data from a database. The data scientist performed the model training and deployment steps in a Jupyter notebook that is hosted on SageMaker Studio notebooks. The model's prediction accuracy is decreasing over time. Which combination of steps is the MOST operationally eficient way for the data scientist to maintain the model's accuracy? (Choose two.) ",
       "zhcn": "某金融服务公司的数据科学家利用Amazon SageMaker训练并部署了一套贷款违约预测模型。该模型通过分析新增贷款申请来预判违约风险。在模型训练阶段，这位数据科学家曾手动从数据库提取贷款数据，并在SageMaker Studio notebooks托管的Jupyter笔记本中完成了模型训练与部署操作。目前该模型的预测准确率正随时间推移逐渐下降。请问下列哪两项措施组合最能帮助数据科学家以最高运维效率维持模型准确率？（请选择两项）"
@@ -1870,7 +1920,7 @@
     "o_id": "222"
   },
   {
-    "id": "37",
+    "id": "223",
     "question": {
       "enus": "A retail company wants to create a system that can predict sales based on the price of an item. A machine learning (ML) engineer built an initial linear model that resulted in the following residual plot: Which actions should the ML engineer take to improve the accuracy of the predictions in the next phase of model building? (Choose three.) ",
       "zhcn": "一家零售企业计划构建一套能够根据商品价格预测销量的系统。机器学习工程师初步建立的线性模型生成了如下残差图：在模型构建的下一阶段，该工程师应采取哪三项措施来提升预测精准度？（请选择三项）"
@@ -1927,7 +1977,7 @@
     "o_id": "223"
   },
   {
-    "id": "38",
+    "id": "227",
     "question": {
       "enus": "A company has hired a data scientist to create a loan risk model. The dataset contains loan amounts and variables such as loan type, region, and other demographic variables. The data scientist wants to use Amazon SageMaker to test bias regarding the loan amount distribution with respect to some of these categorical variables. Which pretraining bias metrics should the data scientist use to check the bias distribution? (Choose three.) ",
       "zhcn": "某公司聘请一位数据科学家构建贷款风险模型。数据集包含贷款金额及贷款类型、地区与其他人口统计变量。该数据科学家计划使用Amazon SageMaker检验贷款金额分布在部分分类变量上的偏差。请问其应选用哪三项预训练偏差指标来评估偏差分布？"
@@ -1984,10 +2034,10 @@
     "o_id": "227"
   },
   {
-    "id": "39",
+    "id": "229",
     "question": {
       "enus": "An online retail company wants to develop a natural language processing (NLP) model to improve customer service. A machine learning (ML) specialist is setting up distributed training of a Bidirectional Encoder Representations from Transformers (BERT) model on Amazon SageMaker. SageMaker will use eight compute instances for the distributed training. The ML specialist wants to ensure the security of the data during the distributed training. The data is stored in an Amazon S3 bucket. Which combination of steps should the ML specialist take to protect the data during the distributed training? (Choose three.) ",
-      "zhcn": "一家网络零售公司计划开发自然语言处理模型以提升客户服务质量。一位机器学习专家正在亚马逊SageMaker平台上配置双向Transformer编码器模型的分布式训练任务。该训练将启用八个计算实例。为确保分布式训练期间的数据安全（训练数据存储于亚马逊S3存储桶中），机器学习专家应采取哪三项组合措施？（请选择三项）"
+      "zhcn": "一家网络零售公司计划开发自然语言处理模型以提升客户服务质量。一位机器学习专家正在Amazon SageMaker平台上配置双向Transformer编码器模型的分布式训练任务。该训练将启用八个计算实例。为确保分布式训练期间的数据安全（训练数据存储于亚马逊S3存储桶中），机器学习专家应采取哪三项组合措施？（请选择三项）"
     },
     "option": [
       {
@@ -2041,7 +2091,7 @@
     "o_id": "229"
   },
   {
-    "id": "40",
+    "id": "231",
     "question": {
       "enus": "An ecommerce company is collecting structured data and unstructured data from its website, mobile apps, and IoT devices. The data is stored in several databases and Amazon S3 buckets. The company is implementing a scalable repository to store structured data and unstructured data. The company must implement a solution that provides a central data catalog, self-service access to the data, and granular data access policies and encryption to protect the data. Which combination of actions will meet these requirements with the LEAST amount of setup? (Choose three.) ",
       "zhcn": "一家电商企业正从其官方网站、移动应用及物联网设备中采集结构化与非结构化数据。这些数据目前存储于多个数据库及亚马逊S3存储桶中。该公司正在构建一个可扩展的数据存储库，用以统一存储两类数据。此方案需实现三大核心功能：建立统一数据目录、提供自助式数据查询服务、实施细粒度数据访问策略及加密保护机制。请问以下哪三项措施的组合能以最简配置满足上述需求？（请选择三项答案）"
@@ -2098,7 +2148,7 @@
     "o_id": "231"
   },
   {
-    "id": "41",
+    "id": "232",
     "question": {
       "enus": "A machine learning (ML) specialist is developing a deep learning sentiment analysis model that is based on data from movie reviews. After the ML specialist trains the model and reviews the model results on the validation set, the ML specialist discovers that the model is overfitting. Which solutions will MOST improve the model generalization and reduce overfitting? (Choose three.) ",
       "zhcn": "一位机器学习专家正在开发一款基于影评数据的深度学习情感分析模型。在完成模型训练并验证验证集结果后，该专家发现模型存在过拟合现象。下列哪三项措施最能有效提升模型泛化能力并抑制过拟合？（请选择三项）"
@@ -2155,7 +2205,7 @@
     "o_id": "232"
   },
   {
-    "id": "42",
+    "id": "247",
     "question": {
       "enus": "A company’s data scientist has trained a new machine learning model that performs better on test data than the company’s existing model performs in the production environment. The data scientist wants to replace the existing model that runs on an Amazon SageMaker endpoint in the production environment. However, the company is concerned that the new model might not work well on the production environment data. The data scientist needs to perform A/B testing in the production environment to evaluate whether the new model performs well on production environment data. Which combination of steps must the data scientist take to perform the A/B testing? (Choose two.) ",
       "zhcn": "某公司的数据科学家训练出一款新的机器学习模型，其在测试数据上的表现优于公司生产环境中现有的模型。该数据科学家希望替换当前在生产环境中通过Amazon SageMaker端点运行的模型。然而公司担心新模型可能无法很好地适应生产环境的数据。数据科学家需要在生产环境中进行A/B测试，以评估新模型在实际生产数据上的表现。请问数据科学家必须采取哪两个步骤组合来完成此次A/B测试？（请选择两项）"
@@ -2205,7 +2255,7 @@
     "o_id": "247"
   },
   {
-    "id": "43",
+    "id": "254",
     "question": {
       "enus": "A data scientist wants to improve the fit of a machine learning (ML) model that predicts house prices. The data scientist makes a first attempt to fit the model, but the fitted model has poor accuracy on both the training dataset and the test dataset. Which steps must the data scientist take to improve model accuracy? (Choose three.) ",
       "zhcn": "一位数据科学家希望优化预测房价的机器学习模型拟合效果。初次尝试建模后，发现模型在训练集和测试集上的预测精度均不理想。为提升模型准确性，该数据科学家应采取以下哪三项措施？（请选择三项）"
@@ -2262,10 +2312,10 @@
     "o_id": "254"
   },
   {
-    "id": "44",
+    "id": "256",
     "question": {
       "enus": "A company is creating an application to identify, count, and classify animal images that are uploaded to the company’s website. The company is using the Amazon SageMaker image classification algorithm with an ImageNetV2 convolutional neural network (CNN). The solution works well for most animal images but does not recognize many animal species that are less common. The company obtains 10,000 labeled images of less common animal species and stores the images in Amazon S3. A machine learning (ML) engineer needs to incorporate the images into the model by using Pipe mode in SageMaker. Which combination of steps should the ML engineer take to train the model? (Choose two.) ",
-      "zhcn": "某公司正在开发一款应用程序，用于识别、计数和分类用户上传至其网站的动物图像。该公司采用亚马逊SageMaker图像分类算法，并搭配ImageNetV2卷积神经网络（CNN）架构。该解决方案对大多数常见动物图像识别效果良好，但对许多较为罕见的动物物种却难以辨识。公司现已获取一万张稀有动物物种的标注图像，并存储于亚马逊S3服务中。机器学习工程师需通过SageMaker的Pipe模式将这些图像数据整合到模型中。请问该工程师应采取哪两种步骤组合来完成模型训练？（请选择两项正确答案）"
+      "zhcn": "某公司正在开发一款应用程序，用于识别、计数和分类用户上传至其网站的动物图像。该公司采用Amazon SageMaker图像分类算法，并搭配ImageNetV2卷积神经网络（CNN）架构。该解决方案对大多数常见动物图像识别效果良好，但对许多较为罕见的动物物种却难以辨识。公司现已获取一万张稀有动物物种的标注图像，并存储于亚马逊S3服务中。机器学习工程师需通过SageMaker的Pipe模式将这些图像数据整合到模型中。请问该工程师应采取哪两种步骤组合来完成模型训练？（请选择两项正确答案）"
     },
     "option": [
       {
@@ -2312,7 +2362,7 @@
     "o_id": "256"
   },
   {
-    "id": "45",
+    "id": "263",
     "question": {
       "enus": "A pharmaceutical company performs periodic audits of clinical trial sites to quickly resolve critical findings. The company stores audit documents in text format. Auditors have requested help from a data science team to quickly analyze the documents. The auditors need to discover the 10 main topics within the documents to prioritize and distribute the review work among the auditing team members. Documents that describe adverse events must receive the highest priority. A data scientist will use statistical modeling to discover abstract topics and to provide a list of the top words for each category to help the auditors assess the relevance of the topic. Which algorithms are best suited to this scenario? (Choose two.) ",
       "zhcn": "一家制药公司定期对临床试验基地开展审计，以便迅速处理关键发现。该公司以文本格式存储审计文件。审计人员请求数据科学团队协助快速分析这些文件，旨在从文档中识别十大核心主题，从而合理分配审计团队的审阅工作优先级。其中，描述不良事件的文档必须列为最高优先级别。数据科学家将采用统计建模方法挖掘抽象主题，并为每个类别提供核心词汇列表，以辅助审计人员评估主题相关性。请问下列哪种算法最适用于此场景？（请选择两项。）"
@@ -2362,7 +2412,7 @@
     "o_id": "263"
   },
   {
-    "id": "46",
+    "id": "272",
     "question": {
       "enus": "A machine learning (ML) specialist uploads 5 TB of data to an Amazon SageMaker Studio environment. The ML specialist performs initial data cleansing. Before the ML specialist begins to train a model, the ML specialist needs to create and view an analysis report that details potential bias in the uploaded data. Which combination of actions will meet these requirements with the LEAST operational overhead? (Choose two.) ",
       "zhcn": "一位机器学习专家将5 TB数据上传至Amazon SageMaker Studio环境，并完成了初步的数据清洗。在开始训练模型之前，该专家需生成并查阅一份分析报告，其中需详细说明所上传数据中可能存在的偏差。若要满足以上需求，同时尽可能降低运维负担，应选择哪两项操作组合？（请选出两项正确答案）"
@@ -2412,7 +2462,7 @@
     "o_id": "272"
   },
   {
-    "id": "47",
+    "id": "275",
     "question": {
       "enus": "A machine learning (ML) engineer has created a feature repository in Amazon SageMaker Feature Store for the company. The company has AWS accounts for development, integration, and production. The company hosts a feature store in the development account. The company uses Amazon S3 buckets to store feature values ofiine. The company wants to share features and to allow the integration account and the production account to reuse the features that are in the feature repository. Which combination of steps will meet these requirements? (Choose two.) ",
       "zhcn": "一位机器学习工程师在公司内部的Amazon SageMaker特征存储中创建了一个特征库。该公司分别设有开发、集成和生产环境的AWS账户，其中特征存储部署于开发账户，并采用Amazon S3存储桶离线保存特征值。现需实现特征共享功能，使集成账户与生产账户能够复用特征库中的特征。下列哪两项步骤组合可满足此需求？（请选择两项）"
@@ -2462,7 +2512,7 @@
     "o_id": "275"
   },
   {
-    "id": "48",
+    "id": "278",
     "question": {
       "enus": "A company's machine learning (ML) specialist is building a computer vision model to classify 10 different trafic signs. The company has stored 100 images of each class in Amazon S3, and the company has another 10,000 unlabeled images. All the images come from dash cameras and are a size of 224 pixels × 224 pixels. After several training runs, the model is overfitting on the training data. Which actions should the ML specialist take to address this problem? (Choose two.) ",
       "zhcn": "某公司的机器学习专家正在构建一个计算机视觉模型，旨在对10种不同的交通标志进行分类。该公司已将每个类别的100张图像存储于Amazon S3中，同时还有10,000张未标注的图像。所有图像均采集自行车记录仪，尺寸为224像素×224像素。经过多次训练后，模型在训练数据上出现了过拟合现象。机器学习专家应采取哪两项措施来解决此问题？（请选择两项）"
@@ -2498,7 +2548,7 @@
       },
       {
         "option_text": {
-          "zhcn": "利用亚马逊SageMaker平台的k近邻（k-NN）算法，对未标注图像进行智能分类。",
+          "zhcn": "利用Amazon SageMaker平台的k近邻（k-NN）算法，对未标注图像进行智能分类。",
           "enus": "Use the Amazon SageMaker k-nearest neighbors (k-NN) algorithm to label the unlabeled images."
         },
         "option_flag": true
@@ -2512,7 +2562,7 @@
     "o_id": "278"
   },
   {
-    "id": "49",
+    "id": "284",
     "question": {
       "enus": "A company is building custom deep learning models in Amazon SageMaker by using training and inference containers that run on Amazon EC2 instances. The company wants to reduce training costs but does not want to change the current architecture. The SageMaker training job can finish after interruptions. The company can wait days for the results. Which combination of resources should the company use to meet these requirements MOST cost-effectively? (Choose two.) ",
       "zhcn": "某公司正通过运行在亚马逊EC2实例上的训练与推理容器，在Amazon SageMaker中构建定制深度学习模型。公司希望降低训练成本，但需维持现有架构不变。当前SageMaker训练任务在中断后仍可完成，且公司能够接受数日的结果等待周期。要最高性价比地满足这些需求，应选择哪两种资源组合？（请选择两项）"
@@ -2562,10 +2612,10 @@
     "o_id": "284"
   },
   {
-    "id": "50",
+    "id": "287",
     "question": {
       "enus": "A data engineer is evaluating customer data in Amazon SageMaker Data Wrangler. The data engineer will use the customer data to create a new model to predict customer behavior. The engineer needs to increase the model performance by checking for multicollinearity in the dataset. Which steps can the data engineer take to accomplish this with the LEAST operational effort? (Choose two.) ",
-      "zhcn": "一位数据工程师正在亚马逊SageMaker数据整理平台中评估客户数据。该工程师计划利用这些客户数据构建预测用户行为的新模型。为提升模型性能，需检测数据集中的多重共线性现象。以下哪两项措施能以最小操作量实现此目标？（请选择两项）"
+      "zhcn": "一位数据工程师正在Amazon SageMaker数据整理平台中评估客户数据。该工程师计划利用这些客户数据构建预测用户行为的新模型。为提升模型性能，需检测数据集中的多重共线性现象。以下哪两项措施能以最小操作量实现此目标？（请选择两项）"
     },
     "option": [
       {
@@ -2612,7 +2662,7 @@
     "o_id": "287"
   },
   {
-    "id": "51",
+    "id": "290",
     "question": {
       "enus": "A company operates large cranes at a busy port The company plans to use machine learning (ML) for predictive maintenance of the cranes to avoid unexpected breakdowns and to improve productivity. The company already uses sensor data from each crane to monitor the health of the cranes in real time. The sensor data includes rotation speed, tension, energy consumption, vibration, pressure, and temperature for each crane. The company contracts AWS ML experts to implement an ML solution. Which potential findings would indicate that an ML-based solution is suitable for this scenario? (Choose two.) ",
       "zhcn": "某公司在繁忙港口运营大型起重机，计划采用机器学习技术实施预测性维护，以期避免意外停机并提升作业效率。目前公司已通过每台起重机的传感器数据实时监测设备运行状态，采集指标包括旋转速度、张力、能耗、振动、压力及温度等。现聘请AWS机器学习专家部署解决方案。下列哪两项潜在发现可表明该场景适合采用基于机器学习的解决方案？（请选择两项）"
@@ -2662,7 +2712,114 @@
     "o_id": "290"
   },
   {
-    "id": "52",
+    "id": "291",
+    "question": {
+      "enus": "A company wants to create an artificial intelligence (AШ) yoga instructor that can lead large classes of students. The company needs to create a feature that can accurately count the number of students who are in a class. The company also needs a feature that can differentiate students who are performing a yoga stretch correctly from students who are performing a stretch incorrectly. Determine whether students are performing a stretch correctly, the solution needs to measure the location and angle of each student’s arms and legs. A data scientist must use Amazon SageMaker to access video footage of a yoga class by extracting image frames and applying computer vision models. Which combination of models will meet these requirements with the LEAST effort? (Choose two.) ",
+      "zhcn": "一家公司计划开发人工智能瑜伽教练系统，用于指导大规模团体课程。该系统需具备两项核心功能：一是精确统计课堂学员人数，二是能准确区分学员的瑜伽伸展动作是否标准。为实现动作标准度判定，解决方案需测量每位学员四肢的位置与角度数据。数据科学家需利用Amazon SageMaker平台，通过提取视频图像帧并应用计算机视觉模型来处理瑜伽课堂录像。为以最小工作量满足上述需求，应选择哪两种模型组合？（请选择两项）"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "图像分类",
+          "enus": "Image Classification"
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "光学字符识别（OCR）",
+          "enus": "Optical Character Recognition (OCR)"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "目标检测",
+          "enus": "Object Detection"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "姿态估计",
+          "enus": "Pose estimation"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "图像生成对抗网络（GANs）",
+          "enus": "Image Generative Adversarial Networks (GANs)"
+        },
+        "option_flag": true
+      }
+    ],
+    "analysis": {
+      "enus": "**问题分析：** 该任务要求计算机视觉模型具备两项核心能力：  \n1. **统计学生数量** → 需要检测并定位画面中的每个个体。  \n2. **测量肢体位置与角度** → 需要理解每个被检测者的姿态（手臂、腿部等关键点）。  \n\n---  \n**正确答案选择：**  \n- **目标检测** – 识别并定位每个学生（通过边界框），实现精准计数。  \n- **姿态估计** – 检测身体关键关节（如肘部、膝盖）及其空间关系，通过计算关节角度评估动作标准度。  \n\n---  \n**最低成本实现依据：**  \n- 目标检测直接满足学生计数需求；  \n- 姿态估计可直接提供计算肢体角度所需的关键点坐标；  \n- 二者均属成熟技术，可通过 Amazon SageMaker 或 SageMaker JumpStart 快速获取预训练模型，相比其他方案几乎无需定制开发。  \n\n---  \n**错误选项排除原因：**  \n- **图像分类** – 仅能对整体图像进行分类（如识别“瑜伽课堂”），无法统计个体或分析姿态；  \n- **光学字符识别** – 专用于文本提取，与人体姿态分析及计数无关；  \n- **图像生成对抗网络** – 用于生成合成图像，而非检测或姿态分析任务。  \n\n---  \n**常见误区：**  \n- 误用**图像分类**代替**目标检测**进行计数——分类模型无法定位或统计独立个体；  \n- 在纯分析任务（检测+姿态）中过度复杂化地选择**生成对抗网络**。  \n综上，**目标检测**与**姿态估计**的组合能以最小成本同时满足两项需求。",
+      "zhcn": "我们先明确题目中的需求：  \n\n1. **统计学生人数** → 需要检测/识别每个学生。  \n2. **判断动作是否正确** → 需要测量每个学生四肢的位置和角度。  \n3. 方法：从视频中提取图像帧，用计算机视觉模型处理。  \n\n---\n\n**分析选项：**  \n\n- **[A] Image Classification（图像分类）**  \n  只能给整张图一个标签（例如“瑜伽课”），无法定位每个人的位置和关节角度，不满足需求。  \n\n- **[B] Optical Character Recognition (OCR)**  \n  用于识别文字，与人体动作无关，不适用。  \n\n- **[C] Object Detection（目标检测）**  \n  可以检测并定位图像中的每个人（边界框），可用于人数统计。  \n\n- **[D] Pose estimation（姿态估计）**  \n  可以检测人体关键点（关节位置），从而计算四肢角度，判断动作是否正确。  \n\n- **[E] Image Generative Adversarial Networks (GANs)**  \n  用于生成图像，不适用于此处的分析任务。  \n\n---\n\n**组合选择：**  \n- 人数统计 → **Object Detection**  \n- 测量关节角度 → **Pose Estimation**  \n\n这两个模型组合可以满足所有需求，且不需要额外训练复杂的端到端模型（如果使用现成模型，例如 SageMaker 内置或 TorchVision/YOLO/OpenPose 类方案），是**最少工作量**的方案。  \n\n---\n\n**答案：**  \n**[C] 和 [D]**  \n\n题目给的参考答案是 A，但 A（图像分类）明显不能满足需求，可能是题目或答案有误。根据 AWS 的典型方案和计算机视觉常识，正确组合应为 **C 和 D**。"
+    },
+    "answer": "AE",
+    "o_id": "291"
+  },
+  {
+    "id": "293",
+    "question": {
+      "enus": "A data scientist stores financial datasets in Amazon S3. The data scientist uses Amazon Athena to query the datasets by using SQL. The data scientist uses Amazon SageMaker to deploy a machine learning (ML) model. The data scientist wants to obtain inferences from the model at the SageMaker endpoint. However, when the data scientist attempts to invoke the SageMaker endpoint, the data scientist receives SQL statement failures. The data scientist’s IAM user is currently unable to invoke the SageMaker endpoint. Which combination of actions will give the data scientist’s IAM user the ability to invoke the SageMaker endpoint? (Choose three.) ",
+      "zhcn": "一位数据科学家将金融数据集存储于Amazon S3中，并借助SQL语言通过Amazon Athena对这些数据集进行查询。随后，该科学家使用Amazon SageMaker部署了一套机器学习模型，并期望通过SageMaker端点从模型中获取推断结果。然而，在尝试调用SageMaker端点时，却出现了SQL语句执行失败的问题。目前，该数据科学家的IAM用户权限尚无法成功调用SageMaker端点。请问需要采取哪三项组合措施，方可赋予该IAM用户调用SageMaker端点的权限？（请选择三项。）"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "为该用户身份附加AmazonAthenaFullAccess这一AWS托管策略。",
+          "enus": "Attach the AmazonAthenaFullAccess AWS managed policy to the user identity."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "为数据科学家的IAM用户添加一项策略声明，允许该用户执行sagemaker:InvokeEndpoint操作。",
+          "enus": "Include a policy statement for the data scientist's IAM user that allows the IAM user to perform the sagemaker:InvokeEndpoint action."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "为数据科学家的IAM用户添加内联策略，使其能够通过SageMaker读取S3存储桶中的对象。",
+          "enus": "Include an inline policy for the data scientist’s IAM user that allows SageMaker to read S3 objects."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "为数据科学家的IAM用户添加策略声明，允许该IAM用户执行sagemaker:GetRecord操作。",
+          "enus": "Include a policy statement for the data scientist’s IAM user that allows the IAM user to perform the sagemaker:GetRecord action."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在Athena SQL查询中需加入以下SQL语句：\"USING EXTERNAL FUNCTION ml_function_name\"。",
+          "enus": "Include the SQL statement \"USING EXTERNAL FUNCTION ml_function_name'' in the Athena SQL query."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "在SageMaker中执行用户重映射，将当前IAM用户关联至托管终端节点上的另一IAM用户。",
+          "enus": "Perform a user remapping in SageMaker to map the IAM user to another IAM user that is on the hosted endpoint."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "**问题分析**  \n核心问题在于数据科学家的IAM用户无法调用SageMaker终端节点。本题要求找出能够授予该特定权限的**操作组合**。文中提及SQL语句失败和Athena的信息属于干扰项，问题的本质纯粹是SageMaker终端节点的IAM权限问题，与Athena查询或S3数据访问无关。\n\n**正确答案解析**  \n正确答案是：**“在数据科学家的IAM用户策略中添加允许其执行`sagemaker:InvokeEndpoint`操作的策略语句。”**  \n唯有此方案能直接解决根本问题。要调用SageMaker终端节点，IAM主体（即数据科学家的用户）必须明确拥有`sagemaker:InvokeEndpoint`操作权限。这是AWS安全的基本要求，其他操作均无法解决调用终端节点时的权限错误。\n\n**干扰项排除依据**  \n*   **“为用户身份关联AmazonAthenaFullAccess托管策略”**：该策略仅针对Amazon Athena权限，与SageMaker终端节点调用无关。  \n*   **“允许IAM用户执行`sagemaker:GetRecord`操作的策略语句”**：该权限用于调用SageMaker*特征存储*终端节点，而非标准实时推理终端节点。题干明确指向部署模型的“SageMaker终端节点”，需使用`sagemaker:InvokeEndpoint`。  \n*   **“添加允许SageMaker读取S3对象的内联策略”**：此策略方向错误。它授予的是SageMaker服务权限，而非用户调用终端节点的权限，且问题核心是终端节点调用而非模型读取S3数据。  \n*   **“在Athena查询中添加`USING EXTERNAL FUNCTION ml_function_name`语句”**：此方案适用于在Athena查询中调用SageMaker模型，与直接调用终端节点的场景不同。题干明确科学家是直接调用终端节点时出错。  \n*   **“在SageMaker中执行用户重映射以关联其他IAM用户”**：“用户重映射”并非解决SageMaker终端节点IAM权限问题的标准或相关流程。\n\n**常见误区与难点**  \n主要陷阱在于被Athena和S3等无关信息干扰。错误信息“无法调用SageMaker终端节点”已明确指向IAM权限问题，特别是`sagemaker:InvokeEndpoint`操作权限的缺失。另一常见错误是混淆不同SageMaker服务的权限，例如误将特征存储的`sagemaker:GetRecord`权限当作推理终端节点所需的`sagemaker:InvokeEndpoint`权限。最直接的解决方案即授予缺失的特定操作权限。",
+      "zhcn": "我们来逐步分析这个题目。  \n\n---\n\n## 1. 题目理解  \n- 数据科学家在 S3 存数据，用 **Athena**（SQL）查询数据。  \n- 用 **SageMaker** 部署了一个 ML 模型（有 endpoint）。  \n- 数据科学家想从 **Athena SQL 查询中调用 SageMaker 端点**（即使用 Athena 的“SageMaker 机器学习集成”功能，通过 SQL 函数调用模型推理）。  \n- 当尝试调用 SageMaker endpoint 时，收到 **SQL statement failures**，并且提示 **IAM user 当前无法调用 SageMaker endpoint**。  \n- 问：需要哪三个操作来让该 IAM user 能够调用 SageMaker endpoint（在 Athena 中）？\n\n---\n\n## 2. 背景知识  \nAthena 与 SageMaker 集成时，需要在 Athena 中创建一个 **USING EXTERNAL FUNCTION**，指向 SageMaker 端点。  \n调用流程：  \n1. 用户在 Athena 执行 SQL，SQL 中包含外部函数。  \n2. Athena 服务（以用户通过 Athena 查询传递的 IAM 角色/用户权限）去调用 SageMaker 端点的 `InvokeEndpoint` API。  \n3. 如果用户没有直接调用 SageMaker 端点的权限，就会失败。  \n\n但注意：Athena 与 SageMaker 集成时，实际调用 SageMaker 的是 **Athena 服务**，但 Athena 会使用**调用者的权限**（即查询用户的 IAM 权限）去调用 SageMaker。  \n所以用户必须拥有 `sagemaker:InvokeEndpoint` 权限。  \n\n另外，Athena 外部函数还需要权限写入 S3（查询结果），以及可能从 S3 读取模型/函数定义（但这里主要是调用端点失败，不是 S3 读取失败）。  \n\n---\n\n## 3. 选项分析  \n\n**[A] Attach the AmazonAthenaFullAccess AWS managed policy to the user identity.**  \n- 这个策略主要给 Athena 查询权限（包括读写查询结果 S3 位置），但不包含 `sagemaker:InvokeEndpoint`。  \n- 对解决“无法调用 SageMaker 端点”的问题有帮助吗？有帮助，因为 Athena 基础权限需要，但单独不够。题目问“哪三个操作”组合起来能解决，A 可能是其中之一，因为用户可能需要 Athena 的完整权限来创建/使用外部函数。  \n\n**[B] Include a policy statement for the data scientist's IAM user that allows the IAM user to perform the sagemaker:InvokeEndpoint action.**  \n- 这是直接必要的，因为调用端点需要这个权限。  \n\n**[C] Include an inline policy for the data scientist’s IAM user that allows SageMaker to read S3 objects.**  \n- 这里描述有问题：策略是附加到用户，但内容是“允许 SageMaker 读 S3”？那应该是资源策略（S3 bucket policy）允许 SageMaker 角色读，而不是用户内联策略。  \n- 如果模型输入数据来自 S3，SageMaker 端点可能需要读 S3，但那是 SageMaker 执行角色的权限，不是数据科学家用户的权限。  \n- 这个选项可能不相关。  \n\n**[D] Include a policy statement for the data scientist’s IAM user that allows the IAM user to perform the sagemaker:GetRecord action.**  \n- `sagemaker:GetRecord` 是 SageMaker 特征存储（Feature Store）的 API，不是 InvokeEndpoint。  \n- 这里调用的是部署的模型端点，不是特征存储，所以不需要 GetRecord。  \n- 这个选项可能是干扰项。  \n\n**[E] Include the SQL statement \"USING EXTERNAL FUNCTION ml_function_name'' in the Athena SQL query.**  \n- 这是使用该功能的**必要步骤**，但题目说“当数据科学家尝试调用 SageMaker 端点时”已经是在执行这个 SQL 了，所以失败是因为权限，不是没写这个 SQL。  \n- 但要让整个流程能工作，确实需要创建外部函数（可能已经创建），但如果是第一次，这个步骤是必要的。  \n- 可能三个操作之一。  \n\n**[F] Perform a user remapping in SageMaker to map the IAM user to another IAM user that is on the hosted endpoint.**  \n- SageMaker 没有“user remapping”这种操作。端点的调用权限是基于 IAM 策略，不是端点上的用户映射。  \n- 无关。  \n\n---\n\n## 4. 推断正确答案  \n从 AWS 官方文档关于 Athena 与 SageMaker 集成的要求看，需要：  \n1. 用户有 Athena 查询权限（包括 S3 读写查询结果位置）→ A。  \n2. 用户有 `sagemaker:InvokeEndpoint` 权限 → B。  \n3. 在 Athena 中创建外部函数（SQL 语句）→ E。  \n\nC 和 D 无关，F 不存在。  \n\n所以正确选项是 **A, B, E**。  \n\n但题目给的参考答案是 **D**？这明显不对，因为 D（GetRecord）不相关。可能是题目或答案有误。  \n\n根据 AWS 实际架构，正确组合是 **A, B, E**。  \n\n---\n\n**最终答案（根据题目意图和最佳实践）：**  \n\\[\n\\boxed{ABE}\n\\]"
+    },
+    "answer": "ABE",
+    "o_id": "293"
+  },
+  {
+    "id": "296",
     "question": {
       "enus": "A retail company stores 100 GB of daily transactional data in Amazon S3 at periodic intervals. The company wants to identify the schema of the transactional data. The company also wants to perform transformations on the transactional data that is in Amazon S3. The company wants to use a machine learning (ML) approach to detect fraud in the transformed data. Which combination of solutions will meet these requirements with the LEAST operational overhead? (Choose three.) ",
       "zhcn": "一家零售企业定期将每日100 GB的交易数据存储于亚马逊S3中。该公司需要明确这些交易数据的结构模式，并对其中的数据进行转换处理。此外，企业还希望采用机器学习方法，在转换后的数据中实现欺诈行为检测。若要同时满足这些需求且将运维负担降至最低，应选择哪三种解决方案的组合？（请选出三项。）"
@@ -2719,7 +2876,57 @@
     "o_id": "296"
   },
   {
-    "id": "53",
+    "id": "300",
+    "question": {
+      "enus": "A university wants to develop a targeted recruitment strategy to increase new student enrollment. A data scientist gathers information about the academic performance history of students. The data scientist wants to use the data to build student profiles. The university will use the profiles to direct resources to recruit students who are likely to enroll in the university. Which combination of steps should the data scientist take to predict whether a particular student applicant is likely to enroll in the university? (Choose two.) ",
+      "zhcn": "某大学计划制定精准招生策略以提升新生录取率。一位数据科学家着手收集学生过往学业表现的相关信息，旨在通过数据分析构建学生画像。校方将借助这些画像精准配置招生资源，重点吸纳入学意愿强烈的申请者。为预测特定申请人是否倾向于就读该校，数据科学家应当采取下列哪两项组合步骤？（请选择两项）"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "利用Amazon SageMaker Ground Truth将数据归类至\"enrolled\"（已注册）与\"not enrolled\"（未注册）两个分组中。",
+          "enus": "Use Amazon SageMaker Ground Truth to sort the data into two groups named \"enrolled\" or \"not enrolled.\""
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "运用预测算法进行趋势推演。",
+          "enus": "Use a forecasting algorithm to run predictions."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "运用回归算法进行预测分析。",
+          "enus": "Use a regression algorithm to run predictions."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "运用分类算法进行预测分析。",
+          "enus": "Use a classification algorithm to run predictions."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "运用Amazon SageMaker内置的k均值算法，将数据划分为名为\"已注册\"与\"未注册\"的两个群组。",
+          "enus": "Use the built-in Amazon SageMaker k-means algorithm to cluster the data into two groups named \"enrolled\" or \"not enrolled.\""
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "对于该问题的正确答案是 **\"采用分类算法进行预测\"**。这一选择正确的原因在于，本问题的核心目标是预测一个分类结果——即学生是否会入学（\"已入学\"或\"未入学\"）。分类算法正是为这类二元预测任务而设计的。\n\n其余干扰项可排除的理由如下：\n\n*   **\"采用预测算法进行预测\"**：预测算法用于预测未来的数值（例如，随时间变化的销售额），而非将项目归类到特定组别。\n*   **\"采用回归算法进行预测\"**：回归算法用于预测连续的数值（例如，学生*具体能得多少分*），而非像入学状态这样的离散类别。\n*   **\"使用Amazon SageMaker内置的k-means算法对数据进行聚类...\"** 以及 **\"使用Amazon SageMaker Ground Truth对数据进行分类...\"**：这些选项不正确，因为k-means是一种无监督的聚类算法，用于发现数据内在模式，它并不利用历史标签来学习预测如入学率这样的特定结果；而Ground Truth是一个数据*标注*工具，并非用于构建预测模型。\n\n一个常见的误区是混淆回归与分类。尽管二者同属监督学习技术，但它们解决的是本质不同类型的问题。此处的关键区别在于，所需输出是一个类别标签而非具体数值，因此分类才是适用的方法。",
+      "zhcn": "我们先分析一下题目要求：  \n\n**目标**：根据学生的历史学业表现数据，预测某个申请学生是否可能入学（enroll）。  \n**输出**：是/否（二元结果） → 这是一个**分类问题**。  \n\n---\n\n**选项分析**：  \n\n- **[A] Use Amazon SageMaker Ground Truth to sort the data into two groups named \"enrolled\" or \"not enrolled.\"**  \n  Ground Truth 是用于数据标注的服务，如果数据没有标签才需要人工标注。但题目中已经提到“academic performance history of students”，通常这类数据已经包含历史学生是否入学的标签（enrolled/not enrolled），所以不需要专门用 Ground Truth 去标注。这一步不是建模预测的必要步骤，而是数据准备环节，且不是预测模型本身。  \n\n- **[B] Use a forecasting algorithm to run predictions.**  \n  Forecasting 是时间序列预测（如销量、流量预测），不适用于此处的二元分类问题。  \n\n- **[C] Use a regression algorithm to run predictions.**  \n  回归算法预测连续值，虽然逻辑回归可用于分类，但通常二元分类更直接使用分类算法（如决策树、随机森林等）。不过逻辑回归也属于广义分类算法，但 SageMaker 场景下，题目可能更倾向于明确分类算法。  \n\n- **[D] Use a classification algorithm to run predictions.**  \n  正确。二元分类问题，适合用分类算法（如 XGBoost、线性学习器二元分类等）。  \n\n- **[E] Use the built-in Amazon SageMaker k-means algorithm to cluster the data into two groups named \"enrolled\" or \"not enrolled.\"**  \n  K-means 是无监督学习，聚类的结果不能直接用于预测新样本的类别（因为聚类不利用标签），并且聚类结果的分组无法保证对应“enrolled”/“not enrolled”，所以不适合此处的预测任务。  \n\n---\n\n**答案**：  \n题目问的是 **组合（Choose two）**，但官方给出的参考答案是 **D**（只有一个）。  \n可能另一个可选的是 **C**（逻辑回归作分类）？但更严谨的 SageMaker 考题中，这种问题通常选 **D** 和 **A** 吗？  \n\n不过仔细看，A 是数据标注，如果数据已经标注好，就不需要；如果数据未标注，则需要 A 先创建标签。但题中说“gathers information about the academic performance history of students”，隐含已有历史入学结果数据，所以 A 不必要。  \n\n因此最合理的两个步骤是：  \n1. 准备带标签的数据（但题目没强调没标签，所以可能不选 A）  \n2. 使用分类算法（D）  \n\n但题目要选两个，可能另一个是 **C 回归算法（逻辑回归）** 吗？但逻辑回归在 SageMaker 里属于分类（二元分类用分类算法更直接）。  \n\n从 AWS 认证机器学习题型看，官方答案给 D，可能另一个正确选项是 **A**（如果数据未标注）？但题目没明说未标注。  \n\n---\n\n**推断**：  \n常见考题中，此类问题正确步骤是：  \n- 用分类算法（D）  \n- 用回归算法（C）不合适，因为输出是离散类别  \n- 用聚类（E）不合适，因为是有监督预测  \n- 用预测（B）不合适  \n\n但若必须选两个，可能选 **A 和 D**：A 是准备标签数据（如果需要），D 是建模。  \n\n但官方答案只给 D，说明可能题目答案有争议，或者另一个正确选项是 **B 或 C** 中的一个错误选项？  \n\n---\n\n**最终建议**：  \n按 AWS 机器学习题目常规思路，预测二元分类用 **分类算法（D）**，并且数据需要标签（如果未标注，则用 A 标注）。所以答案是 **A 和 D**。  \n\n但官方答案只给 D，可能是题目有误或选项设计问题。  \n\n**考试时**：选 **D** 和 **A**（如果必须选两个）。"
+    },
+    "answer": "AD",
+    "o_id": "300"
+  },
+  {
+    "id": "301",
     "question": {
       "enus": "A machine learning (ML) specialist is using the Amazon SageMaker DeepAR forecasting algorithm to train a model on CPU-based Amazon EC2 On-Demand instances. The model currently takes multiple hours to train. The ML specialist wants to decrease the training time of the model. Which approaches will meet this requirement? (Choose two.) ",
       "zhcn": "一位机器学习专家正利用基于CPU的亚马逊EC2按需实例，通过Amazon SageMaker平台的DeepAR预测算法训练模型。当前模型训练耗时数小时之久。该专家希望缩短模型训练时长，下列哪两种方法可实现此目标？（请选择两项正确答案）"
@@ -2769,7 +2976,7 @@
     "o_id": "301"
   },
   {
-    "id": "54",
+    "id": "309",
     "question": {
       "enus": "An online retailer collects the following data on customer orders: demographics, behaviors, location, shipment progress, and delivery time. A data scientist joins all the collected datasets. The result is a single dataset that includes 980 variables. The data scientist must develop a machine learning (ML) model to identify groups of customers who are likely to respond to a marketing campaign. Which combination of algorithms should the data scientist use to meet this requirement? (Choose two.) ",
       "zhcn": "某电商平台收集了以下客户订单数据：用户画像、行为特征、地理位置、物流状态及交付时长。数据科学家将全部采集到的数据集进行整合后，生成了一个包含980个变量的统一数据集。此时需要开发一个机器学习模型，用于精准定位可能对营销活动产生兴趣的客户群体。为达成此目标，数据科学家应当采用哪两种算法的组合方案？（请选择两项）"
@@ -2819,7 +3026,7 @@
     "o_id": "309"
   },
   {
-    "id": "55",
+    "id": "314",
     "question": {
       "enus": "A data scientist is trying to improve the accuracy of a neural network classification model. The data scientist wants to run a large hyperparameter tuning job in Amazon SageMaker. However, previous smaller tuning jobs on the same model often ran for several weeks. The ML specialist wants to reduce the computation time required to run the tuning job. Which actions will MOST reduce the computation time for the hyperparameter tuning job? (Choose two.) ",
       "zhcn": "一位数据科学家正致力于提升神经网络分类模型的准确率。他计划在Amazon SageMaker平台上运行大规模超参数调优任务，但此前相同模型的较小规模调优作业往往需耗时数周。为缩短调优任务的计算时间，该机器学习专家应采取哪两项最能显著提升效率的措施？（请选择两项）"
@@ -2869,7 +3076,7 @@
     "o_id": "314"
   },
   {
-    "id": "56",
+    "id": "325",
     "question": {
       "enus": "A company wants to detect credit card fraud. The company has observed that an average of 2% of credit card transactions are fraudulent. A data scientist trains a classifier on a year's worth of credit card transaction data. The classifier needs to identify the fraudulent transactions. The company wants to accurately capture as many fraudulent transactions as possible. Which metrics should the data scientist use to optimize the classifier? (Choose two.) ",
       "zhcn": "一家公司希望检测信用卡欺诈行为。据该公司观察，信用卡交易中平均有2%属于欺诈交易。数据科学家利用一整年的信用卡交易数据训练了一个分类器，该分类器需要识别出欺诈交易。公司希望尽可能准确地捕捉尽可能多的欺诈交易。数据科学家应采用哪些指标来优化该分类器？（请选择两项。）"
@@ -2919,7 +3126,7 @@
     "o_id": "325"
   },
   {
-    "id": "57",
+    "id": "330",
     "question": {
       "enus": "A company that operates oil platforms uses drones to photograph locations on oil platforms that are difficult for humans to access to search for corrosion. Experienced engineers review the photos to determine the severity of corrosion. There can be several corroded areas in a single photo. The engineers determine whether the identified corrosion needs to be fixed immediately, scheduled for future maintenance, or requires no action. The corrosion appears in an average of 0.1% of all photos. A data science team needs to create a solution that automates the process of reviewing the photos and classifying the need for maintenance. Which combination of steps will meet these requirements? (Choose three.) ",
       "zhcn": "一家运营海上石油平台的企业采用无人机拍摄平台人员难以抵达区域的照片，以探查腐蚀状况。经验丰富的工程师通过审阅这些照片评估腐蚀严重程度，单张图像中可能呈现多处腐蚀区域。工程师需判断已识别的腐蚀点是需要立即修复、安排后续维护，抑或无需采取行动。在所有拍摄图像中，腐蚀现象的出现概率平均为0.1%。数据科学团队需构建一套自动化解决方案，实现照片审阅及维护需求分类的智能化处理。下列哪三项步骤组合能够满足上述需求？（请选择三项）"
@@ -2976,7 +3183,7 @@
     "o_id": "330"
   },
   {
-    "id": "58",
+    "id": "349",
     "question": {
       "enus": "A company wants to use machine learning (ML) to improve its customer churn prediction model. The company stores data in an Amazon Redshift data warehouse. A data science team wants to use Amazon Redshift machine learning (Amazon Redshift ML) to build a model and run predictions for new data directly within the data warehouse. Which combination of steps should the company take to use Amazon Redshift ML to meet these requirements? (Choose three.) ",
       "zhcn": "某公司计划运用机器学习技术优化其客户流失预测模型。该企业将数据存储于Amazon Redshift数据仓库中，数据科学团队希望借助Amazon Redshift机器学习功能，直接在数据仓库内构建模型并对新数据执行预测。为实现这一目标，该公司应采取以下哪三项组合步骤？（请选择三项）"
@@ -3033,7 +3240,7 @@
     "o_id": "349"
   },
   {
-    "id": "59",
+    "id": "353",
     "question": {
       "enus": "A data scientist is building a new model for an ecommerce company. The model will predict how many minutes it will take to deliver a package. During model training, the data scientist needs to evaluate model performance. Which metrics should the data scientist use to meet this requirement? (Choose two.) ",
       "zhcn": "一位数据科学家正在为某电商企业构建新模型，该模型旨在预测包裹投递所需时长。在模型训练过程中，需对模型性能进行评估。为达成此目标，该数据科学家应采用哪两项评估指标？（请选择两项）"
@@ -3083,7 +3290,7 @@
     "o_id": "353"
   },
   {
-    "id": "60",
+    "id": "354",
     "question": {
       "enus": "A machine learning (ML) specialist is developing a model for a company. The model will classify and predict sequences of objects that are displayed in a video. The ML specialist decides to use a hybrid architecture that consists of a convolutional neural network (CNN) followed by a classifier three-layer recurrent neural network (RNN). The company developed a similar model previously but trained the model to classify a different set of objects. The ML specialist wants to save time by using the previously trained model and adapting the model for the current use case and set of objects. Which combination of steps will accomplish this goal with the LEAST amount of effort? (Choose two.) ",
       "zhcn": "一位机器学习专家正为公司开发一款视频物体序列分类与预测模型。该专家决定采用由卷积神经网络（CNN）与三层循环神经网络（RNN）分类器构成的混合架构。该公司曾开发过类似模型，但当时训练所用物体类别与当前不同。为节省时间，专家计划基于已有模型进行适应性调整。以下哪两种步骤组合能以最小工作量实现这一目标？（请选择两项）"
@@ -3133,7 +3340,7 @@
     "o_id": "354"
   },
   {
-    "id": "61",
+    "id": "361",
     "question": {
       "enus": "A machine learning (ML) specialist is building a credit score model for a financial institution. The ML specialist has collected data for the previous 3 years of transactions and third-party metadata that is related to the transactions. After the ML specialist builds the initial model, the ML specialist discovers that the model has low accuracy for both the training data and the test data. The ML specialist needs to improve the accuracy of the model. Which solutions will meet this requirement? (Choose two.) ",
       "zhcn": "一位机器学习专家正为某金融机构构建信用评分模型。该专家已收集了过去三年的交易数据及与之相关的第三方元数据。在完成初始模型构建后，专家发现该模型对训练数据和测试数据的准确度均不理想。现需提升模型精准度，下列哪两项措施可达成此目标？（请选择两项）"
@@ -3183,7 +3390,7 @@
     "o_id": "361"
   },
   {
-    "id": "62",
+    "id": "366",
     "question": {
       "enus": "A company has 2,000 retail stores. The company needs to develop a new model to predict demand based on holidays and weather conditions. The model must predict demand in each geographic area where the retail stores are located. Before deploying the newly developed model, the company wants to test the model for 2 to 3 days. The model needs to be robust enough to adapt to supply chain and retail store requirements. Which combination of steps should the company take to meet these requirements with the LEAST operational overhead? (Choose two.) ",
       "zhcn": "一家企业拥有2000家零售门店，现需开发新型预测模型，将节假日与天气状况纳入需求预测考量。该模型须针对每家门店所在区域进行精准需求预测。在正式部署前，企业计划对模型进行2至3天的测试，且模型需具备足够灵活性以适应供应链与门店运营需求。请问以下哪两项措施组合能以最低运营成本满足上述需求？（请选择两项）"
@@ -3198,28 +3405,28 @@
       },
       {
         "option_text": {
-          "zhcn": "运用亚马逊预测的节假日特征化处理与天气指数来构建该模型。",
+          "zhcn": "运用Amazon Forecast的节假日特征化处理与天气指数来构建该模型。",
           "enus": "Develop the model by using the Amazon Forecast holidays featurization and weather index."
         },
         "option_flag": true
       },
       {
         "option_text": {
-          "zhcn": "采用金丝雀部署策略，通过亚马逊SageMaker与AWS Step Functions服务实现模型部署。",
+          "zhcn": "采用金丝雀部署策略，通过Amazon SageMaker与AWS Step Functions服务实现模型部署。",
           "enus": "Deploy the model by using a canary strategy that uses Amazon SageMaker and AWS Step Functions."
         },
         "option_flag": true
       },
       {
         "option_text": {
-          "zhcn": "采用亚马逊SageMaker流水线进行A/B测试，实现模型部署。",
+          "zhcn": "采用Amazon SageMaker流水线进行A/B测试，实现模型部署。",
           "enus": "Deploy the model by using an A/B testing strategy that uses Amazon SageMaker Pipelines."
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "采用亚马逊SageMaker与AWS Step Functions服务，通过A/B测试策略部署模型。流量分配比例为BC版本67%，BE版本33%。",
+          "zhcn": "采用Amazon SageMaker与AWS Step Functions服务，通过A/B测试策略部署模型。流量分配比例为BC版本67%，BE版本33%。",
           "enus": "Deploy the model by using an A/B testing strategy that uses Amazon SageMaker and AWS Step Functions.  BC (67%)  BE (33%)"
         },
         "option_flag": false
