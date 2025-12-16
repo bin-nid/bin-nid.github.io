@@ -11828,7 +11828,7 @@
     "id": "337",
     "question": {
       "enus": "A machine learning (ML) engineer is using Amazon SageMaker automatic model tuning (AMT) to optimize a model's hyperparameters. The ML engineer notices that the tuning jobs take a long time to run. The tuning jobs continue even when the jobs are not significantly improving against the objective metric. The ML engineer needs the training jobs to optimize the hyperparameters more quickly. How should the ML engineer configure the SageMaker AMT data types to meet these requirements? ",
-      "zhcn": "一位机器学习工程师正借助Amazon SageMaker自动模型调优功能优化模型超参数。该工程师发现调优任务运行耗时过长，且即使目标指标未出现显著提升时，调优进程仍持续进行。为加速超参数优化进程，该工程师应如何配置SageMaker自动模型调优的数据类型以满足需求？"
+      "zhcn": "一位机器学习工程师正借助Amazon SageMaker automatic model tuning (AMT)功能优化模型超参数。该工程师发现调优任务运行耗时过长，且即使目标指标未出现显著提升时，调优进程仍持续进行。为加速超参数优化进程，该工程师应如何配置SageMaker自动模型调优的数据类型以满足需求？"
     },
     "option": [
       {
@@ -12191,14 +12191,14 @@
       },
       {
         "option_text": {
-          "zhcn": "采用亚马逊云搜索服务，并按搜索相关度得分对结果进行排序。",
+          "zhcn": "采用Amazon CloudSearch服务，并按搜索相关度得分对结果进行排序。",
           "enus": "Use Amazon CloudSearch and sort results by the search relevance score. "
         },
         "option_flag": true
       },
       {
         "option_text": {
-          "zhcn": "利用亚马逊云搜索服务，并按照地理位置对结果进行排序。",
+          "zhcn": "利用Amazon CloudSearch服务，并按照地理位置对结果进行排序。",
           "enus": "Use Amazon CloudSearch and sort results by the geographic location."
         },
         "option_flag": false
@@ -12270,7 +12270,7 @@
       },
       {
         "option_text": {
-          "zhcn": "运用Amazon SageMaker数据整理器的快速模型可视化功能，筛选出特征重要性评分介于0.5至1之间的结果。",
+          "zhcn": "运用Amazon SageMaker Data Wrangler的快速模型可视化功能，筛选出特征重要性评分介于0.5至1之间的结果。",
           "enus": "Use an Amazon SageMaker Data Wrangler quick model visualization to find feature importance scores that are between 0.5 and 1. "
         },
         "option_flag": true
@@ -12650,28 +12650,28 @@
     "option": [
       {
         "option_text": {
-          "zhcn": "化解棘手特征，使其归于和谐。",
+          "zhcn": "对问题特征进行归一化处理。",
           "enus": "Normalize the problematic features."
         },
         "option_flag": true
       },
       {
         "option_text": {
-          "zhcn": "**启动问题功能。**",
+          "zhcn": "对问题特征进行自助采样（Bootstrap）。",
           "enus": "Bootstrap the problematic features."
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "去除有问题的功能。",
+          "zhcn": "移除问题特征。",
           "enus": "Remove the problematic features."
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "推演合成特征。",
+          "zhcn": "外推合成特征。",
           "enus": "Extrapolate synthetic features."
         },
         "option_flag": false
@@ -12714,8 +12714,8 @@
       },
       {
         "option_text": {
-          "zhcn": "利用Amazon SageMaker Autopilot为每款产品分别构建专属模型。完成度：百分之百。",
-          "enus": "Use Amazon SageMaker Autopilot to build separate models for each product.  A (100%)"
+          "zhcn": "利用Amazon SageMaker Autopilot为每款产品分别构建专属模型。",
+          "enus": "Use Amazon SageMaker Autopilot to build separate models for each product."
         },
         "option_flag": false
       }
@@ -12836,7 +12836,7 @@
       },
       {
         "option_text": {
-          "zhcn": "利用亚马逊欺诈检测预测接口，可对系统识别出的可疑活动进行自动化审核，及时拦截欺诈行为。",
+          "zhcn": "利用Amazon Fraud Detector预测接口，可对系统识别出的可疑活动进行自动化审核，及时拦截欺诈行为。",
           "enus": "Use the Amazon Fraud Detector prediction API to approve or deny any activities that Fraud Detector identifies as fraudulent."
         },
         "option_flag": true
@@ -12922,7 +12922,7 @@
       },
       {
         "option_text": {
-          "zhcn": "利用Amazon SageMaker数据整理器的快速模型可视化功能预测股票收益，并根据快速模式的特征重要性评分识别最具预测力的特征。",
+          "zhcn": "利用Amazon SageMaker Data Wrangler的快速模型可视化功能预测股票收益，并根据快速模式的特征重要性评分识别最具预测力的特征。",
           "enus": "Use an Amazon SageMaker Data Wrangler quick model visualization to predict the stock returns. Identify the most predictive features based on the quick mode's feature importance scores."
         },
         "option_flag": false
@@ -12951,28 +12951,28 @@
     "option": [
       {
         "option_text": {
-          "zhcn": "创建应用型负载均衡器（ALB），并为该负载均衡器配置HTTPS监听器。",
-          "enus": "Create an Application Load Balancer (ALB). Add an HTTPS listener to the AL"
+          "zhcn": "创建应用程序负载均衡器（ALB）。为ALB添加HTTPS监听器。将自动扩缩组配置为向ALB的目标组注册实例。",
+          "enus": "Create an Application Load Balancer (ALB). Add an HTTPS listener to the ALB. Configure the Auto Scaling group to register instances with the ALB's target group. "
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "将自动扩缩组配置为向ALB目标组注册实例。  \nB. 创建Amazon CloudFront分发服务。使用自定义SSL/TLS证书配置该分发，并将自动扩缩组设置为分发的源站。",
-          "enus": "Configure the Auto Scaling group to register instances with the ALB's target group.  B. Create an Amazon CloudFront distribution. Configure the distribution with a custom SSL/TLS certificate. Set the Auto Scaling group as the distribution's origin."
+          "zhcn": "创建Amazon CloudFront分发。使用自定义SSL/TLS证书配置该分发。将自动扩缩组设置为分发的源站。",
+          "enus": "Create an Amazon CloudFront distribution. Configure the distribution with a custom SSL/TLS certificate. Set the Auto Scaling group as the distribution's origin."
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "创建网络负载均衡器（NLB）。为该负载均衡器添加TCP监听器。将自动扩展组配置为向NLB目标组注册实例。",
+          "zhcn": "创建网络负载均衡器（NLB）。为NLB添加TCP监听器。将自动扩缩组配置为向NLB的目标组注册实例。",
           "enus": "Create a Network Load Balancer (NLB). Add a TCP listener to the NLB. Configure the Auto Scaling group to register instances with the NLB's target group. "
         },
         "option_flag": true
       },
       {
         "option_text": {
-          "zhcn": "创建网关负载均衡器（GLB）。配置自动扩展组，将实例注册至GLB的目标组。",
+          "zhcn": "创建网关负载均衡器（GLB）。将自动扩缩组配置为向GLB的目标组注册实例。",
           "enus": "Create a Gateway Load Balancer (GLB). Configure the Auto Scaling group to register instances with the GLB's target group."
         },
         "option_flag": false
