@@ -3185,7 +3185,7 @@
     "id": "86",
     "question": {
       "enus": "A Machine Learning Specialist wants to bring a custom algorithm to Amazon SageMaker. The Specialist implements the algorithm in a Docker container supported by Amazon SageMaker. How should the Specialist package the Docker container so that Amazon SageMaker can launch the training correctly? ",
-      "zhcn": "一位机器学习专家希望将自定义算法集成至Amazon SageMaker平台。该专家已采用Amazon SageMaker支持的Docker容器实现算法。为确保Amazon SageMaker能正确启动训练任务，专家应当如何封装该Docker容器？\n\n（注：专有名词\"Amazon SageMaker\"和\"Docker\"保留原表达，采用技术领域通用的\"容器\"而非\"集装箱\"等直译，运用\"集成\"\"实现\"\"封装\"等专业术语保持技术文档的严谨性，同时通过\"确保\"\"启动训练任务\"等动态表述增强操作指引的清晰度。）"
+      "zhcn": "一位机器学习专家希望将自定义算法集成至Amazon SageMaker平台。该专家已采用Amazon SageMaker支持的Docker容器实现算法。为确保Amazon SageMaker能正确启动训练任务，专家应当如何封装该Docker容器？"
     },
     "option": [
       {
@@ -3247,7 +3247,7 @@
       },
       {
         "option_text": {
-          "zhcn": "在训练过程中应用L1或L2正则化方法，并配合使用随机失活技术。",
+          "zhcn": "在训练过程中应用L1或L2正则化方法，并配合使用dropouts。",
           "enus": "Apply L1 or L2 regularization and dropouts to the training"
         },
         "option_flag": true
@@ -3835,28 +3835,28 @@
     "option": [
       {
         "option_text": {
-          "zhcn": "一瓣残片",
+          "zhcn": "1 shards",
           "enus": "1 shards"
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "十枚碎片",
+          "zhcn": "10 shards",
           "enus": "10 shards"
         },
         "option_flag": true
       },
       {
         "option_text": {
-          "zhcn": "百枚碎片",
+          "zhcn": "100 shards",
           "enus": "100 shards"
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "千枚碎片",
+          "zhcn": "1,000 shards",
           "enus": "1,000 shards"
         },
         "option_flag": false
@@ -5619,7 +5619,7 @@
       },
       {
         "option_text": {
-          "zhcn": "使用Amazon SageStudio重新构建模型。创建基于XGBoost训练容器的笔记本来执行模型训练，并将模型部署至终端节点。通过Amazon SageMaker Processing对模型进行后续分析，自动生成特征重要性可解释性图表供信贷团队使用。",
+          "zhcn": "使用Amazon SageMaker Studio重新构建模型。创建基于XGBoost训练容器的笔记本来执行模型训练，并将模型部署至终端节点。通过Amazon SageMaker Processing对模型进行后续分析，自动生成特征重要性可解释性图表供信贷团队使用。",
           "enus": "Use Amazon SageMaker Studio to rebuild the model. Create a notebook that uses the XGBoost training container to perform model  training. Deploy the model at an endpoint. Use Amazon SageMaker Processing to post-analyze the model and create a feature importance  explainability chart automatically for the credit team."
         },
         "option_flag": false
@@ -5765,7 +5765,7 @@
     "id": "155",
     "question": {
       "enus": "A machine learning (ML) specialist is administering a production Amazon SageMaker endpoint with model monitoring configured. Amazon SageMaker Model Monitor detects violations on the SageMaker endpoint, so the ML specialist retrains the model with the latest dataset. This dataset is statistically representative of the current production traffic. The ML specialist notices that even after deploying the new SageMaker model and running the first monitoring job, the SageMaker endpoint still has violations. What should the ML specialist do to resolve the violations? ",
-      "zhcn": "一位机器学习专家正在管理一个已配置模型监控功能的Amazon SageMaker生产终端。当Amazon SageMaker模型监控器检测到该终端出现违规行为时，该专家使用最新数据集对模型进行重新训练。该数据集能准确反映当前生产环境的数据特征。然而专家发现，即使部署了新模型并运行首次监控任务后，终端仍存在违规现象。此时应采取何种措施以消除这些违规行为？"
+      "zhcn": "一位机器学习专家正在管理一个已配置模型监控功能的Amazon SageMaker生产终端。当Amazon SageMaker Model Monitor检测到该终端出现违规行为时，该专家使用最新数据集对模型进行重新训练。该数据集能准确反映当前生产环境的数据特征。然而专家发现，即使部署了新模型并运行首次监控任务后，终端仍存在违规现象。此时应采取何种措施以消除这些违规行为？"
     },
     "option": [
       {
@@ -7167,7 +7167,7 @@
       },
       {
         "option_text": {
-          "zhcn": "部署模型后，可利用SageMaker模型监控功能观测模型的推理延迟指标与资源开销延迟指标。通过调整模型超参数来优化推理耗时，并启动新一轮训练任务以提升性能。",
+          "zhcn": "部署模型后，可利用SageMaker Model Monitor功能观测模型的推理延迟指标与资源开销延迟指标。通过调整模型超参数来优化推理耗时，并启动新一轮训练任务以提升性能。",
           "enus": "Use SageMaker Model Monitor for visibility into the ModelLatency metric and OverheadLatency metric of the model after the model is  deployed. Adjust the model hyperparameters, and look for lower inference times. Run a new training job."
         },
         "option_flag": false
@@ -7282,7 +7282,7 @@
       },
       {
         "option_text": {
-          "zhcn": "使用Amazon SageMaker模型监控功能创建模型质量基线。请确保在基线约束文件中将emit_metrics选项设置为启用状态，并为该指标配置Amazon CloudWatch告警。",
+          "zhcn": "使用Amazon SageMaker Model Monitor功能创建模型质量基线。请确保在基线约束文件中将emit_metrics选项设置为启用状态，并为该指标配置Amazon CloudWatch告警。",
           "enus": "Use Amazon SageMaker Model Monitor to create a model quality baseline. Confirm that the emit_metrics option is set to Enabled in the  baseline constraints file. Set up an Amazon CloudWatch alarm for the metric."
         },
         "option_flag": false
@@ -7303,7 +7303,7 @@
       }
     ],
     "analysis": {
-      "enus": "正确答案是：**“使用Amazon SageMaker模型监控器创建数据质量基线。确认基线约束文件中已将emit_metrics选项设置为启用状态，并针对该指标设置Amazon CloudWatch警报。”**\n\n**深度解析：**\n核心问题在于检测*模型特征值分布变化*，这正是**数据漂移**的典型定义。Amazon SageMaker模型监控器内置了专为此场景设计的**数据质量监控**功能，可自动将输入数据与统计基线（如特征值分布）进行比对，并向CloudWatch发送指标。\n\n以下从\"最低运维负担\"角度阐释正误答案的差异：\n\n*   **正确答案（数据质量基线方案）：** 该方案完全自动化。配置完成后，模型监控器会自动执行统计比对和指标发送，仅需一次性设置基线并在生成指标上创建CloudWatch警报，运维负担极低。\n\n*   **错误选项1（模型质量基线）：** 模型质量监控针对的是*模型预测偏差*（如准确率、精确度），而非*输入特征分布变化*。题干已明确根本原因是特征分布变化，而非模型预测逻辑的性能变化。\n\n*   **错误选项2（SageMaker调试器）：** 该工具专用于*训练阶段的实时分析*（如梯度消失/过拟合检测），不适用于生产环境推理端点的数据漂移自动化监控。配置此方案需大量定制代码和维护工作，运维负担较高。\n\n*   **错误选项3（CloudWatch日志分析）：** 此为被动式人工操作方案。需持续编写查询脚本分析日志以检测统计漂移，缺乏自动化支持且人力成本最高，运维负担远超其他方案。\n\n**关键区别：** 正确答案精准选用专为数据漂移场景设计的服务（模型监控器）及其功能模块（数据质量监控），通过自动化机制满足\"最低运维负担\"要求。而错误选项或偏离问题本质，或工具选择失当，或依赖人工干预，均无法实现高效运维。",
+      "enus": "正确答案是：**“使用Amazon SageMaker Model Monitor创建数据质量基线。确认基线约束文件中已将emit_metrics选项设置为启用状态，并针对该指标设置Amazon CloudWatch警报。”**\n\n**深度解析：**\n核心问题在于检测*模型特征值分布变化*，这正是**数据漂移**的典型定义。Amazon SageMaker Model Monitor内置了专为此场景设计的**数据质量监控**功能，可自动将输入数据与统计基线（如特征值分布）进行比对，并向CloudWatch发送指标。\n\n以下从\"最低运维负担\"角度阐释正误答案的差异：\n\n*   **正确答案（数据质量基线方案）：** 该方案完全自动化。配置完成后，模型监控器会自动执行统计比对和指标发送，仅需一次性设置基线并在生成指标上创建CloudWatch警报，运维负担极低。\n\n*   **错误选项1（模型质量基线）：** 模型质量监控针对的是*模型预测偏差*（如准确率、精确度），而非*输入特征分布变化*。题干已明确根本原因是特征分布变化，而非模型预测逻辑的性能变化。\n\n*   **错误选项2（SageMaker调试器）：** 该工具专用于*训练阶段的实时分析*（如梯度消失/过拟合检测），不适用于生产环境推理端点的数据漂移自动化监控。配置此方案需大量定制代码和维护工作，运维负担较高。\n\n*   **错误选项3（CloudWatch日志分析）：** 此为被动式人工操作方案。需持续编写查询脚本分析日志以检测统计漂移，缺乏自动化支持且人力成本最高，运维负担远超其他方案。\n\n**关键区别：** 正确答案精准选用专为数据漂移场景设计的服务（模型监控器）及其功能模块（数据质量监控），通过自动化机制满足\"最低运维负担\"要求。而错误选项或偏离问题本质，或工具选择失当，或依赖人工干预，均无法实现高效运维。",
       "zhcn": "我们先来梳理一下题目关键信息：  \n\n- 背景：零售公司用 ML 模型做销量预测，最近 3 周预测不准。  \n- 原因：模型输入特征（features）的数值分布发生了变化（data drift / 数据漂移）。  \n- 已有流程：每天 AWS Glue 任务会把输入数据、实际销量、模型预测结果存到 S3。  \n- 需求：未来要能检测到这类特征分布变化，并且 **操作开销最小**。  \n\n---\n\n**选项分析**  \n\n**[A]** 使用 SageMaker Model Monitor 的 **数据质量基线**（data quality baseline）功能，在 baseline constraints 文件中启用 `emit_metrics`，然后设置 CloudWatch 警报。  \n- Model Monitor 的数据质量监控可以检测输入数据与训练时基线在缺失值、数据类型、数据范围、分布（如数值型特征的分布差异）等方面的变化。  \n- 它会自动计算指标并发送到 CloudWatch，操作简单，无需大量自定义代码。  \n\n**[B]** 使用 SageMaker Model Monitor 的 **模型质量基线**（model quality baseline）。  \n- 模型质量监控需要真实标签（actual sales）来计算准确率、RMSE 等模型性能指标。  \n- 但题目中检测的是 **特征分布变化**，不是直接检测模型预测性能下降，而且模型质量监控需要标签数据，可能延迟（标签可能次日才有），不如数据质量监控直接和实时。  \n- 并且模型性能下降可能是多种原因，不一定是特征分布变化。  \n\n**[C]** 使用 SageMaker Debugger 创建规则捕获特征值。  \n- Debugger 主要用于训练过程监控和实时张量收集，用于推理阶段的数据漂移检测需要较多自定义设置，操作比 Model Monitor 的数据质量监控复杂。  \n\n**[D]** 用 CloudWatch 直接监控 SageMaker 端点，分析日志检查数据漂移。  \n- 这需要自己从日志中提取特征并做分布对比，需要写脚本、设置警报，操作开销大。  \n\n---\n\n**结论**  \n检测特征分布变化（数据漂移），且要求操作开销最小 → SageMaker Model Monitor 的数据质量监控（A）是官方推荐的标准方法，自动化程度高，只需设置基线并开启指标发送到 CloudWatch 即可。  \n\n---\n\n**答案：A** ✅"
     },
     "answer": "A",
@@ -8070,7 +8070,7 @@
       },
       {
         "option_text": {
-          "zhcn": "利用SageMaker模型监控功能生成沙普利值，以解析模型行为逻辑。将生成的沙普利值存储至Amazon S3服务中，并绘制特征与SHAP（沙普利加和解释）值的关系图表，清晰呈现各特征对模型决策结果的影响机制。",
+          "zhcn": "利用SageMaker Model Monitor功能生成沙普利值，以解析模型行为逻辑。将生成的沙普利值存储至Amazon S3服务中，并绘制特征与SHAP（沙普利加和解释）值的关系图表，清晰呈现各特征对模型决策结果的影响机制。",
           "enus": "Use SageMaker Model Monitor to create Shapley values that help explain model behavior. Store the Shapley values in Amazon S3.  Create a chart that shows features and SHapley Additive explanations (SHAP) values to explain how the features affect the model  outcomes."
         },
         "option_flag": false
@@ -9016,7 +9016,7 @@
       },
       {
         "option_text": {
-          "zhcn": "在企业部署模型后，运用Amazon SageMaker模型监控器来洞察模型的延迟指标与资源开销指标。提升模型学习速率，并启动新一轮训练任务。",
+          "zhcn": "在企业部署模型后，运用Amazon SageMaker Model Monitor来洞察模型的延迟指标与资源开销指标。提升模型学习速率，并启动新一轮训练任务。",
           "enus": "Use Amazon SageMaker Model Monitor to gain visibility into the ModelLatency metric and OverheadLatency metric of the model after  the company deploys the model. Increase the model learning rate. Run a new training job."
         },
         "option_flag": false
@@ -9482,7 +9482,7 @@
       },
       {
         "option_text": {
-          "zhcn": "将日常物件存放于S3标准低频访问存储层级，并设置生命周期策略，使这些物件在90天后自动转存至S3冰川深度归档存储。",
+          "zhcn": "将日常物件存放于S3标准低频访问存储层级，并设置生命周期策略，使这些物件在90天后自动转存至S3 Glacier深度归档存储。",
           "enus": "Store the daily objects in the S3 Standard-InfrequentAccess (S3 Standard-IA) storage class. Configure an S3 Lifecycle rule to move the  objects to S3 Glacier Deep Archive after 90 days."
         },
         "option_flag": true
@@ -10457,14 +10457,14 @@
     "option": [
       {
         "option_text": {
-          "zhcn": "对模型进行增量训练以完成更新。启用Amazon SageMaker模型监控功能，以便检测模型性能问题并发送通知。",
+          "zhcn": "对模型进行增量训练以完成更新。启用Amazon SageMaker Model Monitor功能，以便检测模型性能问题并发送通知。",
           "enus": "Perform incremental training to update the model. Activate Amazon SageMaker Model Monitor to detect model performance issues and  to send notifications."
         },
         "option_flag": true
       },
       {
         "option_text": {
-          "zhcn": "使用Amazon SageMaker模型治理功能。通过配置模型治理自动调整模型超参数。在Amazon CloudWatch中创建性能阈值告警以便发送通知。",
+          "zhcn": "使用Amazon SageMaker Model Governance功能。通过配置Model Governance自动调整模型超参数。在Amazon CloudWatch中创建性能阈值告警以便发送通知。",
           "enus": "Use Amazon SageMaker Model Governance. Configure Model Governance to automatically adjust model hyperparameters. Create a  performance threshold alarm in Amazon CloudWatch to send notifications."
         },
         "option_flag": false
@@ -10478,8 +10478,8 @@
       },
       {
         "option_text": {
-          "zhcn": "仅采用近数月的数据进行增量训练，以完成模型迭代更新。通过Amazon SageMaker模型监测平台及时侦测模型性能异常，并自动发送预警通知。",
-          "enus": "Use only data from the previous several months to perform incremental training to update the model. Use Amazon SageMaker Model  Monitor to detect model performance issues and to send notifications."
+          "zhcn": "仅采用近数月的数据进行增量训练，以完成模型迭代更新。通过Amazon SageMaker Model Monitor平台及时侦测模型性能异常，并自动发送预警通知。",
+          "enus": "Use only data from the previous several months to perform incremental training to update the model. Use Amazon SageMaker Model Monitor to detect model performance issues and to send notifications."
         },
         "option_flag": false
       }
@@ -10643,7 +10643,7 @@
       },
       {
         "option_text": {
-          "zhcn": "请使用 Amazon SageStudio 数据整理器。",
+          "zhcn": "请使用 Amazon SageMaker Studio Data Wrangler。",
           "enus": "Use Amazon SageMaker Studio Data Wrangler."
         },
         "option_flag": true
@@ -10722,15 +10722,15 @@
       },
       {
         "option_text": {
-          "zhcn": "利用Amazon SageMaker数据整理工具的偏差报告识别数据集中的异常值，随后通过数据流处理功能，依据偏差分析结果剔除异常数据。",
-          "enus": "Use an Amazon SageMaker Data Wrangler bias report to find outliers in the dataset. Use a Data Wrangler data fiow to remove outliers  based on the bias report."
+          "zhcn": "利用Amazon SageMaker Data Wrangler的偏差报告识别数据集中的异常值，随后通过Data Wrangler数据流，依据偏差分析结果剔除异常数据。",
+          "enus": "Use an Amazon SageMaker Data Wrangler bias report to find outliers in the dataset. Use a Data Wrangler data flow to remove outliers  based on the bias report."
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "借助Amazon SageMaker数据整理器的异常检测可视化功能，可精准定位数据集中的异常值。通过在数据整理流程中添加转换步骤，即可有效剔除异常数据点。",
-          "enus": "Use an Amazon SageMaker Data Wrangler anomaly detection visualization to find outliers in the dataset. Add a transformation to a  Data Wrangler data fiow to remove outliers."
+          "zhcn": "借助Amazon SageMaker Data Wrangler的异常检测可视化功能，可精准定位数据集中的异常值。通过在Data Wrangler流程中添加转换步骤，即可有效剔除异常数据点。",
+          "enus": "Use an Amazon SageMaker Data Wrangler anomaly detection visualization to find outliers in the dataset. Add a transformation to a Data Wrangler data flow to remove outliers."
         },
         "option_flag": true
       },
@@ -11582,8 +11582,8 @@
       },
       {
         "option_text": {
-          "zhcn": "采用AWS Batch托管型Amazon EC2竞价型实例对模型进行评分。创建Amazon FSx for Lustre存储卷并将其挂载至竞价型实例。获赞最多方案",
-          "enus": "Score the model by using AWS Batch managed Amazon EC2 Spot Instances. Create an Amazon FSx for Lustre volume and mount it to the Spot Instances. Most Voted"
+          "zhcn": "采用AWS Batch托管型Amazon EC2竞价型实例对模型进行评分。创建Amazon FSx for Lustre存储卷并将其挂载至竞价型实例。",
+          "enus": "Score the model by using AWS Batch managed Amazon EC2 Spot Instances. Create an Amazon FSx for Lustre volume and mount it to the Spot Instances."
         },
         "option_flag": true
       },
@@ -11596,8 +11596,8 @@
       },
       {
         "option_text": {
-          "zhcn": "在Amazon EC2 Spot实例上通过Amazon SageMaker笔记本对模型进行评分。创建亚马逊弹性文件系统（Amazon EFS）并挂载至Spot实例。B（100%）",
-          "enus": "Score the model by using Amazon SageMaker notebook on Amazon EC2 Spot Instances. Create an Amazon Elastic File System (Amazon EFS) file system and mount it to the Spot Instances.  B (100%)"
+          "zhcn": "在Amazon EC2 Spot实例上通过Amazon SageMaker笔记本对模型进行评分。创建亚马逊弹性文件系统（Amazon EFS）并挂载至Spot实例。",
+          "enus": "Score the model by using Amazon SageMaker notebook on Amazon EC2 Spot Instances. Create an Amazon Elastic File System (Amazon EFS) file system and mount it to the Spot Instances."
         },
         "option_flag": false
       }
@@ -11618,35 +11618,35 @@
     "option": [
       {
         "option_text": {
-          "zhcn": "网格搜索",
+          "zhcn": "网格搜索（Grid search）",
           "enus": "Grid search"
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "随机寻优",
+          "zhcn": "随机寻优（Random search）",
           "enus": "Random search"
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "贝叶斯优化",
+          "zhcn": "贝叶斯优化（Bayesian optimization）",
           "enus": "Bayesian optimization"
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "超频优选（Hyperband Most Voted）\n\n注：采用\"超频\"对应\"Hyper\"的技术感，\"优选\"对应\"Most Voted\"的集体决策内涵，既保留算法领域特性，又通过四字格提升中文韵律美感。专有名词部分保留英文原称置于括号内，符合学术规范。",
-          "enus": "Hyperband Most Voted"
+          "zhcn": "Hyperband",
+          "enus": "Hyperband"
         },
         "option_flag": true
       }
     ],
     "analysis": {
-      "enus": "正确答案为 **Hyperband Most Voted**。Hyperband 采用一种多臂赌博机策略，能够动态地将资源分配给潜力较大的超参数配置，并对表现不佳的试验进行提前终止。该算法通过多轮逐次减半机制，先以少量资源测试大量配置，仅保留表现优异者继续优化。这种做法恰好满足了尽早终止低效任务、将算力集中于潜力配置的要求，从而最大程度减少因不良超参数造成的时间浪费。\n\n相比之下：  \n- **网格搜索** 会穷举所有参数组合且不支持提前终止，导致计算成本高昂；  \n- **随机搜索** 虽比网格搜索高效，但仍需完整运行所有试验，缺乏早期终止机制；  \n- **贝叶斯优化** 虽注重智能搜索，但通常不会像 Hyperband 那样在训练过程中果断剔除表现不佳的配置。  \n\n因此在此场景下，Hyperband 能最有效地提升计算效率。",
+      "enus": "正确答案为 **Hyperband**。Hyperband 采用一种多臂赌博机策略，能够动态地将资源分配给潜力较大的超参数配置，并对表现不佳的试验进行提前终止。该算法通过多轮逐次减半机制，先以少量资源测试大量配置，仅保留表现优异者继续优化。这种做法恰好满足了尽早终止低效任务、将算力集中于潜力配置的要求，从而最大程度减少因不良超参数造成的时间浪费。\n\n相比之下：  \n- **网格搜索** 会穷举所有参数组合且不支持提前终止，导致计算成本高昂；  \n- **随机搜索** 虽比网格搜索高效，但仍需完整运行所有试验，缺乏早期终止机制；  \n- **贝叶斯优化** 虽注重智能搜索，但通常不会像 Hyperband 那样在训练过程中果断剔除表现不佳的配置。  \n\n因此在此场景下，Hyperband 能最有效地提升计算效率。",
       "zhcn": "我们先分析一下题目要求：  \n\n- 任务：图像目标检测的深度学习模型  \n- 目标：通过大量并行超参数调优实验，找到**优化计算时间**的超参数  \n- 要求：  \n  1. 性能差的实验要尽早停止（早停机制）  \n  2. 计算资源要分配给表现好的超参数组合  \n  3. 调优的参数：SGD 学习率、动量、epoch、mini-batch 大小  \n- 选择标准：**计算时间最少**  \n\n---\n\n**选项分析**  \n\n- **A. Grid search**  \n  网格搜索会遍历所有超参数组合，每个组合都跑完所有 epoch，不会提前停止表现差的配置，计算成本高，不符合“早停”要求。  \n\n- **B. Random search**  \n  随机搜索比网格搜索更高效（尤其在高维空间），但通常也是每个配置跑满资源，除非手动加入早停，但题目要求的是**技术本身**支持早停和资源分配。  \n\n- **C. Bayesian optimization**  \n  贝叶斯优化利用已有结果指导后续超参数选择，比随机搜索更高效，但标准的贝叶斯优化（如基于高斯过程）并不直接包含“提前终止表现差的训练”这一机制，除非与多臂老虎机或逐次减半等方法结合。  \n\n- **D. Hyperband**  \n  Hyperband 是一种基于逐次减半（Successive Halving）的算法，核心思想是：  \n  - 对大量超参数组合用少量资源（如 epoch 数）进行初步评估  \n  - 只保留表现好的一半，并给它们更多资源继续训练  \n  - 重复此过程，直到某些配置跑完所有资源  \n  这样能快速淘汰差的配置，把计算资源集中在有希望的配置上，特别适合需要早停的场景，且比纯贝叶斯优化更简单并行。  \n\n---\n\n**为什么选 D**  \n\n题目强调“大量并行超参数调优”、“停止表现差的实验”、“分配更多资源给表现好的配置”，这正是 Hyperband 的设计目的。  \n相比贝叶斯优化（需要串行或部分串行），Hyperband 可以充分利用并行计算资源，快速筛选，从而在**计算时间最少**的前提下完成调优。  \n\n---\n\n**答案**：D"
     },
     "answer": "D",
@@ -11682,8 +11682,8 @@
       },
       {
         "option_text": {
-          "zhcn": "通过扩展Amazon SageMaker的scikit-learn容器对代码进行封装。投票结果：D选项（50%）获最高支持，A选项（33%）次之，C选项（17%）位列第三。",
-          "enus": "Package the code by extending an Amazon SageMaker scikit-learn container. Most Voted  D (50%)  A (33%)  C (17%)"
+          "zhcn": "通过扩展Amazon SageMaker的scikit-learn容器对代码进行封装。",
+          "enus": "Package the code by extending an Amazon SageMaker scikit-learn container. "
         },
         "option_flag": true
       }
@@ -11719,14 +11719,14 @@
       {
         "option_text": {
           "zhcn": "创建一条亚马逊数据火线（Amazon Data Firehose）传输流，将数据传送至OpenSearch服务。配置该传输流时，需将原始数据备份至S3存储桶。同时设置数据源，使其能够向传输流发送数据。",
-          "enus": "Create one Amazon Data Firehose delivery stream to send data to OpenSearch Service. Configure the delivery stream to back up the raw data to the S3 bucket. Configure the data sources to send data to the delivery stream. Most Voted"
+          "enus": "Create one Amazon Data Firehose delivery stream to send data to OpenSearch Service. Configure the delivery stream to back up the raw data to the S3 bucket. Configure the data sources to send data to the delivery stream."
         },
         "option_flag": true
       },
       {
         "option_text": {
-          "zhcn": "创建一条Amazon Kinesis Data Streams。建立一条Amazon Data Firehose传输流，将数据发送至OpenSearch Service。配置该传输流将数据备份至S3存储桶。把传输流与数据流相连接。配置数据源使其向数据流发送数据。C (100%)",
-          "enus": "Create one Amazon Kinesis data stream. Create one Amazon Data Firehose delivery stream to send data to OpenSearch Service. Configure the delivery stream to back up the data to the S3 bucket. Connect the delivery stream to the data stream. Configure the data sources to send data to the data stream.  C (100%)"
+          "zhcn": "创建一条Amazon Kinesis Data Streams。建立一条Amazon Data Firehose传输流，将数据发送至OpenSearch Service。配置该传输流将数据备份至S3存储桶。把传输流与数据流相连接。配置数据源使其向数据流发送数据。",
+          "enus": "Create one Amazon Kinesis data stream. Create one Amazon Data Firehose delivery stream to send data to OpenSearch Service. Configure the delivery stream to back up the data to the S3 bucket. Connect the delivery stream to the data stream. Configure the data sources to send data to the data stream."
         },
         "option_flag": false
       }
@@ -11754,8 +11754,8 @@
       },
       {
         "option_text": {
-          "zhcn": "将数据上传至Amazon S3存储桶，并授权SageMaker访问桶内数据。随后将数据从S3存储桶导入SageMaker Data Wrangler，通过该工具进行数据转换并生成分析洞察。此为最高票选方案。",
-          "enus": "Upload the data into an Amazon S3 bucket. Allow SageMaker to access the data that is in the bucket. Import the data from the S3 bucket into SageMaker Data Wrangler. Perform data transformations and generate insights within Data Wrangler. Most Voted"
+          "zhcn": "将数据上传至Amazon S3存储桶，并授权SageMaker访问桶内数据。随后将数据从S3存储桶导入SageMaker Data Wrangler，通过该工具进行数据转换并生成分析洞察。",
+          "enus": "Upload the data into an Amazon S3 bucket. Allow SageMaker to access the data that is in the bucket. Import the data from the S3 bucket into SageMaker Data Wrangler. Perform data transformations and generate insights within Data Wrangler."
         },
         "option_flag": true
       },
@@ -11797,8 +11797,8 @@
       },
       {
         "option_text": {
-          "zhcn": "无服务器推理与预置并发\n最高票选\nB（83%）\nA（17%）",
-          "enus": "Serverless inference with provisioned concurrency Most Voted  B (83%)  A (17%)"
+          "zhcn": "无服务器推理与预置并发",
+          "enus": "Serverless inference with provisioned concurrency"
         },
         "option_flag": true
       },
@@ -11854,8 +11854,8 @@
       },
       {
         "option_text": {
-          "zhcn": "将 TrainingJobEarlyStoppingType 设为 AUTO 值。此为最高票选方案。",
-          "enus": "Set TrainingJobEarlyStoppingType to the AUTO value. Most Voted"
+          "zhcn": "将 TrainingJobEarlyStoppingType 设为 AUTO 值。",
+          "enus": "Set TrainingJobEarlyStoppingType to the AUTO value."
         },
         "option_flag": true
       }
@@ -11883,8 +11883,8 @@
       },
       {
         "option_text": {
-          "zhcn": "在模型训练前，对训练数据集采用合成少数类过采样技术（SMOTE）。最高票选方案。",
-          "enus": "Apply Synthetic Minority Oversampling Technique (SMOTE) to the training dataset before training. Most Voted"
+          "zhcn": "在模型训练前，对训练数据集采用合成少数类过采样技术（SMOTE）。",
+          "enus": "Apply Synthetic Minority Oversampling Technique (SMOTE) to the training dataset before training. "
         },
         "option_flag": true
       },
@@ -11926,8 +11926,8 @@
       },
       {
         "option_text": {
-          "zhcn": "\"类别不均衡（CI）最高票选\"",
-          "enus": "Class imbalance (CI) Most Voted"
+          "zhcn": "类别不均衡（CI）",
+          "enus": "Class imbalance (CI) "
         },
         "option_flag": true
       },
@@ -11976,8 +11976,8 @@
       },
       {
         "option_text": {
-          "zhcn": "CompleteOnConvergence 最高票当选",
-          "enus": "CompleteOnConvergence Most Voted"
+          "zhcn": "CompleteOnConvergence",
+          "enus": "CompleteOnConvergence"
         },
         "option_flag": true
       },
@@ -11990,7 +11990,7 @@
       }
     ],
     "analysis": {
-      "enus": "正确答案为 **\"ConvergenceDetected\"**（实际选项中的\"CompleteOnConvergence Most Voted\"已隐含此意）。其核心要求是：当内置算法判定后续优化结果相比最佳结果提升幅度难以超过1%时，立即停止参数调优。  \n- **MaxRuntimeInSeconds** 仅基于固定时长停止，与优化进度无关；  \n- **TargetObjectiveMetricValue** 在达到特定指标值时终止，不涉及收敛性判断；  \n- **MaxNumberOfTrainingJobsNotImproving** 虽在连续多次训练无改善后停止，但未采用1%收敛逻辑。  \n唯 **ConvergenceDetected** 能通过SageMaker内置算法实时监测优化幅度，在提升率低于阈值（默认1%）时自动终止调优，与此处需求完全契合。",
+      "enus": "正确答案为 **\"ConvergenceDetected\"**。其核心要求是：当内置算法判定后续优化结果相比最佳结果提升幅度难以超过1%时，立即停止参数调优。  \n- **MaxRuntimeInSeconds** 仅基于固定时长停止，与优化进度无关；  \n- **TargetObjectiveMetricValue** 在达到特定指标值时终止，不涉及收敛性判断；  \n- **MaxNumberOfTrainingJobsNotImproving** 虽在连续多次训练无改善后停止，但未采用1%收敛逻辑。  \n唯 **ConvergenceDetected** 能通过SageMaker内置算法实时监测优化幅度，在提升率低于阈值（默认1%）时自动终止调优，与此处需求完全契合。",
       "zhcn": "我们来逐步分析一下这道题。  \n\n**题干关键信息**：  \n- 目前使用的是 `MaxNumberOfTrainingJobs` 作为超参数调优的停止条件。  \n- 现在想改为：当内部算法判断调优任务不太可能比当前最佳训练任务的目标指标再提高 **1%** 以上时，立即停止。  \n- 这意味着希望模型在**收敛**（即改进空间很小）时自动停止，而不是跑满指定的训练任务数量。  \n\n**选项分析**：  \n\n**[A] MaxRuntimeInSeconds**  \n- 这是按总运行时间上限来停止，与“改进小于 1%”无关。  \n\n**[B] TargetObjectiveMetricValue**  \n- 这是设定一个目标值，一旦有训练任务达到该目标值就停止，而不是根据收敛情况判断。  \n\n**[C] CompleteOnConvergence** ✅  \n- SageMaker 超参数调优作业的停止条件之一。  \n- 当内部算法判断进一步调优不太可能带来显著改进（即收敛）时停止。  \n- 题干中“不太可能比最佳结果再提高 1% 以上”正是收敛的典型判断逻辑。  \n\n**[D] MaxNumberOfTrainingJobsNotImproving**  \n- 这是指连续多少个训练任务没有改善才停止，虽然也涉及“不再改进”，但它是一个固定数量阈值，不是基于 1% 改进潜力的动态收敛判断。  \n\n**结论**：  \n`CompleteOnConvergence` 是 SageMaker 中专门用于在模型收敛时提前停止调优的选项，符合题目要求。  \n\n**答案**：C"
     },
     "answer": "C",
@@ -12027,7 +12027,7 @@
       {
         "option_text": {
           "zhcn": "借助SageMaker Data Wrangler的直方图可视化功能，可清晰呈现特定特征的数值分布范围。",
-          "enus": "Use the SageMaker Data Wrangler histogram visualization to inspect the range of values for the specific feature.  Most Voted"
+          "enus": "Use the SageMaker Data Wrangler histogram visualization to inspect the range of values for the specific feature."
         },
         "option_flag": true
       }
@@ -12055,8 +12055,8 @@
       },
       {
         "option_text": {
-          "zhcn": "相较于文件模式，建议将SageMaker训练任务配置调整为快速文件模式，无需其他改动。此为最高票推荐方案。",
-          "enus": "Instead of File mode, configure the SageMaker training job to use FastFile mode with no other changes. Most Voted"
+          "zhcn": "相较于文件模式，建议将SageMaker训练任务配置调整为快速文件模式，无需其他改动。",
+          "enus": "Instead of File mode, configure the SageMaker training job to use FastFile mode with no other changes."
         },
         "option_flag": true
       },
@@ -12091,8 +12091,8 @@
     "option": [
       {
         "option_text": {
-          "zhcn": "启用模型端点的Amazon SageMaker模型监控数据捕获功能。基于训练数据集创建监控基线。设定定期监控任务。当区域客户数据的数值分布未通过基线漂移检验时，通过Amazon CloudWatch向数据科学家发送告警。利用更广泛的数据源重新评估训练集并优化模型。最高票选方案",
-          "enus": "Enable Amazon SageMaker Model Monitor data capture on the model endpoint. Create a monitoring baseline on the training dataset. Schedule monitoring jobs. Use Amazon CloudWatch to alert the data scientists when the numerical distance of regional customer data fails the baseline drift check. Reevaluate the training set with the larger data source and retrain the model. Most Voted"
+          "zhcn": "启用模型端点的Amazon SageMaker Model Monitor数据捕获功能。基于训练数据集创建监控基线。设定定期监控任务。当区域客户数据的数值分布未通过基线漂移检验时，通过Amazon CloudWatch向数据科学家发送告警。利用更广泛的数据源重新评估训练集并优化模型。",
+          "enus": "Enable Amazon SageMaker Model Monitor data capture on the model endpoint. Create a monitoring baseline on the training dataset. Schedule monitoring jobs. Use Amazon CloudWatch to alert the data scientists when the numerical distance of regional customer data fails the baseline drift check. Reevaluate the training set with the larger data source and retrain the model."
         },
         "option_flag": true
       },
@@ -12134,28 +12134,28 @@
     "option": [
       {
         "option_text": {
-          "zhcn": "精准",
+          "zhcn": "Accuracy",
           "enus": "Accuracy"
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "“精准之选”",
-          "enus": "Precision Most Voted"
+          "zhcn": "Precision",
+          "enus": "Precision"
         },
         "option_flag": true
       },
       {
         "option_text": {
-          "zhcn": "忆起",
+          "zhcn": "Recall",
           "enus": "Recall"
         },
         "option_flag": false
       },
       {
         "option_text": {
-          "zhcn": "一级方程式赛车",
+          "zhcn": "F1",
           "enus": "F1"
         },
         "option_flag": false
@@ -12191,8 +12191,8 @@
       },
       {
         "option_text": {
-          "zhcn": "采用亚马逊云搜索服务，并按搜索相关度得分对结果进行排序。最多赞同",
-          "enus": "Use Amazon CloudSearch and sort results by the search relevance score. Most Voted"
+          "zhcn": "采用亚马逊云搜索服务，并按搜索相关度得分对结果进行排序。",
+          "enus": "Use Amazon CloudSearch and sort results by the search relevance score. "
         },
         "option_flag": true
       },
@@ -12227,8 +12227,8 @@
       },
       {
         "option_text": {
-          "zhcn": "为\"day_of_week\"与\"binned_age\"创建交叉分析表。最多票选",
-          "enus": "Create crosstabs for day_of_week and binned_age. Most Voted"
+          "zhcn": "为\"day_of_week\"与\"binned_age\"创建交叉分析表。",
+          "enus": "Create crosstabs for day_of_week and binned_age. "
         },
         "option_flag": true
       },
@@ -12270,8 +12270,8 @@
       },
       {
         "option_text": {
-          "zhcn": "运用Amazon SageMaker数据整理器的快速模型可视化功能，筛选出特征重要性评分介于0.5至1之间的结果。此为最高票选方案。",
-          "enus": "Use an Amazon SageMaker Data Wrangler quick model visualization to find feature importance scores that are between 0.5 and 1. Most Voted"
+          "zhcn": "运用Amazon SageMaker数据整理器的快速模型可视化功能，筛选出特征重要性评分介于0.5至1之间的结果。",
+          "enus": "Use an Amazon SageMaker Data Wrangler quick model visualization to find feature importance scores that are between 0.5 and 1. "
         },
         "option_flag": true
       },
@@ -12320,8 +12320,8 @@
       },
       {
         "option_text": {
-          "zhcn": "以Amazon S3为目标端配置Amazon Data Firehose服务，设定Firehose调用AWS Glue中的Apache Spark作业进行数据转换。启用源数据记录备份功能并配置错误日志存储路径。此为最高票选方案。",
-          "enus": "Use Amazon Data Firehose with Amazon S3 as the destination. Configure Firehose to invoke an Apache Spark job in AWS Glue for data transformation. Enable source record backup and configure the error prefix. Most Voted"
+          "zhcn": "以Amazon S3为目标端配置Amazon Data Firehose服务，设定Firehose调用AWS Glue中的Apache Spark作业进行数据转换。启用源数据记录备份功能并配置错误日志存储路径。",
+          "enus": "Use Amazon Data Firehose with Amazon S3 as the destination. Configure Firehose to invoke an Apache Spark job in AWS Glue for data transformation. Enable source record backup and configure the error prefix. "
         },
         "option_flag": false
       },
@@ -12370,8 +12370,8 @@
       },
       {
         "option_text": {
-          "zhcn": "卷积神经网络（CNN） 高票精选",
-          "enus": "Convolutional neural network (CNN) Most Voted"
+          "zhcn": "卷积神经网络（CNN）",
+          "enus": "Convolutional neural network (CNN) "
         },
         "option_flag": true
       }
@@ -12392,8 +12392,8 @@
     "option": [
       {
         "option_text": {
-          "zhcn": "导入数据集中出现了目标变量泄露。多数投票结果如此。",
-          "enus": "Target leakage occurred in the imported dataset. Most Voted"
+          "zhcn": "导入数据集中出现了目标变量泄露。",
+          "enus": "Target leakage occurred in the imported dataset. "
         },
         "option_flag": true
       },
@@ -12456,8 +12456,8 @@
       },
       {
         "option_text": {
-          "zhcn": "将国家代码通过独热编码转换为数值变量。最高票当选。",
-          "enus": "Encode the country codes into numeric variables by using one-hot encoding. Most Voted"
+          "zhcn": "将国家代码通过独热编码转换为数值变量。",
+          "enus": "Encode the country codes into numeric variables by using one-hot encoding. "
         },
         "option_flag": false
       }
@@ -12478,8 +12478,8 @@
     "option": [
       {
         "option_text": {
-          "zhcn": "对问卷中每道题目的所有选项进行独热编码处理。最高票当选。",
-          "enus": "Perform one-hot encoding on every possible option for each question of the survey. Most Voted"
+          "zhcn": "对问卷中每道题目的所有选项进行独热编码处理。",
+          "enus": "Perform one-hot encoding on every possible option for each question of the survey. "
         },
         "option_flag": true
       },
@@ -12528,8 +12528,8 @@
       },
       {
         "option_text": {
-          "zhcn": "使用AWS Glue DataBrew从PostgreSQL数据库中读取数据并进行数据预处理，通过Amazon SageMaker Canvas平台实现预测建模。此为最高票选方案。",
-          "enus": "Use AWS Glue DataBrew to read the data that is in the PostgreSQL database and to perform the data preparation. Use Amazon SageMaker Canvas for the prediction modeling. Most Voted"
+          "zhcn": "使用AWS Glue DataBrew从PostgreSQL数据库中读取数据并进行数据预处理，通过Amazon SageMaker Canvas平台实现预测建模。",
+          "enus": "Use AWS Glue DataBrew to read the data that is in the PostgreSQL database and to perform the data preparation. Use Amazon SageMaker Canvas for the prediction modeling."
         },
         "option_flag": true
       },
@@ -12965,8 +12965,8 @@
       },
       {
         "option_text": {
-          "zhcn": "创建网络负载均衡器（NLB）。为该负载均衡器添加TCP监听器。将自动扩展组配置为向NLB目标组注册实例。高票采纳方案。",
-          "enus": "Create a Network Load Balancer (NLB). Add a TCP listener to the NLB. Configure the Auto Scaling group to register instances with the NLB's target group. Most Voted"
+          "zhcn": "创建网络负载均衡器（NLB）。为该负载均衡器添加TCP监听器。将自动扩展组配置为向NLB目标组注册实例。",
+          "enus": "Create a Network Load Balancer (NLB). Add a TCP listener to the NLB. Configure the Auto Scaling group to register instances with the NLB's target group. "
         },
         "option_flag": true
       },
@@ -13001,8 +13001,8 @@
       },
       {
         "option_text": {
-          "zhcn": "调整路由器配置以汇总通告路由。最高票选方案。",
-          "enus": "Change the router configurations to summarize the advertised routes. Most Voted"
+          "zhcn": "调整路由器配置以汇总通告路由。",
+          "enus": "Change the router configurations to summarize the advertised routes. "
         },
         "option_flag": true
       },
