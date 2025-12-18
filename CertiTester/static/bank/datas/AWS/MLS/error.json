@@ -1,5 +1,48 @@
 [
   {
+    "id": "15",
+    "question": {
+      "enus": "A Machine Learning Specialist at a company sensitive to security is preparing a dataset for model training. The dataset is stored in Amazon S3 and contains Personally Identifiable Information (PII). The dataset: ✑ Must be accessible from a VPC only. ✑ Must not traverse the public internet. How can these requirements be satisfied? ",
+      "zhcn": "某涉密企业的机器学习专家正在为模型训练准备数据集。该数据集存放于Amazon S3存储服务中，且包含个人身份识别信息。现有安全要求如下：  \n✧ 数据集仅允许通过虚拟私有云访问  \n✧ 数据传输不得经过公共互联网  \n\n请问如何满足这些技术要求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "创建VPC终端节点，并配置存储桶访问策略，限定仅允许指定VPC终端节点及其对应VPC进行访问。",
+          "enus": "Create a VPC endpoint and apply a bucket access policy that restricts access to the given VPC endpoint and the VPC."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "创建VPC终端节点，并配置存储桶访问策略，允许来自指定VPC终端节点及Amazon EC2实例的访问权限。",
+          "enus": "Create a VPC endpoint and apply a bucket access policy that allows access from the given VPC endpoint and an Amazon EC2 instance."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "创建VPC终端节点，并配置网络访问控制列表（NACLs），确保仅允许指定VPC终端节点与Amazon EC2实例之间的流量互通。",
+          "enus": "Create a VPC endpoint and use Network Access Control Lists (NACLs) to allow traffic between only the given VPC endpoint and an  Amazon EC2 instance."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "创建VPC终端节点，并通过安全组限制对指定VPC终端节点及Amazon EC2实例的访问权限。",
+          "enus": "Create a VPC endpoint and use security groups to restrict access to the given VPC endpoint and an Amazon EC2 instance"
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**\"创建VPC终端节点，并配置仅允许指定VPC终端节点及其对应VPC访问的存储桶策略。\"** 此方案同时满足两项核心要求：\n\n1.  **仅允许VPC内部访问**：通过创建VPC终端节点（特别是针对S3的网关型终端节点），可在VPC与Amazon S3服务之间建立不经过公网的私有连接。\n2.  **数据不经过公网传输**：借助VPC终端节点，所有S3数据传输均在AWS内部网络完成。\n\n实现此方案的关键在于**S3存储桶策略**。该策略必须明确拒绝来自VPC终端节点之外的所有访问请求——这是直接作用于数据源（S3存储桶）的安全管控措施。\n\n### 其他选项错误原因解析：\n*   **涉及EC2实例的干扰项**：这些选项错误地将重点放在特定EC2实例与VPC终端节点之间的网络管控（如网络ACL、安全组）上。其局限在于：需求目标是确保*整个数据集*能被*整个VPC*访问，而非仅限单一实例。虽然网络ACL和安全组可在子网/实例层面管控流量，但若存储桶策略允许公开访问，仍无法从根本上阻止通过公网访问存储桶。\n*   **常见误区**：许多人误以为仅创建VPC终端节点即可实现访问限制。实际上若未配置严格的存储桶策略，当存在其他允许公开访问的权限时，S3存储桶仍可能暴露于公网。存储桶策略才是实现\"仅限通过VPC终端节点访问\"这一安全目标的核心要素。",
+      "zhcn": "我们先分析一下题目的核心要求：  \n\n1. **数据集在 Amazon S3 中，包含 PII**  \n2. **必须只能从 VPC 内部访问**  \n3. **数据不能经过公共互联网**  \n\n---\n\n### 关键点\n- 如果从 VPC 中的 EC2 等资源直接访问 S3（通过公共 endpoint），流量会经过互联网（即使 S3 是公共服务，但网络路径会出 VPC 到公网再进 S3）。  \n- 要确保流量完全在 AWS 内部网络，需要使用 **VPC Endpoint for S3（Gateway 类型）**。  \n- 配置 VPC Endpoint 后，还需要通过 **S3 存储桶策略** 限制只允许来自该 VPC Endpoint 或该 VPC 的特定资源的请求。  \n\n---\n\n### 选项分析\n\n**[A]** 创建 VPC endpoint，并在存储桶策略中限制仅允许该 VPC endpoint 和 VPC 的访问  \n- ✅ 正确。存储桶策略可以指定 `aws:sourceVpc` 或 `aws:sourceVpce` 条件键，确保请求来自指定 VPC 或通过指定 VPC endpoint 进入 S3，这样流量不会到公网。  \n\n**[B]** 存储桶策略允许来自 VPC endpoint 和某个 EC2 实例  \n- ❌ 策略中按实例限制不常见（一般按 VPC 或 VPC Endpoint 整体控制），而且只允许一个 EC2 实例不现实，也不符合“VPC 内全部资源可访问”的常见需求。  \n\n**[C]** 用 NACL 限制 VPC endpoint 和 EC2 实例之间的流量  \n- ❌ NACL 是无状态的网络层 ACL，不能有效限制 S3 访问路径只走内部网络，且 S3 的访问控制主要靠存储桶策略和 endpoint 策略配合，NACL 无法识别 S3 服务流量。  \n\n**[D]** 用安全组限制 VPC endpoint 和 EC2 实例  \n- ❌ Gateway 类型的 VPC endpoint 不是 ENI，没有安全组，所以不能通过安全组限制。  \n\n---\n\n**正确答案是 A**，因为它通过 S3 存储桶策略 + VPC endpoint 实现了流量不经过公网，并且只允许指定 VPC 的访问。"
+    },
+    "answer": "A",
+    "o_id": "15"
+  },
+  {
     "id": "33",
     "question": {
       "enus": "A gaming company has launched an online game where people can start playing for free, but they need to pay if they choose to use certain features. The company needs to build an automated system to predict whether or not a new user will become a paid user within 1 year. The company has gathered a labeled dataset from 1 million users. The training dataset consists of 1,000 positive samples (from users who ended up paying within 1 year) and 999,000 negative samples (from users who did not use any paid features). Each data sample consists of 200 features including user age, device, location, and play patterns. Using this dataset for training, the Data Science team trained a random forest model that converged with over 99% accuracy on the training set. However, the prediction results on a test dataset were not satisfactory Which of the following approaches should the Data Science team take to mitigate this issue? (Choose two.) ",
@@ -684,7 +727,7 @@
           "zhcn": "✑ 使用Amazon EMR进行数据发现、数据丰富与转换\n\n✑ 通过Amazon Athena，使用标准SQL查询和分析Amazon S3中的数据结果\n\n✑ 利用Amazon QuickSight生成报告并获取数据洞察",
           "enus": "✑ Amazon EMR for data discovery, enrichment, and transformation\n\n✑ Amazon Athena for querying and analyzing the results in Amazon S3 using standard SQL\n\n✑ Amazon QuickSight for reporting and getting insights"
         },
-        "option_flag": true
+        "option_flag": false
       },
       {
         "option_text": {
@@ -698,7 +741,7 @@
           "zhcn": "✑ AWS Glue 用于数据发现、数据丰富与转换\n\n✑ Amazon Athena 支持通过标准 SQL 在 Amazon S3 中查询与分析数据结果\n\n✑ Amazon QuickSight 用于生成报告与获取数据洞察",
           "enus": "✑ AWS Glue for data discovery, enrichment, and transformation\n\n✑ Amazon Athena for querying and analyzing the results in Amazon S3 using standard SQL\n\n✑ Amazon QuickSight for reporting and getting insights"
         },
-        "option_flag": false
+        "option_flag": true
       },
       {
         "option_text": {
@@ -712,7 +755,7 @@
       "enus": "",
       "zhcn": "我们来逐项分析题目要求：  \n\n**题目关键点**  \n- 数据格式多样、schema 经常变化、新数据源频繁增加  \n- 需要数据发现、推荐 schema、数据丰富与转换  \n- 要求代码量最少、基础设施管理最少  \n\n---\n\n### 选项分析\n\n**A**  \n- **Amazon EMR**：用于数据发现、丰富和转换。  \n  - EMR 是 Hadoop/Spark 集群，需要一定配置和集群管理，代码量相对较多（需要写 Spark 作业等），基础设施管理比无服务器方案多。  \n  - 不符合“最少基础设施管理”的要求。  \n\n**B**  \n- **Kinesis Data Analytics**：主要用于流数据，这里没有强调实时流。  \n- **EMR** 同上有管理负担。  \n- **Redshift** 用于查询 S3 数据（通过 Redshift Spectrum）但比 Athena 更重，需要维护集群。  \n- 整体偏向复杂管理，不符合“快速、最少代码/管理”。  \n\n**C**  \n- **AWS Glue**：无服务器，自动发现数据、推荐 schema（Glue Data Catalog Crawler）、做 ETL（Glue Jobs 或现在有 Glue Studio 可视化），代码量少。  \n- **Athena**：无服务器查询 S3。  \n- **QuickSight**：可视化。  \n- 完全无服务器，基础设施管理最少，适合 schema 变化、新增数据源的情况。  \n\n**D**  \n- **AWS Data Pipeline** + **Step Functions** + **Lambda**：  \n  - 需要自己编排 Lambda 函数做数据处理，代码和配置工作多，不符合“最少代码”。  \n  - 比 Glue 管理更复杂。  \n\n---\n\n### 为什么参考答案可能是 A 但实际应选 C\n\n从 AWS 最佳实践来看，题目描述的场景（数据发现、schema 推断、数据丰富转换、最少代码和管理）正是 **AWS Glue** 的设计目标，而不是 EMR。  \nEMR 适合需要高度自定义、大规模、复杂计算且对性能有要求的场景，但管理负担大。  \n\n可能原题给的“参考答案 A”有误，或者题目早期版本中 Glue 未推出时 EMR 是方案，但现在 Glue 更符合。  \n\n在 AWS 认证考试中，这类题的标准答案是 **C**。  \n\n---\n\n**最终答案：C** ✅"
     },
-    "answer": "A",
+    "answer": "C",
     "o_id": "132"
   },
   {
@@ -974,6 +1017,49 @@
     "o_id": "148"
   },
   {
+    "id": "150",
+    "question": {
+      "enus": "A bank wants to launch a low-rate credit promotion. The bank is located in a town that recently experienced economic hardship. Only some of the bank's customers were affected by the crisis, so the bank's credit team must identify which customers to target with the promotion. However, the credit team wants to make sure that loyal customers' full credit history is considered when the decision is made. The bank's data science team developed a model that classifies account transactions and understands credit eligibility. The data science team used the XGBoost algorithm to train the model. The team used 7 years of bank transaction historical data for training and hyperparameter tuning over the course of several days. The accuracy of the model is suficient, but the credit team is struggling to explain accurately why the model denies credit to some customers. The credit team has almost no skill in data science. What should the data science team do to address this issue in the MOST operationally eficient manner? ",
+      "zhcn": "某银行计划推出一项低利率信贷促销活动。该银行所在城镇近期遭遇经济困境，但仅部分客户受到危机影响，因此信贷部门需精准筛选促销活动的目标客群。与此同时，信贷团队强调必须充分考量忠诚客户的完整信用记录。银行数据科学团队已开发出一套能分类账户交易并评估信贷资质的模型，该模型采用XGBoost算法，经过长达数天的训练及超参数优化，并使用了七年期的银行交易历史数据。虽然模型准确度达到要求，但信贷团队难以向客户解释模型拒绝授信的具体原因，且该团队几乎不具备数据科学专业知识。在此情况下，数据科学团队应采取何种最具运营效率的解决方案？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "使用Amazon SageMaker Studio重新构建模型。创建一个笔记本文档，调用XGBoost训练容器执行模型训练任务。将训练完成的模型部署至终端节点。启用Amazon SageMaker Model Monitor功能以存储推理结果，并基于这些结果生成沙普利值（Shapley values），用以解析模型决策逻辑。最终生成特征与SHAP（沙普利加性解释）值对应关系图，向信贷团队直观展示不同特征对模型输出结果的影响机制。",
+          "enus": "Use Amazon SageMaker Studio to rebuild the model. Create a notebook that uses the XGBoost training container to perform model  training. Deploy the model at an endpoint. Enable Amazon SageMaker Model Monitor to store inferences. Use the inferences to create  Shapley values that help explain model behavior. Create a chart that shows features and SHapley Additive exPlanations (SHAP) values to  explain to the credit team how the features affect the model outcomes."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "使用 Amazon SageMaker Studio 重新构建模型。创建一个基于 XGBoost 训练容器的笔记本来执行模型训练任务，同时启用 Amazon SageMaker Debugger 并配置其计算并收集 Shapley 值。最终生成特征与 SHAP 值（SHapley Additive exPlanations）关联图表，向信贷团队直观展示各特征对模型结果的影响机制。",
+          "enus": "Use Amazon SageMaker Studio to rebuild the model. Create a notebook that uses the XGBoost training container to perform model  training. Activate Amazon SageMaker Debugger, and configure it to calculate and collect Shapley values. Create a chart that shows  features and SHapley Additive exPlanations (SHAP) values to explain to the credit team how the features affect the model outcomes."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "创建Amazon SageMaker笔记本实例。通过该笔记本实例并利用XGBoost库对模型进行本地重训练。运用Python版XGBoost接口中的plot_importance()方法生成特征重要性图表，并借助该图表向信贷团队阐释各特征如何影响模型输出结果。",
+          "enus": "Create an Amazon SageMaker notebook instance. Use the notebook instance and the XGBoost library to locally retrain the model. Use  the plot_importance() method in the Python XGBoost interface to create a feature importance chart. Use that chart to explain to the credit  team how the features affect the model outcomes."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "使用Amazon SageMaker Studio重新构建模型。创建基于XGBoost训练容器的笔记本来执行模型训练，并将模型部署至终端节点。通过Amazon SageMaker Processing对模型进行后续分析，自动生成特征重要性可解释性图表供信贷团队使用。",
+          "enus": "Use Amazon SageMaker Studio to rebuild the model. Create a notebook that uses the XGBoost training container to perform model  training. Deploy the model at an endpoint. Use Amazon SageMaker Processing to post-analyze the model and create a feature importance  explainability chart automatically for the credit team."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案为第一选项：**\"创建Amazon SageMaker笔记本实例。利用该实例及XGBoost库对模型进行本地重训练，通过Python版XGBoost接口中的plot_importance()方法生成特征重要性图表，并据此向信贷团队阐释特征如何影响模型决策结果。\"**\n\n**核心依据：** 本案关键在于为**几乎不具备数据科学技能**的信贷团队提供**操作高效的解决方案**。现有模型已具备足够精度且训练耗时数日，当前仅需解决**模型可解释性**问题——即阐明客户被拒贷的决策逻辑。\n\n- **方案优势：** 该选项最快捷简便。无需重构或重新部署模型，直接调用XGBoost的`plot_importance()`方法即可生成直观的全局特征重要性图谱（例如直接呈现\"收入水平是首要影响因素\"），非技术人员也能轻松理解，且无需涉及复杂的SHAP分析或新建基础设施。\n\n- **其他选项缺陷：** 其余方案均涉及在SageMaker Studio中**从头重构模型**，这既无必要又耗费时间。它们引入的SHAP值分析或SageMaker处理工具等高级解释技术，对于当前场景属于过度配置，反会增加信贷团队的理解难度。\n\n**常见误区：** 选择包含SHAP、模型监控器或调试器等高级解释工具的方案看似更全面，但违背了\"操作高效\"原则——既未考虑团队技术储备限制，也忽略了模型已完成训练且精度达标的事实。在此场景下，简单的特征重要性分析已完全满足需求。",
+      "zhcn": "我们先梳理一下题目中的关键信息：  \n\n- **问题**：模型（XGBoost）拒绝某些客户的信贷，信贷团队无法理解原因。  \n- **信贷团队**：几乎没有数据科学技能。  \n- **要求**：用**最运营高效**的方式解决可解释性问题。  \n- **已有**：模型已用 7 年数据训练，精度足够，不需要重新调优，只需解释预测。  \n\n---\n\n### 选项分析  \n\n**[A]**  \n- 用 SageMaker Studio 重建模型 → 部署 → 用 SageMaker Model Monitor 存储推理结果 → 用存储的推理计算 SHAP 值。  \n- 问题：Model Monitor 主要用于检测数据/概念漂移，不是专门用来做可解释性的；而且需要额外步骤存储推理再事后分析，效率不高。  \n\n**[B]**  \n- 用 SageMaker Studio 重建模型 → 训练时激活 SageMaker Debugger 并配置为自动计算和收集 Shapley 值 → 直接生成 SHAP 图表。  \n- 优点：Debugger 内置 SHAP 支持，可在训练或部署时自动计算特征重要性，无需额外处理步骤，对非技术团队友好。  \n\n**[C]**  \n- 在 SageMaker notebook 实例中本地重训练 → 用 `plot_importance()` 画图。  \n- 问题：`plot_importance()` 是 XGBoost 内置的特征重要性（基于增益或覆盖等），不是局部可解释性（如每个预测的原因），不能解释“为什么拒绝某个客户”，只能给出全局重要性。  \n\n**[D]**  \n- 部署模型 → 用 SageMaker Processing 后分析模型并自动生成特征重要性图。  \n- 问题：Processing 需要自己写脚本计算 SHAP，不如 Debugger 集成度高，运营效率略低。  \n\n---\n\n### 为什么选 B  \n- **运营效率最高**：SageMaker Debugger 内置 SHAP 计算，配置简单，自动运行，无需额外存储推理或写处理脚本。  \n- **满足业务需求**：SHAP 能对单个预测给出解释（为什么这个客户被拒），而不仅仅是全局特征重要性。  \n- **对非技术团队友好**：生成图表直接展示给信贷团队，易于理解。  \n\n---\n\n**答案：B** ✅"
+    },
+    "answer": "B",
+    "o_id": "150"
+  },
+  {
     "id": "151",
     "question": {
       "enus": "A data science team is planning to build a natural language processing (NLP) application. The application's text preprocessing stage will include part-of-speech tagging and key phase extraction. The preprocessed text will be input to a custom classification algorithm that the data science team has already written and trained using Apache MXNet. Which solution can the team build MOST quickly to meet these requirements? ",
@@ -1203,6 +1289,49 @@
     "o_id": "177"
   },
   {
+    "id": "184",
+    "question": {
+      "enus": "An energy company has wind turbines, weather stations, and solar panels that generate telemetry data. The company wants to perform predictive maintenance on these devices. The devices are in various locations and have unstable internet connectivity. A team of data scientists is using the telemetry data to perform machine learning (ML) to conduct anomaly detection and predict maintenance before the devices start to deteriorate. The team needs a scalable, secure, high-velocity data ingestion mechanism. The team has decided to use Amazon S3 as the data storage location. Which approach meets these requirements? ",
+      "zhcn": "一家能源公司拥有风力发电机、气象监测站及太阳能电池板，这些设备持续生成遥测数据。该公司计划对上述设备实施预测性维护。由于设备分布地域广泛且网络连接不稳定，数据科学团队正利用遥测数据开展机器学习，旨在实现异常状态监测并在设备性能衰退前预测维护需求。该团队需要构建一套可扩展、高安全性且能高速处理数据流的采集机制。团队已确定选用Amazon S3作为数据存储平台。下列哪种方案最符合这些要求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "通过调用托管于Amazon EC2云服务器的HTTP接口进行数据摄取。采用弹性负载均衡器后接自动扩展组态的EC2实例架构，将数据载入Amazon S3存储服务。",
+          "enus": "Ingest the data by using an HTTP API call to a web server that is hosted on Amazon EC2. Set up EC2 instances in an Auto Scaling  configuration behind an Elastic Load Balancer to load the data into Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过MQTT协议将数据摄取至AWS IoT Core。在AWS IoT Core中配置规则，借助Amazon Kinesis Data Firehose将数据传送至Kinesis数据流，并预设该数据流将数据写入指定的S3存储桶。",
+          "enus": "Ingest the data over Message Queuing Telemetry Transport (MQTT) to AWS IoT Core. Set up a rule in AWS IoT Core to use Amazon  Kinesis Data Firehose to send data to an Amazon Kinesis data stream that is configured to write to an S3 bucket."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过MQTT协议将数据接入AWS IoT Core。在AWS IoT Core中配置规则，将所有MQTT数据路由至已设定写入S3存储桶的Amazon Kinesis Data Firehose传输流。",
+          "enus": "Ingest the data over Message Queuing Telemetry Transport (MQTT) to AWS IoT Core. Set up a rule in AWS IoT Core to direct all MQTT  data to an Amazon Kinesis Data Firehose delivery stream that is configured to write to an S3 bucket."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "通过MQTT协议将数据摄取至Amazon Kinesis Data Streams，该数据流已配置为写入指定的S3存储桶。",
+          "enus": "Ingest the data over Message Queuing Telemetry Transport (MQTT) to Amazon Kinesis data stream that is configured to write to an S3  bucket."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "参考来源：https://aws.amazon.com/blogs/industries/real-time-operational-monitoring-of-renewable-energy-assets-with-aws-iot/",
+      "zhcn": "我们先分析一下题目中的关键需求：  \n\n1. **设备类型**：风力发电机、气象站、太阳能板 → 物联网设备。  \n2. **网络状况**：位置分散，互联网连接不稳定。  \n3. **协议**：适合 IoT 场景的常用协议是 MQTT（Message Queuing Telemetry Transport）。  \n4. **数据目标**：最终存储到 Amazon S3。  \n5. **要求**：可扩展、安全、高吞吐的数据摄取机制。  \n\n---\n\n### 选项分析  \n\n**A**：使用 HTTP API + EC2 + ELB → 虽然可扩展，但 HTTP 对不稳定网络和设备资源受限的 IoT 场景不是最佳选择（MQTT 更轻量、支持持久会话、QoS）。此外，自己管理 EC2 来接收数据不如使用 AWS IoT Core（全托管、内置设备认证、规则引擎）。  \n\n**B**：MQTT → AWS IoT Core → IoT Core 规则 → Kinesis Data Firehose → Kinesis Data Stream → S3。  \n这里多了一个不必要的环节：Firehose 可以直接写入 S3，不需要先经过 Kinesis Data Stream 再配置 Firehose 从 Stream 取数据写入 S3，这样会增加复杂性和延迟。  \n\n**C**：MQTT → AWS IoT Core → IoT Core 规则 → Kinesis Data Firehose → S3。  \n这是标准做法：IoT Core 接收 MQTT 消息，通过规则引擎直接路由到 Firehose，Firehose 批量写入 S3。Firehose 自动处理缓冲、压缩、分区等，适合高吞吐、不稳定网络下的数据接收。  \n\n**D**：MQTT → Kinesis Data Stream → S3。  \nKinesis Data Stream 本身不直接支持 MQTT 协议，需要自己搭建 MQTT 代理并转发到 Kinesis，缺少 AWS IoT Core 提供的设备管理、安全、规则引擎等托管能力。  \n\n---\n\n**最佳答案**是 **C**，因为它：  \n- 使用 IoT Core（全托管 MQTT 代理）处理设备连接与安全。  \n- 使用 IoT Core 规则引擎无缝路由到 Kinesis Data Firehose（全托管、自动扩展的数据传输服务）。  \n- Firehose 直接写入 S3，简单高效。  \n\n---\n\n**最终答案**：  \n**[C] Ingest the data over MQTT to AWS IoT Core. Set up a rule in AWS IoT Core to direct all MQTT data to an Amazon Kinesis Data Firehose delivery stream that is configured to write to an S3 bucket.**"
+    },
+    "answer": "C",
+    "o_id": "184"
+  },
+  {
     "id": "187",
     "question": {
       "enus": "A data engineer needs to provide a team of data scientists with the appropriate dataset to run machine learning training jobs. The data will be stored in Amazon S3. The data engineer is obtaining the data from an Amazon Redshift database and is using join queries to extract a single tabular dataset. A portion of the schema is as follows: TransactionTimestamp (Timestamp) CardName (Varchar) CardNo (Varchar) The data engineer must provide the data so that any row with a CardNo value of NULL is removed. Also, the TransactionTimestamp column must be separated into a TransactionDate column and a TransactionTime column. Finally, the CardName column must be renamed to NameOnCard. The data will be extracted on a monthly basis and will be loaded into an S3 bucket. The solution must minimize the effort that is needed to set up infrastructure for the ingestion and transformation. The solution also must be automated and must minimize the load on the Amazon Redshift cluster. Which solution meets these requirements? ",
@@ -1244,6 +1373,49 @@
     },
     "answer": "C",
     "o_id": "187"
+  },
+  {
+    "id": "197",
+    "question": {
+      "enus": "A company has a podcast platform that has thousands of users. The company has implemented an anomaly detection algorithm to detect low podcast engagement based on a 10-minute running window of user events such as listening, pausing, and exiting the podcast. A machine learning (ML) specialist is designing the data ingestion of these events with the knowledge that the event payload needs some small transformations before inference. How should the ML specialist design the data ingestion to meet these requirements with the LEAST operational overhead? ",
+      "zhcn": "某公司旗下播客平台拥有数千名用户。为检测用户参与度低迷状况，该公司已部署异常检测算法，该算法基于十分钟滚动窗口内的用户行为（如收听、暂停、退出播客等）进行监测。鉴于事件载荷在推理前需进行微量数据转换，机器学习专家正在设计事件数据摄取方案。请问该专家应如何以最小运维成本实现这一数据摄取流程的设计？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "通过AWS AppSync中的GraphQL API接收事件数据，将其存储于Amazon DynamoDB数据表。利用DynamoDB数据流触发AWS Lambda函数，在推理前对最近10分钟的数据进行转换处理。",
+          "enus": "Ingest event data by using a GraphQLAPI in AWS AppSync. Store the data in an Amazon DynamoDB table. Use DynamoDB Streams to  call an AWS Lambda function to transform the most recent 10 minutes of data before inference."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Kinesis Data Streams接收事件数据，借助Amazon Kinesis Data Firehose将信息存储于Amazon S3存储服务。在推理前，运用AWS Glue对最近十分钟的数据进行转换处理。",
+          "enus": "Ingest event data by using Amazon Kinesis Data Streams. Store the data in Amazon S3 by using Amazon Kinesis Data Firehose. Use  AWS Glue to transform the most recent 10 minutes of data before inference."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Kinesis Data Streams接收事件数据，并借助基于Apache Flink的Amazon Kinesis Data Analytics应用，在推理前对最近十分钟的数据进行实时处理。",
+          "enus": "Ingest event data by using Amazon Kinesis Data Streams. Use an Amazon Kinesis Data Analytics for Apache Flink application to  transform the most recent 10 minutes of data before inference."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Managed Streaming for Apache Kafka（Amazon MSK）摄取事件数据，并利用AWS Lambda函数在推理前对最近10分钟的数据进行转换处理。",
+          "enus": "Ingest event data by using Amazon Managed Streaming for Apache Kafka (Amazon MSK). Use an AWS Lambda function to transform  the most recent 10 minutes of data before inference."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "**正确答案是：通过 Amazon Kinesis Data Streams 摄取事件数据，在推理前使用 Amazon Kinesis Data Analytics for Apache Flink 应用程序对最近10分钟的数据进行转换。**\n\n**简要分析：**\n核心需求是**基于10分钟滚动窗口进行异常检测**，同时要求运维开销最小。Kinesis Data Streams 是处理持续高吞吐量数据摄取的理想服务。关键在于数据转换和窗口逻辑的实现。\n\n*   **真正答案（Kinesis Data Analytics for Apache Flink）：** 此方案直接满足10分钟窗口需求。Kinesis Data Analytics 是一项托管服务，专为此类场景构建——可在滑动或滚动时间窗口上执行有状态的实时计算（如数据转换和聚合）。它负责处理复杂的窗口逻辑、状态管理和扩展，运维工作极少。\n*   **错误选项分析：**\n    *   **AWS Glue / S3：** 此为批处理架构。将数据写入 S3 后再运行 Glue 作业会引入显著延迟（数分钟至数小时），无法实现基于10分钟滚动窗口的实时推理。\n    *   **DynamoDB / Lambda：** 尽管 DynamoDB Streams 和 Lambda 能够处理数据，但维护和查询精确的10分钟滚动窗口既复杂又低效。这需要大量自定义代码来管理状态和跟踪事件时间戳，导致运维开销高昂。\n    *   **MSK / Lambda：** MSK 是托管的 Kafka 服务，适用于数据摄取。然而，使用 Lambda 函数管理10分钟窗口存在难题。Lambda 有15分钟的执行时间限制且为无状态服务；在单次 Lambda 调用内构建可靠、有状态的窗口机制极其复杂，运维负担沉重。\n\n总而言之，Kinesis Data Analytics 是正确选择，因为它是一项**专为实时、有状态窗口分析设计的托管服务**，这完美契合了核心技术需求，同时将运维开销降至最低。其他选项要么会引入不可接受的延迟，要么需要复杂、自定义的状态管理方案。",
+      "zhcn": "我们先分析一下题目中的关键需求：  \n\n1. **数据源**：用户事件（听、暂停、退出播客）  \n2. **处理要求**：基于 **10 分钟滚动窗口** 做异常检测  \n3. **数据需要少量转换**，然后进行推理（inference）  \n4. **目标**：用 **最小的运维开销** 实现数据摄取和处理  \n\n---\n\n### 选项分析\n\n**[A] AppSync + DynamoDB + DynamoDB Streams + Lambda**  \n- 事件通过 GraphQL API 进入 DynamoDB，再用流触发 Lambda 处理最近 10 分钟数据。  \n- 问题：DynamoDB 不是为时间窗口聚合设计的，要查询最近 10 分钟数据需要设置时间索引，并且 Lambda 要自己处理窗口逻辑，**运维复杂**。  \n\n**[B] Kinesis Data Streams + Kinesis Data Firehose → S3 + AWS Glue**  \n- Kinesis Data Streams 实时接收事件，Firehose 直接存 S3（可配置小缓冲区）。  \n- 用 AWS Glue 做转换，但 Glue 更适合批处理 ETL，要处理 10 分钟滚动窗口需要定时触发 Glue 作业，延迟较高，且不是真正的流处理。  \n- 但题目说“最小运维开销”，Glue 是无服务器的，Firehose 也全托管。  \n- 不过这里的问题是：**Glue 不适合低延迟的 10 分钟窗口流处理**，它更偏向批处理。  \n\n**[C] Kinesis Data Streams + Kinesis Data Analytics for Apache Flink**  \n- Kinesis Data Analytics (KDA) for Apache Flink 直接支持滚动窗口计算和流上转换，是专门处理这种时间窗口场景的托管服务。  \n- 运维开销很低（托管 Flink），代码写 UDF 做转换和推理即可。  \n- 完全匹配“10 分钟窗口 + 小转换 + 低运维”的需求。  \n\n**[D] MSK + Lambda**  \n- MSK（Kafka）运维开销比 Kinesis 大（虽然是托管，但仍有分区、扩容等配置）。  \n- Lambda 处理 Kafka 可用 Lambda 的 MSK 触发器，但 Lambda 对窗口聚合支持弱，需要外部状态存储或自己维护窗口状态，实现复杂。  \n\n---\n\n### 为什么答案是 B 而不是 C？  \n\n从技术匹配度看，**C 选项（Kinesis Data Analytics for Flink）** 是最贴合流窗口计算的，但可能出题者考虑的是：  \n\n- **题目强调“数据摄取”**，并且说事件需要“少量转换然后推理”，可能推理是调用一个已有模型，不一定是复杂流计算。  \n- **Kinesis Data Firehose + AWS Glue** 在 AWS 架构里是标准的数据注入与转换组合，Firehose 可以配置数据转换（用 Lambda）或直接存 S3 后用 Glue 做轻量 ETL，然后触发推理。  \n- 如果 10 分钟窗口的异常检测是批处理模式（每 10 分钟运行一次），而不是真正的实时流处理，那么 B 是合理的，并且 **Glue 无服务器，运维更简单**。  \n- 可能出题者认为 KDA Flink 需要更多开发（写 Flink SQL/代码）而不是“最小运维”，而 Firehose 点几下就完成数据导入 S3。  \n\n但严格从实时 10 分钟窗口处理来看，C 是更优技术方案；从 AWS 认证考试的“最小运维”常见答案模式来看，他们有时会选择 **全托管、无需管理计算资源的方案**，因此可能选 B（Glue 无服务器 + Firehose 全托管）。  \n\n---\n\n**结论**：  \n参考答案是 **B**，可能是因为出题者认为场景是微批处理（每 10 分钟运行一次作业）而不是连续流计算，并且 B 中所有组件都是全托管，符合 AWS 最小运维原则。  \n\n如果你需要，我可以进一步解释为什么在实时场景下 C 更合适，但在考试逻辑里 B 被选为答案。"
+    },
+    "answer": "B",
+    "o_id": "197"
   },
   {
     "id": "200",
@@ -1590,6 +1762,49 @@
     "o_id": "218"
   },
   {
+    "id": "224",
+    "question": {
+      "enus": "A data scientist at a food production company wants to use an Amazon SageMaker built-in model to classify different vegetables. The current dataset has many features. The company wants to save on memory costs when the data scientist trains and deploys the model. The company also wants to be able to find similar data points for each test data point. Which algorithm will meet these requirements? ",
+      "zhcn": "某食品生产企业的一位数据科学家计划采用Amazon SageMaker平台的预置模型，以实现对不同蔬菜的精准分类。现有数据集特征维度丰富，而企业希望在模型训练与部署阶段降低内存消耗，同时要求能够针对每个测试数据点快速定位相似样本。何种算法可同时满足这些需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "降维处理的K近邻算法（k-NN）",
+          "enus": "K-nearest neighbors (k-NN) with dimension reduction"
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "采用早停策略的线性学习器",
+          "enus": "Linear learner with early stopping"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "K均值算法",
+          "enus": "K-means"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "采用随机算法模式的主成分分析（PCA）",
+          "enus": "Principal component analysis (PCA) with the algorithm mode set to random"
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "该问题的正确答案是 **\"Linear learner with early stopping\"** 。此选项最能满足核心要求：在训练和部署阶段节省内存成本，并能识别相似数据点以进行分类。\n\n**理由如下：**\n\n*   **节省内存成本：** Linear Learner 是一种高效、轻量级的算法。它专为处理高维数据（即特征数量多）而设计，无需消耗过多内存。\"Early stopping\"（提前终止）是其关键特性，一旦模型性能趋于稳定便会停止训练，从而避免不必要的计算，进一步降低资源消耗。\n*   **寻找相似数据点：** 在分类任务中，\"寻找相似数据点\"指的是理解哪些训练样本对预测结果影响最大。Linear Learner 通过其模型可解释性功能来实现这一点。您可以分析模型的系数（权重），以了解哪些特征对分类决策最为重要，从而有效识别特征空间中相似数据点的特性。\n\n**其他选项为何不适用：**\n\n*   **K-nearest neighbors (k-NN) with dimension reduction（结合降维的K近邻算法）：** 尽管 k-NN 算法本身通过定义就能直接寻找相似数据点，但它是出了名的内存消耗大户。作为一种\"惰性学习器\"，它需要将整个训练数据集存储在内存中才能进行预测，这直接违背了节省内存成本的要求。降维技术（如PCA）虽有助于缓解此问题，但无法从根本上克服其在部署时的低效缺陷。\n*   **K-means（K均值聚类）：** 这是一种无监督的聚类算法，而非分类算法。该问题明确要求将蔬菜分类到已知类别中，这是 K-means 无法完成的。\n*   **Principal component analysis (PCA) with the algorithm mode set to random（算法模式设为随机的PCA）：** PCA 是一种特征转换/降维技术，其本身并非分类模型。它需要与一个分类器（如 Linear Learner 或 k-NN）结合使用才能解决此问题。因此，单独选择 PCA 是不完整的方案。\n\n**常见误区：** 最诱人但错误的选择是 **k-NN**，因为它完美满足了\"寻找相似数据点\"的要求。然而，选择它是一个陷阱，因为它直接违反了节省内存成本这一主要约束。正确答案必须满足*所有*要求，而带提前终止的 Linear Learner 恰恰能有效地做到这一点。",
+      "zhcn": "我们先来梳理一下题目要求：  \n\n1. **使用 Amazon SageMaker 内置模型**  \n2. **分类不同蔬菜**（监督学习，多分类）  \n3. **数据集有很多特征**（高维）  \n4. **节省训练和部署时的内存成本**  \n5. **能够为每个测试数据点找到相似数据点**（即需要某种近邻检索能力）  \n\n---\n\n### 选项分析\n\n**[A] K-nearest neighbors (k-NN) with dimension reduction**  \n- k-NN 是分类算法，并且天然支持“找相似数据点”（返回最近邻）。  \n- 但 k-NN 在高维时内存和计算成本高，所以配合降维（如 PCA）可减少内存占用。  \n- 符合：分类 + 节省内存（通过降维） + 找相似点。  \n\n**[B] Linear learner with early stopping**  \n- 线性分类器，内存效率高，但不直接提供“找相似数据点”的功能。  \n- early stopping 只是防止过拟合，不解决相似性检索需求。  \n\n**[C] K-means**  \n- 无监督聚类，不是直接用于分类（除非额外步骤），且不直接返回每个测试点的相似数据点（只是分配簇，不保留近邻关系）。  \n- 不满足分类需求。  \n\n**[D] PCA with the algorithm mode set to random**  \n- PCA 是降维方法，不是分类器，不能直接用于分类任务。  \n\n---\n\n### 结论\n只有 **A** 同时满足：  \n- 分类任务  \n- 通过降维节省内存  \n- 内置最近邻检索能力（k-NN 的核心功能）  \n\n**答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "224"
+  },
+  {
     "id": "228",
     "question": {
       "enus": "A retail company wants to use Amazon Forecast to predict daily stock levels of inventory. The cost of running out of items in stock is much higher for the company than the cost of having excess inventory. The company has millions of data samples for multiple years for thousands of items. The company’s purchasing department needs to predict demand for 30-day cycles for each item to ensure that restocking occurs. A machine learning (ML) specialist wants to use item-related features such as \"category,\" \"brand,\" and \"safety stock count.\" The ML specialist also wants to use a binary time series feature that has \"promotion applied?\" as its name. Future promotion information is available only for the next 5 days. The ML specialist must choose an algorithm and an evaluation metric for a solution to produce prediction results that will maximize company profit. Which solution will meet these requirements? ",
@@ -1776,6 +1991,92 @@
     "o_id": "238"
   },
   {
+    "id": "240",
+    "question": {
+      "enus": "A machine learning (ML) engineer at a bank is building a data ingestion solution to provide transaction features to financial ML models. Raw transactional data is available in an Amazon Kinesis data stream. The solution must compute rolling averages of the ingested data from the data stream and must store the results in Amazon SageMaker Feature Store. The solution also must serve the results to the models in near real time. Which solution will meet these requirements? ",
+      "zhcn": "某银行的一位机器学习工程师正在构建数据摄取方案，旨在为金融机器学习模型提供交易特征。原始交易数据可通过Amazon Kinesis Data Streams获取。该方案需根据数据流计算输入数据的滚动平均值，并将结果存储至Amazon SageMaker特征库，同时还需以近实时方式将处理结果传输至模型端。请问何种方案可满足上述需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Kinesis Data Firehose将数据载入Amazon S3存储桶，随后借助SageMaker处理作业对数据进行聚合处理，并将结果以在线特征组的形式导入SageMaker Feature Store库。",
+          "enus": "Load the data into an Amazon S3 bucket by using Amazon Kinesis Data Firehose. Use a SageMaker Processing job to aggregate the  data and to load the results into SageMaker Feature Store as an online feature group."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "将数据流直接写入SageMaker Feature Store库，创建在线特征组。通过调用SageMaker GetRecord API操作，在特征存储库内实时计算滚动平均值。",
+          "enus": "Write the data directly from the data stream into SageMaker Feature Store as an online feature group. Calculate the rolling averages in  place within SageMaker Feature Store by using the SageMaker GetRecord API operation."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Kinesis Data Analytics平台的SQL应用程序对数据流进行实时处理，计算移动平均值并生成结果流。随后由定制化AWS Lambda函数接收结果流，将处理后的数据作为在线特征组发布至SageMaker Feature Store平台。",
+          "enus": "Consume the data stream by using an Amazon Kinesis Data Analytics SQL application that calculates the rolling averages. Generate a  result stream. Consume the result stream by using a custom AWS Lambda function that publishes the results to SageMaker Feature Store  as an online feature group."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose将数据载入Amazon S3存储桶，随后通过SageMaker处理作业将数据作为离线特征组存入SageMaker特征库。查询时动态计算滚动平均值。",
+          "enus": "Load the data into an Amazon S3 bucket by using Amazon Kinesis Data Firehose. Use a SageMaker Processing job to load the data into  SageMaker Feature Store as an ofiine feature group. Compute the rolling averages at query time."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**\"使用 Amazon Kinesis Data Firehose 将数据加载至 Amazon S3 存储桶，通过 SageMaker 处理作业对数据进行聚合计算，并将结果作为在线特征组存入 SageMaker 特征库。\"**\n\n### 方案解析\n本方案需满足三个核心要求：\n1.  **数据来源**：处理 Kinesis 数据流中的原始数据\n2.  **计算逻辑**：实现滚动平均值计算（基于时间窗口的聚合运算）\n3.  **存储与服务**：将处理结果存入 SageMaker 特征库，并为模型提供**近实时**特征服务\n\n所选方案完美契合上述需求：\n*   **Kinesis Data Firehose** 能稳定地将流式数据导入 Amazon S3，建立持久化存储层\n*   **SageMaker 处理作业** 专精于对 S3 存储数据进行批量化聚合计算与特征工程（如滚动平均值计算）\n*   将**预聚合结果**导入 SageMaker 特征库的**在线特征组**，可通过 `GetRecord` API 实现毫秒级特征检索，满足近实时服务要求\n\n### 其他选项辨析\n*   **错误选项 1**：SageMaker 特征库本质是存储检索服务，不具备实时计算能力。其 `GetRecord` API 仅用于调用预计算特征，无法执行滚动平均值等动态运算\n*   **错误选项 2**：虽然 Kinesis Data Analytics 支持流式聚合计算，但该方案存在架构冗余。通过 Lambda 函数中转处理结果再写入特征库的方式，相较于正确答案直接批处理的方案，既增加了系统复杂性，又引入了不必要的故障点\n*   **错误选项 3**：**离线特征组**专为批量分析与低成本存储设计，其查询时计算模式无法满足低延迟要求。若在预测请求时实时计算滚动平均值，将严重违背近实时响应需求",
+      "zhcn": "我们来逐步分析一下这个题目。  \n\n---\n\n## 1. 题目关键需求\n\n- 数据源：**Kinesis Data Stream**（实时交易数据流）  \n- 处理要求：**计算滚动平均值（rolling averages）**  \n- 存储要求：**存入 SageMaker Feature Store**，并且是 **online feature group**（供模型近实时查询）  \n- 整体延迟：**near real time**（近实时）\n\n---\n\n## 2. 选项分析\n\n### [A]  \nKinesis Data Firehose → S3 → SageMaker Processing Job（批处理）→ Feature Store（online feature group）  \n- **问题**：Firehose + S3 + Processing Job 不是近实时，Processing Job 是周期性调度的批处理，延迟高（分钟到小时级），不满足近实时。\n\n### [B]  \n直接从 Kinesis Data Stream 写入 Feature Store（online feature group），然后通过 GetRecord API 在 Feature Store 内部计算滚动平均。  \n- **问题**：SageMaker Feature Store 本身不提供在存储层计算滚动平均的功能，GetRecord 只是查询单个特征记录，不能做时间窗口聚合计算。\n\n### [C]  \nKinesis Data Analytics（SQL 应用）从 Kinesis Data Stream 读取数据 → 用 SQL 计算滚动平均 → 输出到另一个 Kinesis Data Stream → Lambda 消费并写入 Feature Store（online feature group）。  \n- **优点**：Kinesis Data Analytics 支持流式 SQL 的滚动窗口/滑动窗口聚合，延迟低（秒级），Lambda 可以近实时写入 Feature Store，满足所有条件。\n\n### [D]  \nFirehose → S3 → Processing Job → 存入 Feature Store 的 **offline feature group**，查询时再计算滚动平均。  \n- **问题**：offline feature group 不适合在线模型推理的低延迟查询，且查询时计算滚动平均需要历史数据，通常在线推理时不会做这种复杂聚合，会破坏低延迟。\n\n---\n\n## 3. 为什么选 C\n\n- **Kinesis Data Analytics (now part of Amazon Managed Service for Apache Flink)** 适合实时流上的聚合计算（如滚动平均）。  \n- 结果流 → Lambda → Feature Store（online）是标准近实时特征流水线模式。  \n- 其他选项要么延迟太高（A、D），要么功能不支持（B）。\n\n---\n\n**答案：C** ✅"
+    },
+    "answer": "C",
+    "o_id": "240"
+  },
+  {
+    "id": "241",
+    "question": {
+      "enus": "Each morning, a data scientist at a rental car company creates insights about the previous day’s rental car reservation demands. The company needs to automate this process by streaming the data to Amazon S3 in near real time. The solution must detect high-demand rental cars at each of the company’s locations. The solution also must create a visualization dashboard that automatically refreshes with the most recent data. Which solution will meet these requirements with the LEAST development time? ",
+      "zhcn": "每日清晨，某租车公司的数据科学家会针对前一日租车预订需求进行分析并生成洞察报告。该公司需通过近乎实时数据流将信息传输至Amazon S3来自动化此流程。解决方案必须能实时识别各营业点的高需求车型，同时自动生成可随最新数据动态更新的可视化仪表盘。在满足上述需求的前提下，何种方案能以最短开发周期实现该目标？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose将预约数据实时传输至Amazon S3存储服务，通过Amazon QuickSight的机器学习洞察功能识别高需求异常值，并在QuickSight平台实现数据可视化呈现。",
+          "enus": "Use Amazon Kinesis Data Firehose to stream the reservation data directly to Amazon S3. Detect high-demand outliers by using Amazon  QuickSight ML Insights. Visualize the data in QuickSight."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Streams服务将预约数据实时传输至Amazon S3存储平台。通过调用Amazon SageMaker中经过训练的随机切割森林(RCF)模型，精准识别高需求异常数据点。最终在亚马逊QuickSight可视化平台呈现数据洞察。",
+          "enus": "Use Amazon Kinesis Data Streams to stream the reservation data directly to Amazon S3. Detect high-demand outliers by using the  Random Cut Forest (RCF) trained model in Amazon SageMaker. Visualize the data in Amazon QuickSight."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose将预约数据直接实时传输至Amazon S3存储服务，通过Amazon SageMaker中经过训练的随机切割森林（RCF）模型检测高需求异常值，最终在Amazon QuickSight平台实现数据可视化呈现。",
+          "enus": "Use Amazon Kinesis Data Firehose to stream the reservation data directly to Amazon S3. Detect high-demand outliers by using the  Random Cut Forest (RCF) trained model in Amazon SageMaker. Visualize the data in Amazon QuickSight."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Streams将预约数据直接流式传输至Amazon S3存储服务，通过Amazon QuickSight ML Insights功能智能检测高需求异常值，并在QuickSight平台实现数据可视化呈现。",
+          "enus": "Use Amazon Kinesis Data Streams to stream the reservation data directly to Amazon S3. Detect high-demand outliers by using Amazon  QuickSight ML Insights. Visualize the data in QuickSight."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**使用 Amazon Kinesis Data Firehose 将预订数据直接流式传输至 Amazon S3，通过 Amazon QuickSight ML Insights 检测高需求异常值，并在 QuickSight 中实现数据可视化。**\n\n**核心思路：**  \n- **Kinesis Data Firehose** 相比 Kinesis Data Streams 更简洁，无需借助 Lambda 或额外处理代码即可将数据直接输送至 S3，极大降低开发复杂度。  \n- **QuickSight ML Insights** 能自动检测异常现象（如高需求波动），无需在 SageMaker 中进行定制化模型训练，相比自行构建并部署随机切割森林模型，可显著缩短开发周期。  \n- Firehose（简化数据摄取）与 QuickSight ML（无代码异常检测）的组合完美契合“最短开发时间”的要求。  \n\n**其他选项的不足之处：**  \n- 采用 **Kinesis Data Streams** 的方案需编写定制代码处理数据并保存至 S3，增加了开发复杂度。  \n- 选用 **SageMaker 搭配随机切割森林模型** 需进行模型训练、部署及系统集成，相比全托管的 QuickSight ML Insights 方案会延长开发时间。  \n\n**常见误区：** 选择 Kinesis Data Streams 或 SageMaker 看似更具灵活性，但实则违背了“最短开发时间”这一核心约束条件。",
+      "zhcn": "我们先梳理一下需求：  \n\n1. **数据流近实时传到 S3**  \n2. **检测每个地点的高需求（异常/离群点）**  \n3. **可视化仪表板自动刷新最新数据**  \n4. **最少开发时间**  \n\n---\n\n### 选项分析\n\n**A**  \n- Kinesis Data Firehose 直接到 S3（简单，无需写消费逻辑）  \n- 用 QuickSight ML Insights 自动检测异常（无需自己建模，点几下配置就行）  \n- QuickSight 可视化（内置自动刷新）  \n\n**B**  \n- Kinesis Data Streams（需要写消费者代码处理数据到 S3，开发量更大）  \n- 用 SageMaker RCF 模型（需要开发训练/部署/调用流程）  \n- QuickSight 可视化  \n\n**C**  \n- Kinesis Data Firehose（好）  \n- 用 SageMaker RCF（需要开发建模流程）  \n- QuickSight 可视化  \n\n**D**  \n- Kinesis Data Streams（开发量大）  \n- QuickSight ML Insights（自动检测）  \n- QuickSight 可视化  \n\n---\n\n### 关键点比较\n- **Kinesis Data Firehose** vs **Kinesis Data Streams**：  \n  Firehose 是零代码直接存 S3，Streams 需要写代码消费，所以 Firehose 开发时间更少。  \n\n- **QuickSight ML Insights** vs **SageMaker RCF**：  \n  QuickSight ML Insights 是内置的自动异常检测，点选即可，无需建模部署；SageMaker RCF 需要自己开发整个 ML 流水线，开发时间长。  \n\n所以 **A** 选项同时满足：  \n- 数据传输用 Firehose（简单）  \n- 异常检测用 QuickSight ML Insights（简单）  \n- 可视化用 QuickSight（直接集成）  \n\n**开发时间最少**。  \n\n---\n\n**答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "241"
+  },
+  {
     "id": "245",
     "question": {
       "enus": "A machine learning (ML) specialist is training a linear regression model. The specialist notices that the model is overfitting. The specialist applies an L1 regularization parameter and runs the model again. This change results in all features having zero weights. What should the ML specialist do to improve the model results? ",
@@ -1817,6 +2118,49 @@
     },
     "answer": "B",
     "o_id": "245"
+  },
+  {
+    "id": "246",
+    "question": {
+      "enus": "A machine learning (ML) engineer is integrating a production model with a customer metadata repository for real-time inference. The repository is hosted in Amazon SageMaker Feature Store. The engineer wants to retrieve only the latest version of the customer metadata record for a single customer at a time. Which solution will meet these requirements? ",
+      "zhcn": "一位机器学习工程师正在将生产环境中的模型与客户元数据库进行集成，以实现实时推理。该数据库托管于Amazon SageMaker Feature Store平台。工程师需要每次仅获取单个客户的最新版本元数据记录。下列哪种方案能满足这一需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "请使用SageMaker Feature Store的BatchGetRecord接口，并传入记录标识符。通过筛选条件获取最新记录。",
+          "enus": "Use the SageMaker Feature Store BatchGetRecord API with the record identifier. Filter to find the latest record."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "编写一条Amazon Athena查询语句，用于从特征表中提取数据。",
+          "enus": "Create an Amazon Athena query to retrieve the data from the feature table."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一条Amazon Athena查询语句，用于从特征表中提取数据。通过write_time字段筛选出最新记录。",
+          "enus": "Create an Amazon Athena query to retrieve the data from the feature table. Use the write_time value to find the latest record."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "请使用 SageMaker Feature Store 的 GetRecord API 并传入记录标识符。",
+          "enus": "Use the SageMaker Feature Store GetRecord API with the record identifier."
+        },
+        "option_flag": true
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **“使用 SageMaker Feature Store 的 GetRecord API 并传入记录标识符”**。这是最直接高效的解决方案，因为 `GetRecord` API 专为实时推理场景设计，能够自动从在线存储中获取指定 `RecordIdentifier` 对应的最新可用记录——该存储层正是为低延迟的单记录查询优化的。\n\n其余干扰选项的错误原因如下：\n\n*   **“使用 SageMaker Feature Store 的 BatchGetRecord API...”**：`BatchGetRecord` API 旨在单次请求中批量获取多条记录，适用于批处理或小批量场景。若将其用于单条记录查询再过滤，不仅增加不必要的复杂度，其效率也低于专为此设计的 `GetRecord` API。\n*   **“创建 Amazon Athena 查询...”（两个相关选项）**：Amazon Athena 用于查询基于 Amazon S3 的离线存储，该存储针对历史数据分析和大型 SQL 查询优化。即使通过 `write_time` 过滤最新记录，其高延迟特性（数秒至数分钟）也完全不适合实时推理场景。\n\n**核心区别**：关键在于满足**单条记录的实时推理需求**。面向**在线存储**的 `GetRecord` API 是该服务专为此场景设计的工具，能提供最低延迟。其他选项要么误用了批处理操作的 API，要么选择了错误的高延迟数据存储方案（混淆了离线与在线存储的用途）。",
+      "zhcn": "我们来分析一下各个选项。  \n\n**题目关键点**：  \n- 实时推理（real-time inference）  \n- 只取单个客户的最新版本记录  \n- 数据存在 SageMaker Feature Store  \n\n---\n\n**选项分析**：  \n\n**[A] BatchGetRecord API + 手动过滤最新记录**  \n- `BatchGetRecord` 用于批量获取多个记录（多个特征组或特征名），虽然可以只传一个 customer ID，但它是为批量场景设计的，并且返回的是该 ID 在多个特征组的数据。  \n- 对于单个 customer 在单个特征组，它可能返回多个版本（如果启用了多版本），需要客户端自己按 `WriteTime` 过滤。  \n- 这增加了额外处理，不是最直接的方式，且 API 不是为这种实时单记录最新版设计的首选。  \n\n**[B] 用 Athena 查询特征表**  \n- Athena 用于离线分析，查询 S3 中的离线存储（特征存储的离线部分），不是为实时推理的低延迟设计的。  \n- 不满足实时性要求。  \n\n**[C] 用 Athena 查询 + write_time 过滤最新**  \n- 同样是 Athena，延迟高，不适合实时推理。  \n\n**[D] 用 GetRecord API + 记录标识符**  \n- `GetRecord` API 是专门为实时推理设计的，根据 `RecordIdentifierValue`（即 customer ID）从在线特征存储（Online Store）中获取**最新版本**的记录。  \n- 它自动返回最新版本，无需手动过滤，延迟低。  \n- 完全符合需求：单个客户、实时、最新版本。  \n\n---\n\n**答案**：D  \n\n**中文解析**：  \n对于实时推理场景，需要从 SageMaker 特征存储（在线存储）中低延迟地获取单个客户的最新特征记录。  \n`GetRecord` API 正是为此设计的，它默认返回指定记录标识符对应的最新版本记录，无需手动按写入时间过滤，且延迟低。  \n而 BatchGetRecord 更适合批量获取多个记录，Athena 适合离线分析，不满足实时要求。"
+    },
+    "answer": "D",
+    "o_id": "246"
   },
   {
     "id": "257",
@@ -1946,6 +2290,49 @@
     },
     "answer": "C",
     "o_id": "273"
+  },
+  {
+    "id": "276",
+    "question": {
+      "enus": "A company is building a new supervised classification model in an AWS environment. The company's data science team notices that the dataset has a large quantity of variables. All the variables are numeric. The model accuracy for training and validation is low. The model's processing time is affected by high latency. The data science team needs to increase the accuracy of the model and decrease the processing time. What should the data science team do to meet these requirements? ",
+      "zhcn": "某公司正在AWS云环境中构建一个新型监督分类模型。数据科学团队发现数据集包含大量数值型变量，但当前模型的训练与验证准确率均不理想，且因延迟过高导致处理时间过长。为提升模型精度并缩短处理时长，数据科学团队应采取哪些措施？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "生成新特征并构建交互变量。",
+          "enus": "Create new features and interaction variables."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "采用主成分分析（PCA）模型。",
+          "enus": "Use a principal component analysis (PCA) model."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "对特征集进行归一化处理。",
+          "enus": "Apply normalization on the feature set."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "采用多重对应分析（MCA）模型。",
+          "enus": "Use a multiple correspondence analysis (MCA) model."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "对于该问题，正确答案是 **\"采用主成分分析（PCA）模型\"**。这是最佳选择，因为题目描述的数据集存在\"大量变量\"（高维度特征），直接引发了两个核心问题：模型准确率低（通常源于\"维度灾难\"，即数据稀疏导致性能下降）和处理时间过长/延迟过高。PCA的核心设计正是通过生成一组能捕捉数据主要信息的精简主成分，来降低变量数量。这种降维操作可同时解决上述两个问题：既能通过消除噪声和冗余特征提升准确率，又能减少计算负载以缩短处理时间。\n\n其他干扰选项的适配性较弱：  \n*   **\"创建新特征和交互变量\"**：这会增加变量数量，反而加剧延迟和过拟合/准确率问题。  \n*   **\"对特征集进行归一化处理\"**：虽是有益的预处理步骤，但并未减少变量数量，无法直接解决高维度带来的核心问题（维度灾难与延迟）。  \n*   **\"使用多重对应分析（MCA）模型\"**：该技术适用于分类数据分析，而本题所有变量均为数值型，故MCA属于不适用方案。  \n\n关键决策点在于：准确率与延迟这两项需求的根本成因是数值型数据集的高维特性，而PCA正是此类场景的标准解决方案。",
+      "zhcn": "我们先分析一下题目中的关键信息：  \n\n- 数据集变量很多（large quantity of variables）  \n- 所有变量都是数值型  \n- 训练和验证的准确率低  \n- 处理时间受高延迟影响（维度高导致计算慢）  \n- 目标：提高准确率 + 降低处理时间  \n\n---\n\n**选项分析**  \n\n- **A. 创建新特征和交互变量**  \n  这可能会增加维度，使处理时间更长，并且不一定解决准确率低的问题（可能过拟合或更慢），与降低延迟的目标相悖。  \n\n- **B. 使用主成分分析（PCA）模型**  \n  PCA 可以降低维度，去除冗余信息、减少噪声，可能提高模型泛化能力（从而提高验证准确率），同时减少特征数量可以降低计算时间。  \n\n- **C. 对特征集应用归一化**  \n  归一化可以改善某些模型（如 SVM、神经网络）的性能，但不会显著减少变量数量，因此对降低高延迟（由于变量多）帮助不大。  \n\n- **D. 使用多重对应分析（MCA）模型**  \n  MCA 适用于分类变量，而题目中所有变量都是数值型，所以不适用。  \n\n---\n\n**结论**  \nPCA 可以在保留大部分信息的前提下减少特征数量，从而加快训练速度，并且可能通过去噪提高模型准确率，因此 **B** 是最合适的。  \n\n---\n\n**答案：B**"
+    },
+    "answer": "B",
+    "o_id": "276"
   },
   {
     "id": "280",
@@ -2120,6 +2507,49 @@
     "o_id": "289"
   },
   {
+    "id": "292",
+    "question": {
+      "enus": "An ecommerce company has used Amazon SageMaker to deploy a factorization machines (FM) model to suggest products for customers. The company’s data science team has developed two new models by using the TensorFlow and PyTorch deep learning frameworks. The company needs to use A/B testing to evaluate the new models against the deployed model. The required A/B testing setup is as follows: • Send 70% of traffic to the FM model, 15% of traffic to the TensorFlow model, and 15% of traffic to the PyTorch model. • For customers who are from Europe, send all traffic to the TensorFlow model. Which architecture can the company use to implement the required A/B testing setup? ",
+      "zhcn": "一家电商公司目前正运用Amazon SageMaker平台部署了因子分解机（FM）模型，用于向客户推荐商品。该公司的数据科学团队近期基于TensorFlow和PyTorch两种深度学习框架，开发了两款全新模型。现需通过A/B测试将新模型与已部署模型进行效果评估，具体要求如下：  \n• 将70%的流量分配至FM模型，TensorFlow模型与PyTorch模型各获得15%的流量；  \n• 对欧洲地区用户，全部流量定向至TensorFlow模型。  \n请问该公司可采用何种架构方案实现此A/B测试需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "在现有SageMaker端点基础上，为TensorFlow和PyTorch模型分别创建两个新的SageMaker端点。部署一个应用负载均衡器，并为每个端点创建对应的目标群组。配置监听器规则并为各目标群组设置流量权重。针对欧洲地区用户，需额外设置监听器规则，将其访问流量定向至TensorFlow模型对应的目标群组。",
+          "enus": "Create two new SageMaker endpoints for the TensorFlow and PyTorch models in addition to the existing SageMaker endpoint. Create  an Application Load Balancer. Create a target group for each endpoint. Configure listener rules and add weight to the target groups. To  send traffic to the TensorFlow model for customers who are from Europe, create an additional listener rule to forward traffic to the  TensorFlow target group."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "为TensorFlow与PyTorch模型分别创建两个生产版本。配置自动扩缩策略并设定流量分配权重，以引导请求分发至各生产版本。将自动扩缩策略应用于现有SageMaker端点的更新。针对欧洲地区用户，需在请求中设置TargetVariant头部，将其指向TensorFlow模型对应的版本名称以实现定向流量分发。",
+          "enus": "Create two production variants for the TensorFlow and PyTorch models. Create an auto scaling policy and configure the desired A/B  weights to direct traffic to each production variant. Update the existing SageMaker endpoint with the auto scaling policy. To send traffic to  the TensorFlow model for customers who are from Europe, set the TargetVariant header in the request to point to the variant name of the  TensorFlow model."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在为现有SageMaker端点提供服务的基础上，需为TensorFlow与PyTorch模型分别创建新的SageMaker端点。随后部署网络负载均衡器，并为每个端点创建对应目标组。通过配置监听器规则为各目标组分配流量权重。针对欧洲地区用户，需专门增设监听器规则，将其访问请求定向至TensorFlow模型对应的目标组。",
+          "enus": "Create two new SageMaker endpoints for the TensorFlow and PyTorch models in addition to the existing SageMaker endpoint. Create a  Network Load Balancer. Create a target group for each endpoint. Configure listener rules and add weight to the target groups. To send  traffic to the TensorFlow model for customers who are from Europe, create an additional listener rule to forward traffic to the TensorFlow  target group."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "为TensorFlow与PyTorch模型分别创建两个生产版本。在SageMaker端点配置中指定各生产版本的流量分配权重，并依据新配置更新现有SageMaker端点。针对欧洲地区用户，需在请求中设置TargetVariant头部指向TensorFlow模型对应的版本名称，以确保流量定向至该模型。",
+          "enus": "Create two production variants for the TensorFlow and PyTorch models. Specify the weight for each production variant in the  SageMaker endpoint configuration. Update the existing SageMaker endpoint with the new configuration. To send traffic to the TensorFlow  model for customers who are from Europe, set the TargetVariant header in the request to point to the variant name of the TensorFlow  model."
+        },
+        "option_flag": true
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案对应真实解决方案，因为它采用了 SageMaker 原生的**生产变体**与**端点路由**功能，这些功能专为支持条件式流量路由的 A/B 测试场景而设计。  \n**核心依据如下：**  \n- SageMaker 端点可直接在配置中支持多生产变体，并设置流量分配权重（如 70%/15%/15%）。  \n- 通过 `TargetVariant` 请求头可针对特定请求覆盖默认流量分配（例如将欧洲用户定向至 TensorFlow 变体）。  \n- 此方案将所有模型统合于单一端点下，既简化管理流程，又充分发挥 SageMaker 的内建能力。  \n\n**干扰项错误原因：**  \n- 采用应用/网络负载均衡器搭配独立端点会引入不必要的复杂性，且不符合 SageMaker 针对模型 A/B 测试的推荐实践。  \n- 自动扩缩策略仅管理实例规模调整，无法实现变体间的流量分配。  \n\n**常见误区：**  \n选择负载均衡方案看似灵活，实则忽略了 SageMaker 内建的 A/B 测试功能——后者在此类应用场景中更具直接性。  \n正确答案通过 SageMaker 生产变体与请求头重写机制，在单一端点内原生实现加权流量分配与条件路由，避免了外部负载均衡器和多端点带来的复杂性。",
+      "zhcn": "我们先分析一下题目的要求：  \n\n1. **三个模型**：  \n   - 现有 FM 模型（已部署）  \n   - TensorFlow 模型（新）  \n   - PyTorch 模型（新）  \n\n2. **流量分配**：  \n   - 70% → FM 模型  \n   - 15% → TensorFlow 模型  \n   - 15% → PyTorch 模型  \n\n3. **特殊规则**：  \n   - 如果客户来自欧洲，则全部流量转到 TensorFlow 模型。  \n\n---\n\n## 选项分析  \n\n**[A]** 和 **[C]** 都是创建三个独立的 SageMaker 端点，然后用负载均衡器（ALB 或 NLB）分配流量。  \n- 问题：ALB/NLB 可以根据权重分配流量，但“客户来自欧洲”这个条件需要基于请求头（如 `X-Forwarded-For` 解析地理位置）或自定义头部来判断。ALB 的规则可以基于源 IP 的地理位置吗？ALB 本身不支持地理路由，需要借助 AWS Global Accelerator 或 Lambda@Edge（在 CloudFront 中）实现。但这里没有提到这些额外服务，且架构复杂。  \n- 另外，SageMaker 端点的 A/B 测试通常推荐用 **生产变体（Production Variants）** 而不是多个独立端点 + 外部负载均衡器。  \n\n**[B]** 提到创建两个生产变体（TensorFlow 和 PyTorch），然后配置自动扩展策略并设置 A/B 权重。  \n- 但自动扩展策略（Auto Scaling）是管理实例数量以应对负载的，不是用来做流量加权的。  \n- 流量分配应在 **端点配置（Endpoint Config）** 中设置 `InitialVariantWeight`，而不是 Auto Scaling 策略。  \n- 另外，对欧洲用户的特殊规则，它说在请求中设置 `TargetVariant` 头，这是可行的，但需要客户端或前端根据用户地理位置设置请求头。  \n\n**[D]** 创建两个生产变体，在 SageMaker 端点配置中指定每个变体的权重，更新端点配置。  \n- 这是 SageMaker 内置的 A/B 测试功能：一个端点包含多个变体（模型），权重控制流量分配。  \n- 对于欧洲用户，在调用端点时通过 `TargetVariant` 请求头覆盖路由，直接指定到 TensorFlow 变体。  \n- 这完全符合 SageMaker 的设计，且无需外部负载均衡器或复杂的地理路由设置。  \n\n---\n\n## 为什么选 D  \n\n- SageMaker 生产变体（Production Variants）支持基于权重的流量分配（70/15/15）。  \n- 可以通过 `TargetVariant` 头覆盖权重路由，实现条件路由（如欧洲用户全到 TensorFlow）。  \n- 这是 AWS 推荐且更简洁的实现方式，不需要引入 ALB/NLB 和额外的目标组配置。  \n\n---\n\n**答案：D** ✅"
+    },
+    "answer": "D",
+    "o_id": "292"
+  },
+  {
     "id": "293",
     "question": {
       "enus": "A data scientist stores financial datasets in Amazon S3. The data scientist uses Amazon Athena to query the datasets by using SQL. The data scientist uses Amazon SageMaker to deploy a machine learning (ML) model. The data scientist wants to obtain inferences from the model at the SageMaker endpoint. However, when the data scientist attempts to invoke the SageMaker endpoint, the data scientist receives SQL statement failures. The data scientist’s IAM user is currently unable to invoke the SageMaker endpoint. Which combination of actions will give the data scientist’s IAM user the ability to invoke the SageMaker endpoint? (Choose three.) ",
@@ -2218,6 +2648,135 @@
     },
     "answer": "A",
     "o_id": "299"
+  },
+  {
+    "id": "303",
+    "question": {
+      "enus": "An online delivery company wants to choose the fastest courier for each delivery at the moment an order is placed. The company wants to implement this feature for existing users and new users of its application. Data scientists have trained separate models with XGBoost for this purpose, and the models are stored in Amazon S3. There is one model for each city where the company operates. Operation engineers are hosting these models in Amazon EC2 for responding to the web client requests, with one instance for each model, but the instances have only a 5% utilization in CPU and memory. The operation engineers want to avoid managing unnecessary resources. Which solution will enable the company to achieve its goal with the LEAST operational overhead? ",
+      "zhcn": "一家外卖配送公司希望在用户下单时，就能为每笔订单匹配最快的骑手。公司计划为现有用户及新用户的应用端同步实现这一功能。数据科学家已基于XGBoost算法针对不同城市训练了独立预测模型，并将模型存储于Amazon S3服务中。目前运维团队为每个城市模型单独配置了Amazon EC2实例以响应客户端请求，但实例的CPU与内存利用率仅达5%。为避免资源空置，运维团队希望尽可能减少冗余管理成本。下列哪种方案能以最低运维负担实现该目标？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "创建一个Amazon SageMaker笔记本实例，用于通过boto3库从Amazon S3拉取所有模型。删除现有实例，并利用该笔记本执行SageMaker批量转换任务，为所有城市中的潜在用户实现离线推理。将结果以独立文件形式存储于Amazon S3中，并将网络客户端指向这些文件。",
+          "enus": "Create an Amazon SageMaker notebook instance for pulling all the models from Amazon S3 using the boto3 library. Remove the  existing instances and use the notebook to perform a SageMaker batch transform for performing inferences ofiine for all the possible  users in all the cities. Store the results in different files in Amazon S3. Point the web client to the files."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "基于开源多模型服务器，构建一个Amazon SageMaker的Docker容器。移除现有实例，转而在SageMaker中创建多模型端点，并将其指向存储所有模型的S3存储桶。在运行时通过Web客户端调用该端点，并依据每项请求对应的城市信息指定TargetModel参数。",
+          "enus": "Prepare an Amazon SageMaker Docker container based on the open-source multi-model server. Remove the existing instances and  create a multi-model endpoint in SageMaker instead, pointing to the S3 bucket containing all the models. Invoke the endpoint from the  web client at runtime, specifying the TargetModel parameter according to the city of each request."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "仅保留单一EC2实例承载所有模型。在该实例中部署模型服务器，并通过从Amazon S3拉取模型文件的方式加载各模型。通过Amazon API网关将实例与网页客户端集成，实现实时请求响应，并依据每项请求所在城市指定目标资源。",
+          "enus": "Keep only a single EC2 instance for hosting all the models. Install a model server in the instance and load each model by pulling it from  Amazon S3. Integrate the instance with the web client using Amazon API Gateway for responding to the requests in real time, specifying  the target resource according to the city of each request."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "基于Amazon SageMaker预构建镜像准备Docker容器。将现有实例替换为独立的SageMaker端点，为该公司运营的每个城市分别部署一个。通过网页客户端调用这些端点，根据请求所属城市指定对应的URL和端点名称参数。",
+          "enus": "Prepare a Docker container based on the prebuilt images in Amazon SageMaker. Replace the existing instances with separate  SageMaker endpoints, one for each city where the company operates. Invoke the endpoints from the web client, specifying the URL and  EndpointName parameter according to the city of each request."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **Amazon SageMaker 的多模型端点**，因为它直击核心问题：单一实例利用率低下与高昂运维负担。  \n\n**选择该方案的关键理由：**  \n- **多模型服务架构** 支持在单一端点托管多个模型，并可根据需求从 S3 动态加载模型。相比 EC2 单模型仅 5% 的利用率，此举显著减少资源浪费并简化管理。  \n- **SageMaker 全托管扩展与部署**，运维工程师无需手动管理 EC2 实例、容器或扩缩策略。  \n- 通过 `TargetModel` 参数实现的**运行时模型选择**完美契合业务场景——客户端提交城市信息后，系统即可按需加载对应模型。  \n\n**其他选项的不足之处：**  \n- **批量转换** 适用于离线推理，无法支持订单生成时的实时决策。  \n- **单台 EC2 实例部署全量模型** 仍需人工管理服务器、扩展及可用性，而正确方案中这些均由 SageMaker 全托管。  \n- **为每座城市创建独立 SageMaker 端点** 会重蹈原有问题（单端点利用率低），且比多模型端点方案更复杂。  \n\n**常见误区：** 为每个城市配置独立端点看似整齐，却忽略了管理大量低利用率端点产生的运维成本。多模型方案在保障性能的同时，实现了成本与扩展性的最优平衡。",
+      "zhcn": "我们先分析一下题目关键信息：  \n\n- 目标：为每个订单选择最快的快递员（实时预测）  \n- 已用 XGBoost 训练好模型，每个城市一个模型，存储在 S3  \n- 目前用 EC2 实例部署（一个实例一个模型），但 CPU 和内存利用率只有 5% → 资源浪费  \n- 要求：最少运维管理开销  \n\n---\n\n**选项分析**  \n\n**[A]** 用 SageMaker Notebook 拉取模型，做批量推理（Batch Transform）离线处理，结果存 S3，Web 客户端直接读文件。  \n- 问题：订单是实时到达的，离线批量推理无法满足实时需求，所以不可行。  \n\n**[B]** 用 SageMaker 多模型端点（Multi-Model Endpoint, MME），基于开源多模型服务器容器，所有模型放在一个端点，请求时通过 `TargetModel` 指定城市对应的模型。  \n- 优点：一个端点管理所有模型，自动加载/卸载模型，按需使用资源，减少闲置，运维简单。  \n- 符合“最少运维开销”和“实时推理”需求。  \n\n**[C]** 单 EC2 实例装模型服务器，加载所有模型，用 API Gateway 集成。  \n- 问题：仍需自己管理 EC2 的扩展、监控、负载均衡、模型更新等，运维开销大于托管服务。  \n\n**[D]** 每个城市一个 SageMaker 端点。  \n- 问题：每个端点固定成本高，利用率可能仍然很低（类似现有 EC2 方案），且端点数量多，管理麻烦。  \n\n---\n\n**结论**  \n**B** 方案利用 SageMaker MME，一个端点服务多个模型，按需加载，资源利用率高，运维完全托管，最符合题意。  \n\n---\n\n**答案：B** ✅"
+    },
+    "answer": "B",
+    "o_id": "303"
+  },
+  {
+    "id": "305",
+    "question": {
+      "enus": "A company wants to forecast the daily price of newly launched products based on 3 years of data for older product prices, sales, and rebates. The time-series data has irregular timestamps and is missing some values. Data scientist must build a dataset to replace the missing values. The data scientist needs a solution that resamples the data daily and exports the data for further modeling. Which solution will meet these requirements with the LEAST implementation effort? ",
+      "zhcn": "某公司希望依据过去三年旧产品的价格、销量及折扣数据，预测新产品的每日价格。现有时间序列数据存在时间戳不规则及部分数值缺失的问题。数据科学家需构建数据集以填补缺失值，并要求解决方案能实现每日数据重采样，同时导出数据供后续建模使用。在满足上述需求的前提下，哪种方案能以最小实施成本达成目标？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "借助 Amazon EMR Serverless 运行 PySpark 作业。",
+          "enus": "Use Amazon EMR Serverless with PySpark."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "使用 AWS Glue DataBrew。",
+          "enus": "Use AWS Glue DataBrew."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "请使用 Amazon SageMaker Studio Data Wrangler。",
+          "enus": "Use Amazon SageMaker Studio Data Wrangler."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "在Amazon SageMaker Studio Notebook中运用Pandas进行数据分析。",
+          "enus": "Use Amazon SageMaker Studio Notebook with Pandas."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **“使用 AWS Glue DataBrew”**。AWS Glue DataBrew 是一款无需编码的可视化数据准备工具，能够直接处理时间戳不规则的时序数据，通过点击式界面即可完成按日频率的重采样与缺失值填补。由于需求强调最小化实现成本，DataBrew 通过避免编写、测试及调试代码的特性，最契合这一要求。其他方案则需投入更多精力：\n\n- **采用 Amazon EMR Serverless 与 PySpark** 需要编写并管理 Spark 代码，对此任务而言过于繁重；\n- **Amazon SageMaker Studio Data Wrangler** 虽比从零编码简便，但仍需配置 SageMaker 环境，操作复杂度高于 DataBrew；\n- **使用 Amazon SageMaker Studio Notebook 搭配 Pandas** 需手动编写重采样与缺失值处理代码，会增加实现时间及技术门槛。\n\nDataBrew 依托全托管可视化模式，能以最轻量的实现负担提供最高效的解决方案。",
+      "zhcn": "我们来逐步分析一下题目要求和选项。  \n\n---\n\n## 1. 题目关键信息\n\n- **任务**：预测新产品的每日价格（基于 3 年旧产品的价格、销量、折扣数据）。  \n- **数据特点**：时间序列数据，时间戳不规则，有缺失值。  \n- **需要做**：  \n  1. 构建数据集来填补缺失值。  \n  2. 将数据重采样为每日频率。  \n  3. 导出数据供后续建模。  \n- **约束**：用 **最少实现工作量**（LEAST implementation effort）的方案。  \n\n---\n\n## 2. 选项分析\n\n### [A] Amazon EMR Serverless with PySpark\n- 功能上可行（PySpark 可以处理时间序列重采样、缺失值填充）。  \n- 但需要自己写 PySpark 代码，调试部署，配置集群等。  \n- 实现工作量较大，不适合“最少工作量”场景。  \n\n### [B] AWS Glue DataBrew\n- 可视化数据预处理工具，可以处理缺失值、重采样（可能需要自定义转换或配方）。  \n- 但 DataBrew 对时间序列重采样（resample）支持可能不够直接，需要写一些配方步骤，不如专门的数据准备工具方便。  \n- 导出数据没问题，但整体流程需要配置项目、选择处理步骤，比完全代码方案省力，但可能不如 SageMaker Data Wrangler 集成顺畅。  \n\n### [C] Amazon SageMaker Studio Data Wrangler\n- 集成在 SageMaker Studio 中，专为快速准备 ML 数据设计。  \n- 提供可视化界面 + 内置数据处理流程（包括处理缺失值、时间序列重采样）。  \n- 可以直接导出到 S3 或用于后续 SageMaker 建模，无缝衔接。  \n- 对于 ML 数据预处理，特别是时间序列重采样、填充，有现成的转换器，实现工作量最小。  \n\n### [D] Amazon SageMaker Studio Notebook with Pandas\n- 需要手动写 Pandas 代码（`resample`, `fillna` 等）。  \n- 虽然灵活，但代码、调试、维护都需要自己完成，实现工作量大于可视化工具。  \n\n---\n\n## 3. 为什么选 C\n\n- **Data Wrangler** 专为机器学习数据准备优化，内置时间序列处理功能，可视化操作减少代码工作。  \n- 与题目中的“进一步建模”能无缝对接（同在 SageMaker 环境）。  \n- 相比 DataBrew，Data Wrangler 更侧重 ML 数据准备，对时间序列重采样这类需求更直接。  \n- 相比写代码（A 和 D），实现速度最快。  \n\n---\n\n**答案：[C] Use Amazon SageMaker Studio Data Wrangler** ✅"
+    },
+    "answer": "C",
+    "o_id": "305"
+  },
+  {
+    "id": "311",
+    "question": {
+      "enus": "A data engineer wants to perform exploratory data analysis (EDA) on a petabyte of data. The data engineer does not want to manage compute resources and wants to pay only for queries that are run. The data engineer must write the analysis by using Python from a Jupyter notebook. Which solution will meet these requirements? ",
+      "zhcn": "一位数据工程师希望对PB级数据进行探索性数据分析（EDA）。该工程师不愿自行管理计算资源，且仅希望按实际执行的查询量付费。分析代码需通过Jupyter笔记本使用Python编写。何种方案可满足这些需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "在Amazon Athena 中集成使用 Apache Spark。",
+          "enus": "Use Apache Spark from within Amazon Athena."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在Amazon SageMaker环境中集成Apache Spark进行数据处理。",
+          "enus": "Use Apache Spark from within Amazon SageMaker."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "在 Amazon EMR 集群环境中运行 Apache Spark。",
+          "enus": "Use Apache Spark from within an Amazon EMR cluster."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过集成Amazon Redshift使用Apache Spark。",
+          "enus": "Use Apache Spark through an integration with Amazon Redshift."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **“在 Amazon SageMaker 中使用 Apache Spark”**。  \n该方案满足以下核心要求：  \n\n*   **支持 PB 级数据的探索性分析：** Apache Spark 专为海量数据的分布式处理而设计。  \n*   **无需管理计算资源：** Amazon SageMaker 是全托管服务，数据工程师无需配置、扩展或维护底层的 Spark 集群。  \n*   **按查询次数计费：** SageMaker 的计算资源采用按用量计费模式，符合“仅为运行的查询付费”的要求。  \n*   **通过 Jupyter Notebook 使用 Python：** SageMaker 的主要交互界面是全托管的 Jupyter Notebook，可直接执行 Python 代码。  \n\n### 其他选项为何不适用：  \n*   **“在 Amazon Athena 中使用 Apache Spark”：** Athena 是无服务器查询服务，但其底层使用 Presto/Trino（基于 SQL），而非支持 Python 的 Apache Spark，无法通过 Jupyter Notebook 以所需方式进行交互式分析。  \n*   **“在 Amazon EMR 集群中使用 Apache Spark”：** 尽管 EMR 提供了对 Spark 的最大控制权，但它**并非无服务器服务**。工程师需负责管理集群（启动、停止、配置、扩缩容），违背了“不愿管理计算资源”的要求。  \n*   **“通过 Amazon Redshift 的集成功能使用 Apache Spark”：** Amazon Redshift 是用于 SQL 分析的数据仓库，其 Spark 连接器仅用于在 Spark 和 Redshift 间迁移数据，无法直接对存储于他处的数据在 Notebook 中完成核心的探索性分析。",
+      "zhcn": "我们来逐步分析一下题目要求。  \n\n**1. 题目关键点**  \n- 数据量：PB 级别  \n- 不想管理计算资源（serverless）  \n- 按查询付费（pay only for queries run）  \n- 用 Python 在 Jupyter notebook 里做 EDA  \n- 使用 Apache Spark  \n\n**2. 选项分析**  \n\n**[A] Use Apache Spark from within Amazon Athena**  \n- Athena 主要是用 SQL 查询的 Serverless 服务，虽然现在有 Athena for Apache Spark（支持 PySpark 笔记本），但它是按会话/DPU 计费，不完全像 Athena SQL 那样按扫描数据量计费，且主要是交互式查询，PB 级 EDA 可能成本高且不适合复杂迭代分析。  \n\n**[B] Use Apache Spark from within Amazon SageMaker**  \n- SageMaker 提供了完全托管的 Jupyter notebook，可以配置 Spark 环境（如使用 SageMaker Processing 或 SageMaker Studio 内核集成 EMR/Spark）。  \n- 有 Serverless 选项（SageMaker Studio 可搭配 EMR Serverless 或 SageMaker Spark 分析），可以做到按查询/作业付费，不用管理集群。  \n- 适合 PB 级数据，用 Python 在 notebook 中写分析。  \n\n**[C] Use Apache Spark from within an Amazon EMR cluster**  \n- EMR 需要自己管理集群（或使用自动伸缩但仍需管理资源生命周期），不是完全 Serverless，不符合“不想管理计算资源”。  \n\n**[D] Use Apache Spark through an integration with Amazon Redshift**  \n- Redshift 主要是数据仓库，虽然可以和 Spark 集成（Redshift Spark 连接器），但需要自己有 Spark 集群（EMR 或 EC2），不符合 Serverless 和按查询付费。  \n\n**3. 为什么选 B**  \nSageMaker Studio 可以集成 EMR Serverless 或使用 SageMaker 自带的 Spark 镜像，在 notebook 中直接写 PySpark 代码，按作业运行资源付费，无需管理基础设施，最适合 PB 级数据的探索性分析。  \n\n**答案：B** ✅"
+    },
+    "answer": "B",
+    "o_id": "311"
   },
   {
     "id": "319",
@@ -2435,6 +2994,49 @@
     "o_id": "335"
   },
   {
+    "id": "344",
+    "question": {
+      "enus": "A machine learning (ML) engineer is creating a binary classification model. The ML engineer will use the model in a highly sensitive environment. There is no cost associated with missing a positive label. However, the cost of making a false positive inference is extremely high. What is the most important metric to optimize the model for in this scenario? ",
+      "zhcn": "机器学习工程师正在构建一个用于高敏感场景的二元分类模型。该场景下漏报阳性标签不会产生代价，但误判为阳性的代价极其高昂。在此情况下，优化模型时应优先考量哪个关键指标？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "Accuracy",
+          "enus": "Accuracy"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "Precision",
+          "enus": "Precision"
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "Recall",
+          "enus": "Recall"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "F1",
+          "enus": "F1"
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **Precision**（精确率），因为该场景强调假阳性（FP）的代价极高，而漏检阳性（假阴性，FN）不产生成本。**精确率**的定义为 TP / (TP + FP）。通过优化精确率，模型能最大限度减少假阳性，这与业务约束条件高度契合。高精确率模型在预测阳性类别时具有高度确定性，从而有效规避代价高昂的假阳性误判。\n\n其余干扰项均不适用：\n- **Accuracy**（准确率）：该指标同时考虑假阳性和假阴性。由于漏检阳性（FN）无代价，仅始终预测阴性类别的模型即可获得高准确率，此类模型并无实用价值。准确率无法针对性应对高代价的假阳性问题。\n- **Recall**（召回率）：该指标（TP / (TP + FN））专注于最小化假阴性，与需求背道而驰。高召回率模型虽能捕捉所有阳性案例，但很可能产生大量不可接受的假阳性结果。\n- **F1 Score**（F1分数）：作为精确率与召回率的调和平均数，其平衡特性仍会允许相当数量的假阳性存在，在假阳性代价极高的场景下不可接受。\n\n关键误区在于将“捕捉所有阳性”（召回率）与“预测阳性时确保正确”（精确率）相混淆。在此高敏感场景中，精确率具有绝对优先性。",
+      "zhcn": "我们来一步步分析这个题目。  \n\n**1. 场景回顾**  \n- 二分类问题（正类 positive、负类 negative）。  \n- 环境敏感，**漏掉正类（false negative）没有成本**。  \n- **假阳性（false positive）的成本极高**。  \n\n**2. 关键概念**  \n- **假阳性（False Positive）**：实际是负类，但模型预测为正类。  \n- **精确率（Precision）** = TP / (TP + FP)，衡量在所有预测为正类的样本中，真正为正类的比例。  \n- **召回率（Recall）** = TP / (TP + FN)，衡量在所有实际为正类的样本中，被正确预测为正类的比例。  \n- 题目说“漏掉正类（FN）没有成本”，所以召回率不重要。  \n- 但“假阳性（FP）成本极高”，所以要尽可能减少 FP，也就是要**最大化精确率**。  \n\n**3. 选项分析**  \n- **A. Accuracy**：整体正确率，会受到负类样本数量的影响，但高准确率不能保证低 FP（如果负类很多，即使 FP 不少，准确率也可能高）。  \n- **B. Precision**：直接关注“预测为正类的样本里有多少是真的正类”，提高 Precision 意味着减少 FP，符合题意。  \n- **C. Recall**：关注“找到所有正类”，但题目说 FN 不重要，所以不是重点。  \n- **D. F1**：是 Precision 和 Recall 的调和平均数，因为 Recall 不重要，优化 F1 可能会为了平衡而牺牲 Precision，不满足“FP 成本极高”的要求。  \n\n**4. 结论**  \n最应该优化的指标是 **Precision**。  \n\n**答案：B** ✅"
+    },
+    "answer": "B",
+    "o_id": "344"
+  },
+  {
     "id": "347",
     "question": {
       "enus": "A company needs to develop a model that uses a machine learning (ML) model for risk analysis. An ML engineer needs to evaluate the contribution each feature of a training dataset makes to the prediction of the target variable before the ML engineer selects features. How should the ML engineer predict the contribution of each feature? ",
@@ -2619,6 +3221,49 @@
     },
     "answer": "C",
     "o_id": "357"
+  },
+  {
+    "id": "360",
+    "question": {
+      "enus": "A manufacturing company produces 100 types of steel rods. The rod types have varying material grades and dimensions. The company has sales data for the steel rods for the past 50 years. A data scientist needs to build a machine learning (ML) model to predict future sales of the steel rods. Which solution will meet this requirement in the MOST operationally efficient way? ",
+      "zhcn": "一家钢铁制品公司生产百种规格的螺纹钢，其材质等级与尺寸参数各不相同。该公司拥有过去五十年间的螺纹钢销售数据，一位数据科学家需构建机器学习模型以预测未来销量。下列哪种解决方案能以最高运营效率满足此需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "利用Amazon SageMaker的DeepAR预测算法，为所有产品构建统一预测模型。",
+          "enus": "Use the Amazon SageMaker DeepAR forecasting algorithm to build a single model for all the products."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon SageMaker平台的DeepAR预测算法，为每款产品分别建立专属预测模型。",
+          "enus": "Use the Amazon SageMaker DeepAR forecasting algorithm to build separate models for each product."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon SageMaker Autopilot，为所有产品构建统一模型。",
+          "enus": "Use Amazon SageMaker Autopilot to build a single model for all the products."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon SageMaker Autopilot为每款产品分别构建专属模型。",
+          "enus": "Use Amazon SageMaker Autopilot to build separate models for each product."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**“使用 Amazon SageMaker DeepAR 预测算法为所有产品构建统一模型。”**  \n**理由如下：**  \n- **DeepAR** 是专门针对时间序列预测的算法，能够通过单一模型处理多个关联时序数据。该算法可在学习所有产品全局规律的同时兼顾个体差异，非常适合对100种产品类型进行高效预测。  \n- **为每种产品单独建立模型**（错误选项2和4）会导致运营效率低下，因为需要训练、部署和维护100个独立模型，成本高昂且复杂度大增。  \n- **Amazon SageMaker Autopilot**（错误选项3和4）专为自动化*表格*数据建模设计，不如DeepAR针对时序预测进行优化。在此场景下使用该工具会降低预测精度和效率。  \n\n**关键区别：** DeepAR能够通过统一模型捕捉数据中的共享规律，在保持预测准确性的同时显著降低资源消耗。常见误区是认为“按产品拆分模型能提升效率”，但实际上针对此类场景，构建单一全局模型才是更简洁且可扩展的解决方案。",
+      "zhcn": "我们来逐步分析这道题。  \n\n---\n\n**1. 题目关键信息**  \n- 公司生产 **100 种** 钢材（类型不同，材质和尺寸不同）  \n- 有 **过去 50 年** 的销售数据  \n- 需要预测未来销量  \n- 要求 **最运营高效** 的方式  \n\n---\n\n**2. 选项分析**  \n\n**[A] 使用 Amazon SageMaker DeepAR 为所有产品建立一个模型**  \n- DeepAR 是专门为时间序列预测设计的算法，支持跨系列学习（利用不同产品的时间序列模式相互提升预测效果）。  \n- 为 100 种钢材建立一个模型，意味着模型会学习这些产品之间的共性，同时区分它们的特性（通过物品 ID 作为特征）。  \n- 运营效率高：只需训练和部署一个模型，管理简单。  \n\n**[B] 使用 DeepAR 为每个产品单独建模型**  \n- 100 个产品 → 100 个模型  \n- 训练、部署、维护成本高，不高效。  \n\n**[C] 使用 SageMaker Autopilot 为所有产品建立一个模型**  \n- Autopilot 主要用于表格数据的自动机器学习（分类/回归），不是专门为多时间序列预测设计的。  \n- 虽然可以强行把时间序列转成表格特征，但不如 DeepAR 这种专门算法效果好，且 Autopilot 会尝试多种模型，可能更耗资源。  \n\n**[D] 使用 Autopilot 为每个产品单独建模型**  \n- 最不高效：100 个 Autopilot 任务，成本极高，且方法不适合时间序列数据。  \n\n---\n\n**3. 为什么 A 是最佳答案**  \n- **运营效率**：单个模型，统一管理。  \n- **技术适用性**：DeepAR 专门处理类似场景（多相关时间序列预测），能共享季节性、趋势等模式，尤其适合 50 年长历史数据。  \n- **资源利用**：比单独训练 100 个模型节省大量计算和运维开销。  \n\n---\n\n**最终答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "360"
   },
   {
     "id": "368",
