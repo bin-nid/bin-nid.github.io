@@ -46,5 +46,9 @@
   "aws_mls_c01_error_deepseek": {
     "bank_name": "AWS-MLS(C01)(错题集)",
     "bank_file": "./static/bank/datas/AWS/MLS/error.json"
+  },
+  "aws_mls_c01_k_and_g_deepseek": {
+    "bank_name": "AWS-MLS(C01)(Kinesis&Glue专项)",
+    "bank_file": "./static/bank/datas/AWS/MLS/kinesis_glue.json"
   }
 }

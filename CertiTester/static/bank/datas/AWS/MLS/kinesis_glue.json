@@ -1,0 +1,1464 @@
+[
+  {
+    "id": "3",
+    "question": {
+      "enus": "A Mobile Network Operator is building an analytics platform to analyze and optimize a company's operations using Amazon Athena and Amazon S3. The source systems send data in .CSV format in real time. The Data Engineering team wants to transform the data to the Apache Parquet format before storing it on Amazon S3. Which solution takes the LEAST effort to implement? ",
+      "zhcn": "\n一家移动网络运营商正利用Amazon Athena和Amazon S3构建分析平台，以分析和优化公司运营。源系统实时以.CSV格式发送数据，数据工程团队希望在将数据存储到Amazon S3之前，将其转换为Apache Parquet格式。那么，哪种方案实现起来最省力？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "在Amazon EC2实例上使用Apache Kafka Streams导入CSV数据，并借助Kafka Connect S3将数据序列化为Parquet格式。",
+          "enus": "Ingest .CSV data using Apache Kafka Streams on Amazon EC2 instances and use Kafka Connect S3 to serialize data as Parquet"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "\n从Amazon Kinesis Data Streams摄入CSV数据，并使用Amazon Glue将其转换为Parquet格式。",
+          "enus": "Ingest .CSV data from Amazon Kinesis Data Streams and use Amazon Glue to convert data into Parquet."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "在Amazon EMR集群中使用Apache Spark结构化流导入CSV数据，并借助Apache Spark将数据转换为Parquet格式。",
+          "enus": "Ingest .CSV data using Apache Spark Structured Streaming in an Amazon EMR cluster and use Apache Spark to convert data into  Parquet."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "\n从Amazon Kinesis Data Streams接入CSV数据，并借助Amazon Kinesis Data Firehose将其转换为Parquet格式。",
+          "enus": "Ingest .CSV data from Amazon Kinesis Data Streams and use Amazon Kinesis Data Firehose to convert data into Parquet."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **\"从 Amazon Kinesis 数据流摄取 CSV 格式数据，并运用 Amazon Kinesis Data Firehose 将数据转换为 Parquet 格式\"**。\n\n**技术解析：**  \n核心需求是以**最简化的操作**实现 CSV 至 Parquet 格式的转换。这意味着解决方案需满足无服务器架构、全托管服务及最小化代码编写的特性。\n\n*   **正解（Kinesis Data Firehose）：** 该方案实现成本最低，因其作为全托管服务，可直接从 Kinesis 数据流摄取数据，并通过配置界面内置的格式转换功能，在将数据写入 Amazon S3 前自动完成 CSV 到 Parquet 的转译。整个过程无需管理底层架构，也无需编写转换逻辑代码。\n\n*   **干扰项分析：**  \n    *   **基于 EC2 的 Apache Kafka/Kafka Connect 方案：** 需投入大量运维精力。用户需自行管理 EC2 实例、Kafka 集群及 Kafka Connect 框架，包括编写和维护实现 Parquet 转换的自定义连接器。  \n    *   **EMR 上的 Apache Spark 方案：** 同样存在高复杂度。需负责管理 EMR 集群（分布式系统），并编写、测试及维护用于实时转换的 Spark 结构化流处理应用程序代码。  \n    *   **Amazon Glue（正解选项之一）：** 虽为托管服务，但通过 Glue 作业实现 Kinesis 数据实时转换的复杂度高于 Firehose。该方案需编写 PySpark 或 Spark 脚本并配置触发器，而 Firehose 仅需通过简单配置即可完成转换。\n\n**核心差异：**  \nKinesis Data Firehose 专为此类场景设计——通过配置化、无代码的方式，将流数据加载至存储服务并支持格式转换。相较之下，包括 Glue 在内的其他方案会为基础设施管理或代码开发引入不必要的复杂度，而 Firehose 原生支持该功能闭环。",
+      "zhcn": "我们来逐步分析这道题。  \n\n---\n\n## 1. 题目关键信息\n- 数据源：实时发送的 CSV 格式数据  \n- 目标：将数据转换为 Apache Parquet 格式后存到 S3  \n- 使用 Amazon Athena 分析  \n- 要求：**实现起来最省力（LEAST effort）**  \n\n---\n\n## 2. 选项分析\n\n### [A] Kafka on EC2 + Kafka Connect S3 转 Parquet\n- 需要自己管理 EC2 集群、Kafka、Kafka Connect  \n- 可能需要配置 Confluent S3 Connector 或类似工具来支持 Parquet 写入  \n- 运维成本高，不是完全托管方案  \n- 实现起来较复杂  \n\n---\n\n### [B] Kinesis Data Streams + Glue 转 Parquet\n- Kinesis Data Streams 是全托管的流数据服务  \n- 可以用 Glue 做 ETL 转换（Glue 有托管 Spark 环境，支持从 Kinesis 读取并转成 Parquet 写入 S3）  \n- 但需要配置 Glue 作业，并处理流式或微批处理  \n- 相比 A 省力，但比 D 复杂一些吗？需要判断  \n\n---\n\n### [C] Spark Structured Streaming on EMR\n- EMR 是托管 Hadoop/Spark 集群，但仍需选择并管理集群大小、运行时间、监控等  \n- 需要写 Spark 代码并部署到集群  \n- 比 A 省力，但比 B 和 D 更费劲  \n\n---\n\n### [D] Kinesis Data Streams + Kinesis Data Firehose 转 Parquet\n- Firehose 是**完全托管**的，可配置直接输出为 Parquet 格式（内置转换功能）  \n- 只需在 Firehose 控制台配置数据源、转换格式、目标 S3 等，几乎不用写代码  \n- 与 Lambda 配合可做轻量转换，但题目只是 CSV 转 Parquet，Firehose 原生支持（需启用格式转换）  \n- 这是 AWS 宣传的“零管理”方案  \n\n---\n\n## 3. 为什么答案是 B 而不是 D？\n这里需要小心审题。  \n- **Kinesis Data Firehose 确实支持将 CSV 转为 Parquet**，但 Firehose 要求源数据是 JSON 才能用内置的转换功能吗？  \n  查阅 AWS 文档：Firehose 支持将 **JSON 或 Parquet** 转换为 ORC/Parquet，但**如果源是 CSV，需要先用 Lambda 函数转换成 JSON**，然后再用内置的 Parquet 转换。  \n  这意味着需要额外写一个 Lambda 函数来 CSV → JSON，增加了步骤。  \n\n- **Glue** 可以直接读取 Kinesis Data Streams 的数据（CSV 格式），用 Glue 的映射功能或简单脚本直接转成 Parquet，Glue 对 CSV 的支持比 Firehose 内置转换更灵活，且代码量很少（可视化作图或少量 PySpark）。  \n  但 Glue 流式 ETL 需要作业一直运行，成本和管理比 Firehose 高吗？  \n\n实际上，从“最省力”角度看，**Firehose + Lambda** 需要写 Lambda 代码并管理转换逻辑，而 **Glue** 提供更直接的 CSV 到 Parquet 的映射（尤其是 Glue 工作室可以自动生成转换脚本），可能更少代码和配置。  \n\n但常见 AWS 考题里，Firehose 是更省力的，除非源格式不是 JSON。本题源是 CSV，所以 Firehose 不是直接无代码方案，需要 Lambda。  \n而 **Glue** 配合 Kinesis Data Streams，可以用 Glue 直接读取 CSV 流并写入 Parquet，不需要中间 Lambda，虽然要设置一个持续运行的 Glue 流作业，但代码几乎自动生成，所以整体比 Firehose+Lambda 更“少步骤”。  \n\n---\n\n## 4. 结论\n根据 AWS 认证题目常见思路：  \n- 如果数据是 JSON，Firehose 直接转 Parquet 最省力。  \n- 但数据是 CSV，Firehose 需要额外 Lambda，而 Glue 可以直接处理 CSV 流，所以更省力（B 正确）。  \n\n---\n\n**最终答案：B** ✅"
+    },
+    "answer": "B",
+    "o_id": "3"
+  },
+  {
+    "id": "8",
+    "question": {
+      "enus": "A manufacturing company has structured and unstructured data stored in an Amazon S3 bucket. A Machine Learning Specialist wants to use SQL to run queries on this data. Which solution requires the LEAST effort to be able to query this data? ",
+      "zhcn": "一家制造公司将其结构化与非结构化数据存储于Amazon S3存储桶中。机器学习专家需使用SQL语言对此数据进行查询。若要实现数据查询，何种解决方案所需投入精力最少？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "借助AWS Data Pipeline对数据进行转换处理，并运用Amazon RDS执行查询操作。",
+          "enus": "Use AWS Data Pipeline to transform the data and Amazon RDS to run queries."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用AWS Glue进行数据编目，再通过Amazon Athena执行查询。",
+          "enus": "Use AWS Glue to catalogue the data and Amazon Athena to run queries."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用AWS Batch对数据进行ETL处理，并通过Amazon Aurora执行查询操作。",
+          "enus": "Use AWS Batch to run ETL on the data and Amazon Aurora to run the queries."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用AWS Lambda进行数据转换，并通过Amazon Kinesis Data Analytics执行查询分析。",
+          "enus": "Use AWS Lambda to transform the data and Amazon Kinesis Data Analytics to run queries."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **“使用 AWS Glue 构建数据目录，并通过 Amazon Athena 执行查询。”**  \n\n此方案实现成本最低，因为 AWS Glue 能自动编目 Amazon S3 中的结构化与非结构化数据，无需手动编写 ETL 代码即可生成可检索的表结构。随后，Amazon Athena 可直接通过标准 SQL 对已编目的数据进行查询，且无需配置底层设施。这两项服务均采用无服务器架构，专为直接查询 S3 中数据这一场景而设计。  \n\n其余干扰方案均存在不必要的复杂性：  \n- **AWS Data Pipeline + Amazon RDS** 与 **AWS Batch + Aurora** 都需要将数据从 S3 转移至关系型数据库，涉及大量 ETL 工作与基础设施管理；  \n- **AWS Lambda + Kinesis Data Analytics** 专为实时流数据处理设计，与批量查询 S3 数据的场景不匹配，会造成架构过度复杂。  \n\n常见的误区是认为运行 SQL 查询必须将数据导入传统数据库，而 Athena 的创新之处正是实现了原位数据查询。",
+      "zhcn": "我们先分析一下题目要点：  \n\n- 数据在 **Amazon S3** 中（结构化和非结构化数据）  \n- 想用 **SQL** 查询  \n- 要求 **最小工作量**  \n\n---\n\n**选项分析**  \n\n**[A] AWS Data Pipeline + Amazon RDS**  \n- Data Pipeline 需要定义 ETL 任务把数据从 S3 导入 RDS  \n- RDS 需要预置数据库实例，维护、成本较高  \n- 需要做数据转换和加载，不是最小工作量  \n\n**[B] AWS Glue + Amazon Athena**  \n- Glue Crawler 可以自动扫描 S3 数据，生成表结构（元数据）到 Glue Data Catalog  \n- Athena 是无服务器的，直接用 SQL 查询 S3 数据，无需加载数据  \n- 几乎不需要代码，配置简单，符合“最小工作量”  \n\n**[C] AWS Batch + Aurora**  \n- AWS Batch 用于运行容器化批处理作业，需要自己写 ETL 代码  \n- Aurora 需要预置数据库，数据还要先 ETL 加载进去  \n- 工作量大  \n\n**[D] Lambda + Kinesis Data Analytics**  \n- KDA 更适合实时流数据分析，而不是直接查询 S3 里的静态数据  \n- 需要写 Lambda 做数据转换，复杂  \n\n---\n\n**结论**  \n**B** 选项利用无服务器、自动化的元数据发现和直接查询 S3，步骤最少，最符合“最小工作量”要求。  \n\n**答案：B** ✅"
+    },
+    "answer": "B",
+    "o_id": "8"
+  },
+  {
+    "id": "22",
+    "question": {
+      "enus": "A retail chain has been ingesting purchasing records from its network of 20,000 stores to Amazon S3 using Amazon Kinesis Data Firehose. To support training an improved machine learning model, training records will require new but simple transformations, and some attributes will be combined. The model needs to be retrained daily. Given the large number of stores and the legacy data ingestion, which change will require the LEAST amount of development effort? ",
+      "zhcn": "一家零售连锁企业一直通过Amazon Kinesis Data Firehose服务，将其两万家门店的采购记录实时汇入Amazon S3存储平台。为提升机器学习模型的训练效果，训练数据需进行几项简单的新型转换处理，并将部分属性字段加以整合。该模型需实现每日自动重训练。考虑到门店规模庞大且存在传统数据接入方式，下列哪种改造方案所需开发投入最为精简？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "要求各门店将数据采集方式切换为通过AWS Storage Gateway在本地捕获，随后导入Amazon S3存储服务，再运用AWS Glue进行数据转换处理。",
+          "enus": "Require that the stores to switch to capturing their data locally on AWS Storage Gateway for loading into Amazon S3, then use AWS Glue  to do the transformation."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "部署一个运行Apache Spark的Amazon EMR集群，并配置相应的数据转换逻辑。该集群需每日处理Amazon S3中持续累积的数据记录，将处理后的新数据及转换结果输出至Amazon S3存储空间。",
+          "enus": "Deploy an Amazon EMR cluster running Apache Spark with the transformation logic, and have the cluster run each day on the  accumulating records in Amazon S3, outputting new/transformed records to Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "部署一套搭载转换逻辑的Amazon EC2实例集群，对积存在Amazon S3的数据记录进行转换处理，并将转换后的记录输出至Amazon S3存储空间。",
+          "enus": "Spin up a fieet of Amazon EC2 instances with the transformation logic, have them transform the data records accumulating on Amazon  S3, and output the transformed records to Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在Kinesis Data Firehose数据流的下游接入一条Amazon Kinesis Data Analytics流，通过SQL语句将原始记录属性转化为简洁的转换值。",
+          "enus": "Insert an Amazon Kinesis Data Analytics stream downstream of the Kinesis Data Firehose stream that transforms raw record attributes  into simple transformed values using SQL."
+        },
+        "option_flag": true
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **\"在Kinesis Data Firehose数据流下游接入Amazon Kinesis Data Analytics流，通过SQL将原始记录属性转换为简化处理后的数值。\"**\n\n**深度解析：**  \n核心需求是为已成功通过Amazon Kinesis Data Firehose流入Amazon S3的数据流添加\"简易转换\"功能，同时最大限度降低每日模型重训练的开发成本。\n\n*   **正解（Kinesis Data Analytics方案）：** 该方案开发量最轻，因其能与现有Kinesis Data Firehose基础设施无缝集成。数据可从Firehose路由至Kinesis Data Analytics进行实时SQL转换，再返回Firehose最终输送至S3。这种全托管、无服务器架构无需管理集群或实例，且基于SQL的转换逻辑特别适合简易数据处理场景，既能满足实时流式处理要求，又能确保转换后的数据立即可用于每日训练任务。\n\n*   **干扰项1（AWS存储网关与Glue组合方案）：** 此方案实施成本过高。需要让两万家门店全面改造数据摄取架构，改用AWS存储网关——相较于仅增加转换环节，这种整体架构调整堪称颠覆性工程。尽管Glue是优秀的托管型ETL服务，但变更数据采集源的代价令人难以承受。\n\n*   **干扰项2（EMR集群方案）：** 该方案会引入显著运维复杂度。EMR虽然功能强大，但需要配置管理集群（即使是临时集群）来运行每日批处理任务。与无服务器的实时SQL方案相比，需投入更多开发精力编写Spark代码，并承担集群配置、运维管理及成本优化等额外负担。\n\n*   **干扰项3（EC2实例集群方案）：** 这是运维最复杂、实施成本最高的选项。需要手动管理服务器集群，包括资源调配、扩缩容、监控及容错处理——这正是AWS托管服务所要规避的\"无差异繁重工作\"的典型场景。\n\n**常见误区：**  \n许多设计者会惯性选择熟悉的批处理方案（如EMR或EC2自定义脚本），却忽略了在现有实时数据流基础上叠加无服务器转换服务的简洁性。关键在于认识到数据始终处于流动状态，最有效的处理方式是在流动过程中实施转换，而非待其落地至S3后再行处理。",
+      "zhcn": "我们先分析一下题目要点：  \n\n- 已有数据流：20,000 家门店 → Kinesis Data Firehose → S3  \n- 新需求：每天训练机器学习模型前，需要对数据做简单变换（simple transformations）和属性组合  \n- 要求：改造成本最低（LEAST amount of development effort）  \n- 数据量很大（20,000 家门店，历史数据+新数据）  \n\n---\n\n**选项分析：**\n\n**[A] 让门店改用 AWS Storage Gateway 存数据到 S3，再用 AWS Glue 做转换**  \n- 需要改动门店端的数据发送方式（改为 Storage Gateway），门店端改造量很大，不现实。  \n- 开发成本高。  \n\n**[B] 用 EMR 集群运行 Spark，每天处理 S3 上累积的数据**  \n- 可行，但需要写 Spark 代码、配置集群、调度任务（可以用 Step Functions + EMR 或 Airflow）。  \n- 比直接在流上处理要重一些，需要额外开发批处理作业。  \n\n**[C] 用 EC2 实例群做转换**  \n- 类似 B，但需要自己管理集群、调度、扩展性，比 EMR 更费开发运维精力。  \n\n**[D] 在 Kinesis Data Firehose 下游加一个 Kinesis Data Analytics，用 SQL 做实时转换**  \n- 数据已经是流式进入 Firehose，KDA 可以直接接在 Firehose 后面，用 SQL 做简单变换和属性组合，然后输出到 S3（甚至可以直接到新的 S3 路径）。  \n- 几乎不需要改门店端，不需要写复杂代码，SQL 实现简单转换，开发量最小。  \n- 支持实时处理，数据到达即处理，不需要等一天结束后跑批处理。  \n\n---\n\n**结论：**  \n因为题目强调 **简单转换** 和 **最小开发成本**，并且数据已经在 Kinesis Data Firehose 中，所以直接使用 Kinesis Data Analytics（KDA）用 SQL 处理是最省事的，不需要改动现有数据采集架构。  \n\n**答案：D** ✅"
+    },
+    "answer": "D",
+    "o_id": "22"
+  },
+  {
+    "id": "37",
+    "question": {
+      "enus": "A Machine Learning Specialist working for an online fashion company wants to build a data ingestion solution for the company's Amazon S3- based data lake. The Specialist wants to create a set of ingestion mechanisms that will enable future capabilities comprised of: ✑ Real-time analytics ✑ Interactive analytics of historical data ✑ Clickstream analytics ✑ Product recommendations Which services should the Specialist use? ",
+      "zhcn": "某在线时尚公司的机器学习专家计划为公司基于Amazon S3的数据湖构建一套数据摄取方案。该专家需要设计一组数据接入机制，以支撑未来实现以下功能：  \n✧ 实时数据分析  \n✧ 历史数据交互式分析  \n✧ 点击流分析  \n✧ 商品推荐系统  \n请问专家应当采用哪些服务？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "以AWS Glue作为数据目录；通过Amazon Kinesis Data Streams及数据分析服务实现实时数据洞察；借助Amazon Kinesis Data Firehose将数据输送至Amazon ES进行点击流分析；运用Amazon EMR生成个性化产品推荐方案。",
+          "enus": "AWS Glue as the data catalog; Amazon Kinesis Data Streams and Amazon Kinesis Data Analytics for real-time data insights; Amazon  Kinesis Data Firehose for delivery to Amazon ES for clickstream analytics; Amazon EMR to generate personalized product  recommendations"
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "以Amazon Athena作为数据目录：通过Amazon Kinesis Data Streams与Amazon Kinesis Data Analytics服务实现近实时数据洞察；运用Amazon Kinesis Data Firehose进行点击流分析；借助AWS Glue生成个性化产品推荐方案。",
+          "enus": "Amazon Athena as the data catalog: Amazon Kinesis Data Streams and Amazon Kinesis Data Analytics for near-real-time data insights;  Amazon Kinesis Data Firehose for clickstream analytics; AWS Glue to generate personalized product recommendations"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "以AWS Glue作为元数据目录；通过Amazon Kinesis Data Streams及数据分析服务实现历史数据洞察；借助Amazon Kinesis Data Firehose将数据实时输送至Amazon ES进行点击流分析；采用Amazon EMR框架生成个性化商品推荐方案。",
+          "enus": "AWS Glue as the data catalog; Amazon Kinesis Data Streams and Amazon Kinesis Data Analytics for historical data insights; Amazon  Kinesis Data Firehose for delivery to Amazon ES for clickstream analytics; Amazon EMR to generate personalized product  recommendations"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "以Amazon Athena作为数据目录核心；通过Amazon Kinesis Data Streams与数据分析服务挖掘历史数据价值；借助Amazon DynamoDB流处理技术实现用户点击行为分析；运用AWS Glue构建个性化商品推荐引擎。",
+          "enus": "Amazon Athena as the data catalog; Amazon Kinesis Data Streams and Amazon Kinesis Data Analytics for historical data insights;  Amazon DynamoDB streams for clickstream analytics; AWS Glue to generate personalized product recommendations"
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**以AWS Glue作为数据目录；通过Amazon Kinesis Data Streams和Amazon Kinesis Data Analytics实现实时数据分析；利用Amazon Kinesis Data Firehose将数据传送至Amazon ES进行点击流分析；采用Amazon EMR生成个性化产品推荐**。\n\n**技术解析：**\n题目要求构建一套支持**实时分析**、**历史数据交互分析**、**点击流分析**及**产品推荐**的解决方案。\n\n*   **实时分析**：最适配的方案是**Amazon Kinesis Data Streams**（用于实时数据摄取）结合**Amazon Kinesis Data Analytics**（进行实时计算）。干扰选项中针对此环节提出的\"近实时\"或\"历史数据洞察\"方案均不符合实时性要求。\n*   **数据目录**：在数据湖架构中，**AWS Glue**作为中央数据目录是正确选择，该服务可通过自动爬取数据源更新目录。而Amazon Athena是查询工具，并非持久化数据目录服务。\n*   **点击流分析**：标准实践是采用**Kinesis Data Firehose**将流式点击数据稳定加载至**Amazon Elasticsearch Service（ES）**，后者专精于日志数据的检索与分析。仅使用\"Amazon Kinesis Data Firehose\"（未指定目标端）或\"DynamoDB流\"的方案对此场景既不完整也不适用。\n*   **产品推荐**：生成个性化推荐需进行复杂的大规模数据处理（如基于用户行为数据运行机器学习算法）。**Amazon EMR**专为此类重型数据处理与机器学习任务设计。而**AWS Glue**作为无服务器ETL服务，主要优化数据准备与加载环节，不适用于运行迭代式复杂推荐算法。\n\n最终选定的正确答案精准对应了现代数据架构中各项服务的技术定位，而干扰选项则存在服务误用（如以Glue替代EMR执行机器学习任务，或将Athena用作目录服务）或未能满足特定技术要求（如用\"近实时\"方案替代\"实时\"需求）的问题。",
+      "zhcn": "我们先分析题目中提到的四个需求，以及每个选项的合理性。  \n\n**需求分解：**  \n1. **Real-time analytics** → 需要实时流数据处理服务，如 Kinesis Data Streams + Kinesis Data Analytics。  \n2. **Interactive analytics of historical data** → 一般用 Amazon Athena（基于 S3 数据湖的交互查询），但数据目录（data catalog）通常用 AWS Glue 来管理元数据。  \n3. **Clickstream analytics** → 常见方案是 Kinesis Data Firehose 将数据送到 Amazon Elasticsearch Service（Amazon ES）或 Amazon OpenSearch Service 做日志和点击流分析。  \n4. **Product recommendations** → 需要机器学习或复杂数据处理，可以用 EMR（Spark ML）或 SageMaker，但 EMR 适合大规模数据处理和个性化推荐生成。  \n\n**选项分析：**  \n\n- **A**  \n  - AWS Glue 作数据目录（正确）  \n  - Kinesis Data Streams + Kinesis Data Analytics 做实时分析（正确）  \n  - Kinesis Data Firehose 投递到 Amazon ES 做点击流分析（正确）  \n  - EMR 生成产品推荐（合理）  \n  → 完全符合需求。  \n\n- **B**  \n  - Athena 作数据目录（不合适，Athena 是查询引擎，目录还是 Glue）  \n  - 用 AWS Glue 生成推荐（Glue 主要是 ETL，复杂推荐不如 EMR 或 SageMaker 合适）  \n  → 有缺陷。  \n\n- **C**  \n  - 说 Kinesis Data Streams + Kinesis Data Analytics 用于 historical data insights（错，这是实时/近实时分析，历史数据分析一般用 Athena/Redshift）  \n  → 描述有误。  \n\n- **D**  \n  - Athena 作数据目录（不合适）  \n  - DynamoDB Streams 用于点击流分析（不典型，点击流一般来自网站/APP，用 Kinesis 收集，不是 DynamoDB 的事务日志）  \n  → 不合理。  \n\n**所以正确答案是 A**。"
+    },
+    "answer": "A",
+    "o_id": "37"
+  },
+  {
+    "id": "45",
+    "question": {
+      "enus": "A Data Scientist needs to create a serverless ingestion and analytics solution for high-velocity, real-time streaming data. The ingestion process must buffer and convert incoming records from JSON to a query-optimized, columnar format without data loss. The output datastore must be highly available, and Analysts must be able to run SQL queries against the data and connect to existing business intelligence dashboards. Which solution should the Data Scientist build to satisfy the requirements? ",
+      "zhcn": "数据科学家需要构建一套无服务器架构的数据摄取与分析方案，用以处理高速实时流数据。数据摄取过程需实现缓冲功能，并将输入的JSON格式记录无损转换为查询优化的列式存储格式。输出数据存储须具备高可用性，且分析师能够对数据执行SQL查询，并连接现有商业智能仪表板。请问数据科学家应如何设计该解决方案以满足上述需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "在AWS Glue数据目录中为传入数据格式创建元数据结构。通过Amazon Kinesis Data Firehose传输流实时推送数据，并借助AWS Glue数据目录将数据转换为Apache Parquet或ORC格式后存入Amazon S3。数据分析师可使用Amazon Athena直接查询S3中的数据，并通过Athena的JDBC连接器将商业智能工具与数据平台对接。",
+          "enus": "Create a schema in the AWS Glue Data Catalog of the incoming data format. Use an Amazon Kinesis Data Firehose delivery stream to  stream the data and transform the data to Apache Parquet or ORC format using the AWS Glue Data Catalog before delivering to Amazon  S3. Have the Analysts query the data directly from Amazon S3 using Amazon Athena, and connect to BI tools using the Athena Java  Database Connectivity (JDBC) connector."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "将每条JSON记录写入Amazon S3的临时中转区。利用S3上传事件触发AWS Lambda函数，将数据转换为Apache Parquet或ORC格式后写入S3的处理数据存储区。数据分析师可通过Amazon Athena直接查询S3中的数据，并通过Athena的JDBC连接器接入各类商业智能工具。",
+          "enus": "Write each JSON record to a staging location in Amazon S3. Use the S3 Put event to trigger an AWS Lambda function that transforms  the data into Apache Parquet or ORC format and writes the data to a processed data location in Amazon S3. Have the Analysts query the  data directly from Amazon S3 using Amazon Athena, and connect to BI tools using the Athena Java Database Connectivity (JDBC)  connector."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "将每条JSON记录写入Amazon S3的暂存区，利用S3上传事件触发AWS Lambda函数，将数据转换为Apache Parquet或ORC格式后载入Amazon RDS PostgreSQL数据库。最终由分析师通过该RDS数据库进行查询并生成数据看板。",
+          "enus": "Write each JSON record to a staging location in Amazon S3. Use the S3 Put event to trigger an AWS Lambda function that transforms  the data into Apache Parquet or ORC format and inserts it into an Amazon RDS PostgreSQL database. Have the Analysts query and run  dashboards from the RDS database."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Analytics接入流式数据，通过实时SQL查询将记录转换为Apache Parquet格式后传输至Amazon S3。随后，分析师可借助Amazon Athena直接查询Amazon S3中的数据，并通过Athena的JDBC连接器与商业智能工具实现无缝对接。",
+          "enus": "Use Amazon Kinesis Data Analytics to ingest the streaming data and perform real-time SQL queries to convert the records to Apache  Parquet before delivering to Amazon S3. Have the Analysts query the data directly from Amazon S3 using Amazon Athena and connect to  BI tools using the Athena Java Database Connectivity (JDBC) connector."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案为第一选项：**“在AWS Glue数据目录中创建传入数据格式的元数据结构。通过Amazon Kinesis Data Firehose传输流实时传输数据，并利用AWS Glue数据目录将数据转换为Apache Parquet或ORC格式后存入Amazon S3。数据分析师可使用Amazon Athena直接查询S3中的数据，并通过Athena的JDBC连接器对接商业智能工具。”**\n\n**简要分析：**  \n该方案全面满足所有需求：  \n- **无服务器数据摄取与分析**：Kinesis Data Firehose、Glue数据目录、S3及Athena均属无服务架构  \n- **高吞吐实时流处理**：Kinesis Data Firehose专为此场景设计  \n- **数据缓冲与JSON转列式格式**：Firehose可缓冲数据并基于Glue数据目录模式转换为Parquet/ORC  \n- **数据零丢失**：Firehose具备自动重试机制确保可靠投递  \n- **高可用数据存储**：Amazon S3符合此要求  \n- **SQL查询与BI看板对接**：Athena支持S3数据SQL查询，通过JDBC连接BI工具  \n\n**干扰项错误原因：**  \n- **第二选项（S3上传+Lambda）**：非实时方案，依赖S3事件触发会产生延迟；Lambda处理失败可能丢失数据，且缺乏内置缓冲机制  \n- **第三选项（S3+Lambda+RDS）**：RDS并非为分析场景优化的列式存储，更适用于事务型工作负载而非海量数据分析  \n- **第四选项（Kinesis数据分析）**：虽可通过SQL转换数据，但无法在投递时转换为Parquet/ORC格式，仅支持JSON/CSV/Avro格式写入S3  \n\n核心差异在于：**唯有正确答案采用流优化服务（Kinesis Data Firehose），在满足所有需求的同时实现了向列式格式的无缝转换**。",
+      "zhcn": "我们先梳理题目中的关键需求：  \n\n1. **高速度实时流数据** → 需要支持流式接收。  \n2. **无数据丢失** → 需要可靠的缓冲与转换。  \n3. **将 JSON 转为列式格式（Parquet/ORC）** → 数据转换。  \n4. **高可用输出数据存储** → 存储要可靠且高可用。  \n5. **分析师能用 SQL 查询，并连接现有 BI 仪表板** → 查询引擎支持 JDBC。  \n\n---\n\n**选项分析**  \n\n- **A**：  \n  - 用 **Kinesis Data Firehose** 直接接收流数据（缓冲、可靠传输）。  \n  - Firehose 集成 Glue Data Catalog 自动转 Parquet/ORC。  \n  - 存到 S3（高可用）。  \n  - 用 Athena 查询，支持 JDBC 连接 BI 工具。  \n  - ✅ 完全满足：流式接收、无服务器、格式转换、S3+Athena 查询。  \n\n- **B**：  \n  - 先存 JSON 到 S3（用 S3 作流式入口不合适，因为流数据是先到 Kinesis/Kafka 才合理，直接写 S3 小文件多、延迟高、无缓冲）。  \n  - S3 触发 Lambda 转格式，但 Lambda 对大规模流数据可能超时/扩展复杂，且“无数据丢失”难保证（需自己处理重试）。  \n  - ❌ 不是标准的实时流式摄取方案，更像小批量文件处理。  \n\n- **C**：  \n  - 同样先存 JSON 到 S3（流式入口不合适）。  \n  - 转格式后插入 RDS PostgreSQL，但 RDS 不是为海量数据分析优化的列式存储，不适合大数据量 OLAP 查询。  \n  - ❌ 不满足“查询优化列式格式”和高扩展分析需求。  \n\n- **D**：  \n  - Kinesis Data Analytics 可以转 Parquet？实际上 KDA（现在叫 Managed Service for Apache Flink）可以做流上处理，但 Kinesis Data Firehose 才是专门用于摄取+转格式+存 S3 的无服务器服务。KDA 更侧重实时分析，转 Parquet 并写入 S3 通常还是交给 Firehose 更直接。  \n  - 描述里说“KDA 转 Parquet 再送 S3”不太标准，通常 KDA 输出到 Firehose 或直接写 S3 为文本，列式转换还是 Firehose 做。  \n  - ❌ 方案不如 A 直接和标准。  \n\n---\n\n**结论**：A 是 AWS 官方推荐的无服务器流式数据摄取与分析架构，完全匹配题目要求。  \n\n**答案**：A"
+    },
+    "answer": "A",
+    "o_id": "45"
+  },
+  {
+    "id": "52",
+    "question": {
+      "enus": "A financial services company is building a robust serverless data lake on Amazon S3. The data lake should be fiexible and meet the following requirements: ✑ Support querying old and new data on Amazon S3 through Amazon Athena and Amazon Redshift Spectrum. ✑ Support event-driven ETL pipelines ✑ Provide a quick and easy way to understand metadata Which approach meets these requirements? ",
+      "zhcn": "一家金融服务公司正在Amazon S3上构建一个强健的无服务器数据湖。该数据湖需具备灵活性，并满足以下要求：  \n✑ 支持通过Amazon Athena和Amazon Redshift Spectrum查询Amazon S3上的历史数据与新增数据  \n✑ 支持事件驱动的ETL流程  \n✑ 提供便捷直观的元数据理解方式  \n何种方案符合这些需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "利用AWS Glue爬虫采集S3数据，通过AWS Lambda函数触发Glue ETL任务处理流程，并借助AWS Glue数据目录实现元数据的检索与发现。",
+          "enus": "Use an AWS Glue crawler to crawl S3 data, an AWS Lambda function to trigger an AWS Glue ETL job, and an AWS Glue Data catalog to  search and discover metadata."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用AWS Glue爬虫采集S3数据，通过AWS Lambda函数触发AWS Batch任务，并借助外部Apache Hive元数据存储库进行元数据的检索与发现。",
+          "enus": "Use an AWS Glue crawler to crawl S3 data, an AWS Lambda function to trigger an AWS Batch job, and an external Apache Hive  metastore to search and discover metadata."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用AWS Glue爬虫程序采集S3数据，通过Amazon CloudWatch警报触发AWS Batch任务，并借助AWS Glue数据目录实现元数据的检索与发现。",
+          "enus": "Use an AWS Glue crawler to crawl S3 data, an Amazon CloudWatch alarm to trigger an AWS Batch job, and an AWS Glue Data Catalog to  search and discover metadata."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用AWS Glue爬虫采集S3数据，通过Amazon CloudWatch警报触发AWS Glue ETL任务，并借助外部Apache Hive元存储进行元数据的检索与发现。",
+          "enus": "Use an AWS Glue crawler to crawl S3 data, an Amazon CloudWatch alarm to trigger an AWS Glue ETL job, and an external Apache Hive  metastore to search and discover metadata."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**使用 AWS Glue 爬虫程序采集 S3 数据，通过 AWS Lambda 函数触发 AWS Glue ETL 任务，并利用 AWS Glue 数据目录进行元数据的搜索与发现。**\n\n### 解析\n\n本题要求设计一个满足以下三个核心需求的解决方案：\n\n1.  **支持通过 Athena/Redshift Spectrum 查询数据**：这要求使用 **AWS Glue 数据目录** 作为中心化的托管元存储。Athena 和 Redshift Spectrum 均原生集成于 Glue 数据目录。\n2.  **支持事件驱动的 ETL 流水线**：这需要一种能够响应事件（例如，S3 中到达新文件）立即触发 ETL 任务的机制。**AWS Lambda 函数** 是实现事件驱动触发的标准无服务器方案。\n3.  **提供快速理解元数据的便捷途径**：**AWS Glue 数据目录** 为表定义和结构信息提供了统一且可搜索的存储库，这正是“快速便捷”理解元数据的方式。\n\n**正确选项的合理性：**\n\n*   **AWS Glue 数据目录** 直接满足了需求 1 和 3。\n*   **AWS Lambda 函数** 是针对需求 2 的事件驱动触发器的正确选择。\n*   **AWS Glue ETL 任务** 是 AWS 上专为 ETL 工作负载设计的无服务器服务，能确保与数据目录的兼容性。\n\n**错误选项的不合理性：**\n\n*   **错误选项 1 和 3（外部 Apache Hive 元存储）**：使用外部 Hive 元存储会带来不必要的复杂性，更重要的是，这会破坏与 Athena 和 Redshift Spectrum 的原生集成，导致无法满足需求 1。\n*   **错误选项 2 和 3（Amazon CloudWatch 警报）**：CloudWatch 警报并非事件驱动触发器，它专为基于指标的告警设计，并非在数据到达事件后立即触发处理流程的最佳或直接方法。\n*   **错误选项 1 和 2（AWS Batch）**：AWS Batch 是一项运行批量计算任务的服务，而非托管的 ETL 服务。尽管它*可以*运行 ETL 脚本，但它并非像 AWS Glue 那样是集成化的无服务器 ETL 工具，因此对于此特定用例而言，它是一个较不适用且更为复杂的选择。\n\n**常见误区：** 主要的误解在于选择了未完全集成的组件。正确答案采用了一套完全无服务器化、AWS 原生的技术栈（Glue 爬虫、Lambda、Glue ETL、Glue 数据目录），这些组件能够无缝协作，从而高效地满足所有要求。",
+      "zhcn": "我们来一步步分析题目要求。  \n\n**题目要求：**  \n1. 支持通过 Amazon Athena 和 Amazon Redshift Spectrum 查询 S3 上的新旧数据。  \n   → 这意味着需要一个**统一的数据目录**（表结构定义），AWS 原生的最佳方案是 **AWS Glue Data Catalog**。  \n\n2. 支持事件驱动的 ETL 管道。  \n   → 事件驱动通常指 S3 文件到达等事件自动触发 ETL 任务，常用 **Lambda 触发 AWS Glue 作业**。  \n\n3. 提供快速简便的方法来理解元数据。  \n   → Glue Data Catalog 有控制台界面，可方便查看表结构、分区等信息。  \n\n---\n\n**选项分析：**  \n\n**[A]**  \n- Glue Crawler 爬取 S3 数据 → 自动填充 Glue Data Catalog。  \n- Lambda 触发 Glue ETL 作业 → 事件驱动 ETL。  \n- Glue Data Catalog 用于搜索和发现元数据 → 与 Athena/Redshift Spectrum 原生集成。  \n→ **完全满足要求**。  \n\n**[B]**  \n- 使用外部 Apache Hive Metastore 而不是 Glue Data Catalog。  \n- 虽然 Athena/Redshift Spectrum 可以连接外部 Hive Metastore，但需要额外配置，且不是 AWS 无服务器原生的“快速简便”方案。  \n- 触发用 Lambda + AWS Batch（非 Glue ETL），Batch 需要管理 EC2 或 Fargate，不是无服务器数据湖首选。  \n→ 不符合“快速简便”和原生集成要求。  \n\n**[C]**  \n- CloudWatch 告警触发 Batch 作业，而不是事件驱动（S3 事件 → Lambda 更直接）。  \n- Batch 不是无服务器 ETL 首选（Glue ETL 才是）。  \n→ 事件驱动方式不直接，架构复杂。  \n\n**[D]**  \n- CloudWatch 告警触发 Glue ETL（不如 Lambda 直接响应 S3 事件灵活）。  \n- 外部 Apache Hive Metastore 而不是 Glue Data Catalog，增加复杂度。  \n→ 不是最佳实践。  \n\n---\n\n**结论：** A 选项使用全托管、无服务器、事件驱动且元数据管理方便，是符合要求的最佳方案。  \n\n**答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "52"
+  },
+  {
+    "id": "58",
+    "question": {
+      "enus": "A Machine Learning Specialist needs to be able to ingest streaming data and store it in Apache Parquet files for exploration and analysis. Which of the following services would both ingest and store this data in the correct format? ",
+      "zhcn": "机器学习专家需要能够实时处理数据流，并将其存储为Apache Parquet格式文件以供探索分析。下列哪项服务可同时完成数据摄取并以正确格式存储？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "AWS DMS(数据迁移服务)",
+          "enus": "AWS DMS"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "Amazon Kinesis Data Streams",
+          "enus": "Amazon Kinesis Data Streams"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "Amazon Kinesis Data Firehose",
+          "enus": "Amazon Kinesis Data Firehose"
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "Amazon Kinesis Data Analytics",
+          "enus": "Amazon Kinesis Data Analytics"
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "**问题分析：**  \n题目要求找出能同时**摄取流式数据**并**直接以Apache Parquet格式存储**的AWS服务。Parquet是一种常用于数据湖（如Amazon S3）的列式存储格式，因此目标服务必须支持将传入的流式数据转换为Parquet文件并保存。\n\n---\n\n**正确答案选项：**  \n**Amazon Kinesis Data Firehose**  \n- Kinesis Data Firehose是一项全托管服务，专用于**将流式数据加载至数据存储**（如Amazon S3、Redshift、Elasticsearch）。  \n- 在将数据存入S3前，它可通过集成模式（借助AWS Glue Data Catalog）**将记录格式转换为Apache Parquet（或ORC）**。  \n- 该服务同时涵盖数据摄取与指定格式的存储，无需额外服务进行格式转换。\n\n---\n\n**错误答案选项分析：**  \n1. **AWS DMS（数据库迁移服务）**  \n   - 专为数据库迁移设计（支持批量或持续复制），而非从应用或设备实时摄取流式数据。  \n   - 其流程本身不原生支持将数据转换为Parquet格式，目标通常是数据库或CSV格式的平面文件。  \n\n2. **Amazon Kinesis Data Streams**  \n   - 仅负责摄取并临时存储流式数据（最长7天）。  \n   - 不具备格式转换能力，也无法将数据持久保存为Parquet格式；需额外编写消费者（如Lambda或Kinesis Data Firehose）实现该功能。  \n\n3. **Amazon Kinesis Data Analytics**  \n   - 用于对流式数据进行实时处理与分析（如SQL查询、异常检测）。  \n   - 虽可将结果输出至S3等目标，但若不额外配置并与Firehose集成，无法自动将完整数据流转换为Parquet格式。\n\n---\n\n**正确答案解析：**  \nKinesis Data Firehose是**唯一原生集成数据摄取、格式转换（至Parquet）及存储功能**的服务。其他选项要么无法以指定格式持久存储数据，要么需依赖额外组件才能实现目标。",
+      "zhcn": "我们先分析一下题目要求：  \n\n- **需求**：  \n  1. 能够**摄取流数据**（ingest streaming data）  \n  2. 将数据**存储为 Apache Parquet 文件**  \n  3. 用于后续的探索和分析  \n\n---\n\n### 选项分析\n\n**[A] AWS DMS**  \n- 主要用于数据库迁移（结构化数据从源到目标的复制/同步），虽然支持持续复制（CDC），但通常不是为实时流数据摄取设计的，且原生不支持直接输出为 Parquet 文件到 S3（需要额外转换步骤）。  \n- 不直接满足“流式数据 + 存为 Parquet”的典型场景。\n\n**[B] Amazon Kinesis Data Streams**  \n- 可以实时摄取流数据，但**只负责暂存数据**（保留 24 小时到 365 天），不自动将数据转换成 Parquet 并持久化存储。  \n- 需要额外使用 Kinesis Data Firehose 或自定义消费者才能转成 Parquet 存到 S3。\n\n**[C] Amazon Kinesis Data Firehose**  \n- 专门用于摄取流数据，并且能自动将数据**转换格式**（包括 JSON 转 Parquet/ORC），直接存储到 S3/Redshift 等。  \n- 支持在传输过程中调用 Lambda 函数做数据转换，并且内置了将缓冲数据转换为列式格式（Parquet）的功能。  \n- 完全符合“摄取流数据 + 存为 Parquet”的需求。\n\n**[D] Amazon Kinesis Data Analytics**  \n- 用于对 Kinesis 数据流或 Firehose 的数据进行实时 SQL 或 Flink 处理，不直接负责将数据存储为 Parquet 文件。  \n- 虽然可以搭配 Firehose 输出到 S3，但单独使用它不能完成“存储为 Parquet”的任务。\n\n---\n\n### 结论\n既能摄取流数据，又能直接存储为 Apache Parquet 格式的服务是 **Amazon Kinesis Data Firehose**。  \n\n**正确答案：C**"
+    },
+    "answer": "C",
+    "o_id": "58"
+  },
+  {
+    "id": "61",
+    "question": {
+      "enus": "A Machine Learning Specialist is working with a large cybersecurity company that manages security events in real time for companies around the world. The cybersecurity company wants to design a solution that will allow it to use machine learning to score malicious events as anomalies on the data as it is being ingested. The company also wants be able to save the results in its data lake for later processing and analysis. What is the MOST eficient way to accomplish these tasks? ",
+      "zhcn": "一位机器学习专家正与一家大型网络安全公司合作，该公司为全球企业提供实时安全事件监控服务。该网络安全公司希望设计一套解决方案，能够在数据录入时运用机器学习技术，将恶意事件作为异常数据进行风险评分，同时还需能将分析结果存储至数据湖中，以便后续处理与深度挖掘。如何以最高效的方式实现这些目标？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Kinesis Data Firehose流进行数据摄取，并借助Amazon Kinesis Data Analytics Random Cut Forest (RCF) 算法实现异常检测。随后通过Kinesis Data Firehose将处理结果实时传输至Amazon S3存储服务。",
+          "enus": "Ingest the data using Amazon Kinesis Data Firehose, and use Amazon Kinesis Data Analytics Random Cut Forest (RCF) for anomaly  detection. Then use Kinesis Data Firehose to stream the results to Amazon S3."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon EMR将数据实时接入Apache Spark Streaming流处理平台，结合Spark MLlib机器学习库中的k-means算法实现异常检测。随后通过Amazon EMR将处理结果存入Apache Hadoop分布式文件系统（HDFS），设置副本数为三，构建数据湖存储体系。",
+          "enus": "Ingest the data into Apache Spark Streaming using Amazon EMR, and use Spark MLlib with k-means to perform anomaly detection.  Then store the results in an Apache Hadoop Distributed File System (HDFS) using Amazon EMR with a replication factor of three as the  data lake."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "将数据导入并存储于Amazon S3中，随后借助AWS Batch服务与AWS深度学习AMI，基于TensorFlow框架对Amazon S3内的数据实施k-means模型训练。",
+          "enus": "Ingest the data and store it in Amazon S3. Use AWS Batch along with the AWS Deep Learning AMIs to train a k-means model using  TensorFlow on the data in Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "将数据导入并存储于Amazon S3中，通过按需触发的AWS Glue任务对新增数据进行转换处理。随后调用Amazon SageMaker内置的随机切割森林（RCF）模型，对数据中的异常情况进行检测。",
+          "enus": "Ingest the data and store it in Amazon S3. Have an AWS Glue job that is triggered on demand transform the new data. Then use the  built-in Random Cut Forest (RCF) model within Amazon SageMaker to detect anomalies in the data."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**\"通过Amazon Kinesis Data Firehose摄取数据，并采用Amazon Kinesis Data Analytics中的随机切割森林（RCF）算法进行异常检测，随后再利用Kinesis Data Firehose将处理结果实时传输至Amazon S3。\"**  \n此方案之所以最为高效，是因为它以全托管、实时且无服务器的方式精准契合了核心需求：  \n*   **实时摄取与评分**：Kinesis Data Firehose与Kinesis Data Analytics专为实时数据流处理而生。RCF算法则专门针对高效的流式异常检测而设计，完美实现了\"在数据摄取同时进行评分\"的要求。  \n*   **高效与全托管**：该方案无需基础设施管理（不同于EMR或Batch），直接处理动态数据流，避免了先存储再启动作业的批处理延迟。  \n*   **数据湖存储**：Kinesis Data Firehose可将异常评分结果无缝写入Amazon S3，符合现代数据湖的最佳实践。  \n\n### 其他方案为何效率不足：  \n*   **EMR上的Apache Spark流处理**：需投入大量运维精力管理EMR集群。虽然Spark流处理能力强大，但对此特定场景而言，其效率低于原生AWS流服务，且未采用RCF这类专为流数据优化的异常检测算法。  \n*   **AWS Batch/深度学习AMI**：属于批处理方案，违背了\"边摄取边评分\"的核心需求。该方案需先将数据完整存储于S3再处理，导致延迟较高。  \n*   **AWS Glue与Amazon SageMaker（按需调用）**：与批处理方案类似，并非实时解决方案。按需调用的Glue作业需手动或定时触发，无法随数据到达持续运行，因此无法满足实时性要求。",
+      "zhcn": "我们来逐步分析这道题目。  \n\n---\n\n**1. 题目关键需求**  \n- 实时数据（security events）  \n- 实时机器学习评分（检测异常）  \n- 结果保存到数据湖（data lake）供后续分析  \n- 要求高效（most efficient）  \n\n---\n\n**2. 选项分析**  \n\n**[A] 使用 Kinesis Data Firehose 接收数据 → Kinesis Data Analytics（Random Cut Forest）实时异常检测 → 再用 Kinesis Data Firehose 将结果存入 S3**  \n- 完全实时流处理，无需等待数据落地到 S3 再启动分析  \n- Kinesis Data Analytics 内置 RCF 算法，适合流式异常检测  \n- 结果直接通过 Firehose 写入 S3（数据湖）  \n- 架构简单、全托管、低延迟  \n\n**[B] 使用 EMR + Spark Streaming + Spark MLlib（k-means） → 存到 HDFS**  \n- 虽然 Spark Streaming 可做实时处理，但 k-means 通常用于聚类，不一定适合直接做流式异常检测（需要先离线训练模型）  \n- 数据湖用 HDFS（EMR）而不是 S3，不符合现代云上数据湖最佳实践（S3 更持久、扩展性好）  \n- 需要管理 EMR 集群，不如托管方案高效  \n\n**[C] 数据先存 S3，再用 AWS Batch + 深度学习 AMI 训练 k-means 模型**  \n- 这是批处理，不是实时评分，不符合“as it is being ingested”的要求  \n\n**[D] 数据先存 S3，用 Glue 按需转换，再用 SageMaker 内置 RCF 检测异常**  \n- 需要数据先落地到 S3，再触发 Glue 和 SageMaker，不是真正的实时处理，延迟较高  \n- 适合近实时或小批量，不满足实时恶意事件评分需求  \n\n---\n\n**3. 结论**  \n只有 **A** 实现了真正的实时流数据异常检测，并且无缝将结果存入 S3 数据湖，无需自己管理计算集群，完全托管，效率最高。  \n\n---\n\n**最终答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "61"
+  },
+  {
+    "id": "62",
+    "question": {
+      "enus": "A Data Scientist wants to gain real-time insights into a data stream of GZIP files. Which solution would allow the use of SQL to query the stream with the LEAST latency? ",
+      "zhcn": "一位数据科学家希望实时解析GZIP压缩文件的数据流。若要使用SQL查询数据流并实现最低延迟，下列哪种解决方案最为适宜？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "借助AWS Lambda函数对数据进行转换的Amazon Kinesis Data Analytics服务。",
+          "enus": "Amazon Kinesis Data Analytics with an AWS Lambda function to transform the data."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "使用AWS Glue并搭配自定义ETL脚本来实现数据转换。",
+          "enus": "AWS Glue with a custom ETL script to transform the data."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis客户端库对数据进行转换，并将其存储至Amazon ES数据库集群。",
+          "enus": "An Amazon Kinesis Client Library to transform the data and save it to an Amazon ES cluster."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "借助Amazon Kinesis Data Firehose对数据进行转换后，将其存入Amazon S3存储桶。",
+          "enus": "Amazon Kinesis Data Firehose to transform the data and put it into an Amazon S3 bucket."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "参考来源：https://aws.amazon.com/big-data/real-time-analytics-featured-partners/",
+      "zhcn": "我们来逐步分析这道题。  \n\n**题目要点**  \n- 数据源：GZIP 文件的数据流（实时）  \n- 目标：用 SQL 查询数据流  \n- 要求：延迟最低（LEAST latency）  \n- 选项比较的是“如何让 SQL 查询实时流”  \n\n---\n\n**选项分析**  \n\n**[A] Amazon Kinesis Data Analytics with an AWS Lambda function to transform the data.**  \n- Kinesis Data Analytics (KDA) 可以直接对 Kinesis Data Streams 的数据运行 SQL 查询，接近实时（毫秒到秒级）。  \n- 如果数据是 GZIP 格式，可以先通过 Lambda 解压/预处理，再送入 KDA。  \n- KDA 本身支持实时 SQL，延迟很低。  \n\n**[B] AWS Glue with a custom ETL script to transform the data.**  \n- AWS Glue 主要是批处理 ETL，虽然有 Glue 流式 ETL，但通常延迟高于 KDA，且不是为极低延迟 SQL 查询设计的。  \n\n**[C] An Amazon Kinesis Client Library to transform the data and save it to an Amazon ES cluster.**  \n- 需要自己用 KCL 写代码处理，然后存到 Elasticsearch，虽然可以 Kibana 查询，但不是 SQL 接口，且架构复杂，延迟不如 KDA 直接 SQL 查询低。  \n\n**[D] Amazon Kinesis Data Firehose to transform the data and put it into an Amazon S3 bucket.**  \n- Firehose 是批量写入 S3（分钟级），不适合实时 SQL 查询，延迟高。  \n\n---\n\n**结论**  \n- 题目要求用 SQL 查询实时流且延迟最低，Kinesis Data Analytics 是 AWS 专门为此场景设计的服务。  \n- 虽然需要 Lambda 解压 GZIP，但整体架构是流式处理，延迟最小。  \n\n**答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "62"
+  },
+  {
+    "id": "71",
+    "question": {
+      "enus": "A Data Scientist needs to migrate an existing on-premises ETL process to the cloud. The current process runs at regular time intervals and uses PySpark to combine and format multiple large data sources into a single consolidated output for downstream processing. The Data Scientist has been given the following requirements to the cloud solution: ✑ Combine multiple data sources. ✑ Reuse existing PySpark logic. ✑ Run the solution on the existing schedule. ✑ Minimize the number of servers that will need to be managed. Which architecture should the Data Scientist use to build this solution? ",
+      "zhcn": "一位数据科学家需要将现有的本地ETL流程迁移至云端。当前流程按固定时间间隔运行，使用PySpark整合多个大型数据源并格式化，最终生成统一输出供下游处理。该数据科学家已获知云端解决方案需满足以下要求：  \n✑ 融合多数据源  \n✑ 复用现有PySpark逻辑  \n✑ 按原定计划执行任务  \n✑ 最大限度减少待维护服务器数量  \n请问该数据科学家应采用何种架构来构建此解决方案？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "将原始数据写入Amazon S3存储服务。根据现有调度计划，配置AWS Lambda函数以向常驻的Amazon EMR集群提交Spark作业步骤。运用现有的PySpark逻辑在EMR集群上运行ETL数据处理任务，并将处理结果输出至Amazon S3的指定存储区域，便于下游环节调用使用。",
+          "enus": "Write the raw data to Amazon S3. Schedule an AWS Lambda function to submit a Spark step to a persistent Amazon EMR cluster based  on the existing schedule. Use the existing PySpark logic to run the ETL job on the EMR cluster. Output the results to a processed  location in Amazon S3 that is accessible for downstream use."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "将原始数据写入Amazon S3存储服务。创建AWS Glue ETL作业对输入数据进行抽取、转换和加载处理。该ETL作业采用PySpark编写，以复用现有逻辑。基于现有调度计划新建AWS Glue触发器，用于自动触发ETL作业执行。配置ETL作业的输出目标至Amazon S3中可供下游使用的处理结果存储位置。",
+          "enus": "Write the raw data to Amazon S3. Create an AWS Glue ETL job to perform the ETL processing against the input data. Write the ETL job  in PySpark to leverage the existing logic. Create a new AWS Glue trigger to trigger the ETL job based on the existing schedule. Configure  the output target of the ETL job to write to a processed location in Amazon S3 that is accessible for downstream use."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "将原始数据写入Amazon S3存储服务。依照现有调度计划配置AWS Lambda函数，用于处理来自Amazon S3的输入数据。使用Python编写Lambda函数逻辑，并整合现有PySpark代码以实现ETL流程。最终将处理结果输出至Amazon S3的指定存储区域，便于下游环节调用使用。",
+          "enus": "Write the raw data to Amazon S3. Schedule an AWS Lambda function to run on the existing schedule and process the input data from  Amazon S3. Write the Lambda logic in Python and implement the existing PySpark logic to perform the ETL process. Have the Lambda  function output the results to a processed location in Amazon S3 that is accessible for downstream use."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Analytics服务，可对输入数据进行实时流处理，并通过流式SQL查询实现所需的流内数据转换。最终将处理结果输出至Amazon S3存储服务中指定区域，便于下游环节调用使用。",
+          "enus": "Use Amazon Kinesis Data Analytics to stream the input data and perform real-time SQL queries against the stream to carry out the  required transformations within the stream. Deliver the output results to a processed location in Amazon S3 that is accessible for  downstream use."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是选择 **AWS Glue ETL 任务**。  \n\n**简要分析：**  \n核心需求包括复用现有 PySpark 逻辑、按计划调度运行、整合多个大型数据源，并尽可能减少服务器管理负担。  \n- **AWS Glue** 作为无服务器 ETL 服务，专为基于 Spark（包括 PySpark）的大规模数据集批处理而设计。它原生支持定时触发任务，且无需基础设施管理，完全契合所有要求。  \n\n**其他选项不适用原因：**  \n- **Kinesis Data Analytics：** 该服务专注于使用 SQL 的*实时流式*数据处理，而非基于现有 PySpark 代码的大型数据集定时批处理。  \n- **持久化 EMR 集群：** 此类集群需主动维护服务器，与“减少服务器管理”的要求相悖。  \n- **AWS Lambda：** Lambda 存在严格的运行时和内存限制，无法胜任需要分布式计算环境的 PySpark 多大型数据源处理任务。  \n\n综上，AWS Glue 是唯一兼具无服务器架构、支持 PySpark 大规模批处理、可按计划触发且无需基础设施管理的方案。",
+      "zhcn": "我们来一步步分析这道题。  \n\n**题目关键信息：**  \n- 现有 on-premises ETL 流程，定期运行  \n- 使用 PySpark 处理多个大型数据源  \n- 要求：  \n  1. 合并多个数据源  \n  2. 重用现有 PySpark 逻辑  \n  3. 按现有计划运行  \n  4. 尽量减少需要管理的服务器数量  \n\n---\n\n**选项分析：**  \n\n**[A]** 用持久性 EMR 集群 + Lambda 定时触发 Spark 步骤  \n- 可以重用 PySpark 逻辑  \n- 但 EMR 集群如果是持久性的，就需要管理服务器（集群节点），不符合“最小化管理服务器”的要求  \n- 如果用临时集群，每次启动时间较长，但这里写的是“persistent Amazon EMR cluster”，所以有管理负担  \n\n**[B]** 用 AWS Glue ETL 作业（PySpark） + Glue 触发器按计划运行  \n- Glue 是无服务器的，不需要管理基础设施  \n- 直接支持 PySpark  \n- 可以读取 S3 上多个数据源，合并处理，输出到 S3  \n- 完全符合所有条件  \n\n**[C]** 用 Lambda 执行 PySpark 逻辑  \n- Lambda 运行时间和内存有限（最多 15 分钟，10 GB 内存），不适合“多个大型数据源”的 ETL  \n- PySpark 逻辑通常需要分布式计算，Lambda 无法直接运行 Spark，除非只是调用其他服务，但这里说“在 Lambda 中实现 PySpark 逻辑”意味着在 Lambda 内做数据处理，不适合大数据量  \n\n**[D]** 用 Kinesis Data Analytics 做实时流处理  \n- 但题目是定期批处理，不是实时流处理  \n- 而且 KDA 主要用 SQL 做流处理，不是重用 PySpark 逻辑  \n\n---\n\n**结论：**  \nB 选项是最佳方案，因为它：  \n- 无服务器（Glue）  \n- 支持 PySpark  \n- 可定时触发  \n- 适合大数据量批处理  \n\n---\n\n**答案：B** ✅"
+    },
+    "answer": "B",
+    "o_id": "71"
+  },
+  {
+    "id": "73",
+    "question": {
+      "enus": "An aircraft engine manufacturing company is measuring 200 performance metrics in a time-series. Engineers want to detect critical manufacturing defects in near- real time during testing. All of the data needs to be stored for ofiine analysis. What approach would be the MOST effective to perform near-real time defect detection? ",
+      "zhcn": "一家航空发动机制造企业正在对200项性能指标进行时间序列监测。工程师们需要在测试过程中近乎实时地发现关键制造缺陷，同时所有数据都需存档供离线分析。要实施近实时缺陷检测，何种方法最具实效性？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "运用AWS IoT Analytics实现数据采集、存储与深度分析。通过其内置的Jupyter Notebook功能，可对数据进行异常检测分析。",
+          "enus": "Use AWS IoT Analytics for ingestion, storage, and further analysis. Use Jupyter notebooks from within AWS IoT Analytics to carry out  analysis for anomalies."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon S3进行数据接入、存储与深度分析，并通过Amazon EMR集群运行Apache Spark ML中的k-means聚类算法，以精准识别异常模式。",
+          "enus": "Use Amazon S3 for ingestion, storage, and further analysis. Use an Amazon EMR cluster to carry out Apache Spark ML k-means  clustering to determine anomalies."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "采用Amazon S3进行数据接入、存储与深度分析，并运用Amazon SageMaker随机切割森林（RCF）算法精准识别异常模式。",
+          "enus": "Use Amazon S3 for ingestion, storage, and further analysis. Use the Amazon SageMaker Random Cut Forest (RCF) algorithm to  determine anomalies."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "采用Amazon Kinesis Data Firehose进行数据摄取，并借助Amazon Kinesis Data Analytics随机切割森林（RCF）算法实现异常检测。通过Kinesis Data Firehose将数据存储至Amazon S3中，以便开展深度分析。",
+          "enus": "Use Amazon Kinesis Data Firehose for ingestion and Amazon Kinesis Data Analytics Random Cut Forest (RCF) to perform anomaly  detection. Use Kinesis Data Firehose to store data in Amazon S3 for further analysis."
+        },
+        "option_flag": true
+      }
+    ],
+    "analysis": {
+      "enus": "**分析：** 该问题要求对200项性能指标进行**近实时**缺陷检测。核心约束在于所有数据必须存储以供离线分析，但首要目标是在测试期间实现即时检测。\n\n**正确方案解析：**  \n正确答案采用**Amazon Kinesis Data Analytics结合RCF算法**实现流式异常检测。此方案是唯一能在数据**传输过程中**直接处理的方式，无需等待数据落盘至S3，从而满足\"近实时\"需求。随后Kinesis Data Firehose将数据存入S3用于离线分析，兼顾存储要求。RCF算法专为流数据异常检测场景设计。\n\n**错误方案辨析：**  \n- **错误选项1（IoT Analytics + Jupyter）：** IoT Analytics本质是批处理架构，会引入延迟。Jupyter笔记本适用于交互式分析，无法实现自动化实时检测。  \n- **错误选项2（S3 + SageMaker RCF）：** 此为批处理方案。必须待数据完全导入S3后SageMaker才能处理，违背近实时要求。  \n- **错误选项3（EMR + Spark ML）：** 与前两者类似，属于批处理模式。基于EMR集群运行Spark ML需在数据存入S3后处理，将导致显著延迟。\n\n**关键差异：**  \n正确方案在**数据摄入阶段**（流处理）完成异常检测，而错误方案均依赖**摄入后的批处理**，无法满足近实时场景的时效要求。",
+      "zhcn": "我们先分析题目关键点：  \n\n- **200 个性能指标**（多变量时间序列）  \n- **近实时检测**（near-real time）  \n- 所有数据需要存储供**离线分析**  \n- 检测**关键制造缺陷**（即异常检测）  \n\n---\n\n**选项分析**  \n\n**[A] AWS IoT Analytics**  \n- IoT Analytics 适合 IoT 场景，但它的分析流程通常不是秒级/分钟级的近实时，而是批量处理。  \n- 使用 Jupyter Notebook 做分析是离线方式，不满足 near-real time 要求。  \n\n**[B] Amazon S3 + EMR Spark ML k-means**  \n- S3 作为数据入口不适合实时数据流，因为 S3 是对象存储，延迟高。  \n- EMR 运行 Spark ML 是批处理，不是实时检测。  \n\n**[C] Amazon S3 + SageMaker RCF**  \n- 同样，S3 不适合实时数据入口。  \n- 虽然 SageMaker RCF 可以做异常检测，但需要先收集数据再批量调用，不是持续实时分析。  \n\n**[D] Kinesis Data Firehose（摄入 + 存 S3） + Kinesis Data Analytics RCF**  \n- Kinesis Data Firehose 可以实时接收数据流。  \n- Kinesis Data Analytics 内置 **Random Cut Forest 算法**，可以直接在数据流上做实时异常检测，输出异常分数。  \n- 同时 Firehose 可以将原始数据存入 S3 供后续离线分析。  \n- 完全匹配“近实时检测 + 存储离线分析”的需求。  \n\n---\n\n**结论**  \n题目要求 **near-real time**，意味着数据进来就要快速分析，只有 **Kinesis Data Analytics** 这种流式处理 + 内置 RCF 的方案能满足，同时 Kinesis Data Firehose 负责存储到 S3。  \n\n**正确答案是 D**。"
+    },
+    "answer": "D",
+    "o_id": "73"
+  },
+  {
+    "id": "108",
+    "question": {
+      "enus": "A data scientist is developing a pipeline to ingest streaming web traffic data. The data scientist needs to implement a process to identify unusual web traffic patterns as part of the pipeline. The patterns will be used downstream for alerting and incident response. The data scientist has access to unlabeled historic data to use, if needed. The solution needs to do the following: ✑ Calculate an anomaly score for each web traffic entry. Adapt unusual event identification to changing web patterns over time. Which approach should the data scientist implement to meet these requirements? ",
+      "zhcn": "一位数据科学家正在构建数据管道，用于处理实时网络流量数据。作为该管道的重要组成部分，需要设计一种能够识别异常流量模式的机制。这些异常模式将用于后续的预警和事件响应流程。如需参考，该科学家可使用未标记的历史数据集。解决方案需满足以下要求：  \n✑ 为每条网络流量记录计算异常分值  \n✑ 使异常识别机制能适应网络流量模式的动态变化  \n请问应当采用何种方法以满足上述需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "利用历史网络流量数据，通过Amazon SageMaker平台内置的随机切割森林（RCF）模型训练异常检测模型。采用Amazon Kinesis Data Streams处理实时传入的网络流量数据，并通过预连接的AWS Lambda预处理函数调用RCF模型计算每条记录的异常分值，从而实现数据增强处理。",
+          "enus": "Use historic web traffic data to train an anomaly detection model using the Amazon SageMaker Random Cut Forest (RCF) built-in model.  Use an Amazon Kinesis Data Stream to process the incoming web traffic data. Attach a preprocessing AWS Lambda function to perform  data enrichment by calling the RCF model to calculate the anomaly score for each record."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用历史网络流量数据，基于Amazon SageMaker平台内置的XGBoost模型训练异常检测模型。通过Amazon Kinesis Data Streams处理实时传入的网络流量数据，并挂载预处理函数AWS Lambda进行数据增强：调用XGBoost模型为每条记录计算异常分值。",
+          "enus": "Use historic web traffic data to train an anomaly detection model using the Amazon SageMaker built-in XGBoost model. Use an Amazon  Kinesis Data Stream to process the incoming web traffic data. Attach a preprocessing AWS Lambda function to perform data enrichment  by calling the XGBoost model to calculate the anomaly score for each record."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose采集流式数据，将传输流映射为Amazon Kinesis Data Analytics的输入源。通过k近邻算法SQL扩展功能编写实时流数据查询语句，基于滑动窗口为每条记录计算异常分数。",
+          "enus": "Collect the streaming data using Amazon Kinesis Data Firehose. Map the delivery stream as an input source for Amazon Kinesis Data  Analytics. Write a SQL query to run in real time against the streaming data with the k-Nearest Neighbors (kNN) SQL extension to calculate  anomaly scores for each record using a tumbling window."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "使用Amazon Kinesis Data Firehose采集流式数据，将传输流映射为Amazon Kinesis Data Analytics的输入源。通过Amazon随机切割森林（RCF）SQL扩展功能编写实时SQL查询语句，基于滑动窗口对流数据进行计算，从而为每条记录生成异常分值。",
+          "enus": "Collect the streaming data using Amazon Kinesis Data Firehose. Map the delivery stream as an input source for Amazon Kinesis Data  Analytics. Write a SQL query to run in real time against the streaming data with the Amazon Random Cut Forest (RCF) SQL extension to  calculate anomaly scores for each record using a sliding window."
+        },
+        "option_flag": true
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案为第一项：**\"运用历史网络流量数据，借助Amazon SageMaker内置随机切割森林（RCF）模型训练异常检测模型...\"**  \n\n### 简要解析  \n本题核心要求是：为**每条**网络流量记录计算异常分值，并具备**随时间动态适应流量模式变化**的能力。  \n\n*   **正选答案依据：**  \n    **SageMaker随机切割森林（RCF）** 是专为流式数据异常检测设计的**无监督**算法，其优势在于：  \n    1.  可为每个独立数据点生成异常分值  \n    2.  支持定期用新数据重训练模型，从而适应网络流量模式的概念漂移与时变特性  \n    3.  数据流架构（Kinesis数据流+Lambda函数）确保实现逐条记录的实时处理  \n\n*   **干扰项排除原因：**  \n    *   **XGBoost选项：** 作为典型的**有监督**学习算法（适用于分类/回归任务），在缺乏标签数据（即无目标变量）的场景下无法适用于本项异常检测需求  \n    *   **k近邻算法（kNN）选项：** 该算法计算复杂度高，难以支撑高速流数据的实时异常评分。采用滚动窗口处理会形成批量分析结果，无法满足**逐条记录**评分的要求  \n    *   **Kinesis数据分析服务配合滑动窗口的RCF方案：** 虽选用正确算法，但实施方案存在缺陷。Kinesis数据分析服务更适用于基于SQL的窗口聚合计算，而**滑动窗口**机制输出的是窗口内记录的聚合评分，无法实现题目要求的**单条记录**级别异常检测  \n\n**核心判别要点：** 正选答案精准结合了适用于无监督异常检测的RCF算法与支持逐条评分、模型可迭代优化的技术架构，其余选项均因上述关键差异而无法同时满足两项核心要求。",
+      "zhcn": "我们先来梳理一下题目要求：  \n\n1. **数据源**：流式网络流量数据（web traffic streaming data）  \n2. **任务**：识别异常流量模式（unusual web traffic patterns）  \n3. **输出**：为每条记录计算异常分数（anomaly score）  \n4. **适应变化**：模型需要适应随时间变化的流量模式（adapt to changing patterns over time）  \n5. **有未标记的历史数据**（unlabeled historic data）  \n\n---\n\n## 关键点分析\n\n- **无监督学习**：因为数据是 unlabeled，所以要用无监督异常检测算法。  \n- **流式处理**：数据是持续流入的，需要实时或近实时计算异常分数。  \n- **自适应**：模型要能自动适应数据分布的变化（如季节性变化、趋势变化）。  \n- **技术选项**：题目中提到了 **Random Cut Forest (RCF)**、XGBoost、kNN 等。  \n  - RCF 是 AWS 专门为流式数据异常检测设计的算法，能在线更新模型，适应数据变化。  \n  - XGBoost 主要用于监督学习，这里无标签且需要自适应，不太合适。  \n  - kNN 在流式数据中计算成本高，且不易自适应更新。  \n\n---\n\n## 选项分析\n\n**[A]**  \n- 用历史数据训练 RCF 模型（SageMaker 内置），然后用 Lambda 调用模型对 Kinesis Data Stream 的数据进行打分。  \n- 问题：Lambda 调用 SageMaker 端点的方案在流式场景下延迟和扩展性可能不如 Kinesis Data Analytics 内置的 RCF 扩展直接。  \n- 另外，模型更新需要手动或额外流程，不是完全自动适应变化。  \n\n**[B]**  \n- 用 XGBoost 做异常检测：XGBoost 需要标签（有监督），这里无标签，不适合。  \n- 排除。  \n\n**[C]**  \n- 用 Kinesis Data Analytics + SQL 查询 + kNN 扩展 + tumbling window。  \n- kNN 在大数据流上计算代价高，且 tumbling window 每次只处理一个窗口，无法跨窗口自适应，不符合“适应变化”要求。  \n\n**[D]**  \n- 用 Kinesis Data Analytics + RCF SQL 扩展 + sliding window。  \n- RCF 算法本身支持流式更新，sliding window 可以持续学习新数据模式，自动适应变化。  \n- 这正是 AWS 推荐的流式异常检测方案，无需手动训练模型，直接在 SQL 中调用 RCF 函数计算异常分数。  \n\n---\n\n## 结论\n\n**D** 选项完全符合要求：  \n- 无监督（RCF）  \n- 流式计算（Kinesis Data Analytics）  \n- 自适应（sliding window + RCF 在线学习）  \n- 直接输出每条记录的异常分数  \n\n---\n\n**最终答案：D** ✅"
+    },
+    "answer": "D",
+    "o_id": "108"
+  },
+  {
+    "id": "117",
+    "question": {
+      "enus": "An e commerce company wants to launch a new cloud-based product recommendation feature for its web application. Due to data localization regulations, any sensitive data must not leave its on-premises data center, and the product recommendation model must be trained and tested using nonsensitive data only. Data transfer to the cloud must use IPsec. The web application is hosted on premises with a PostgreSQL database that contains all the data. The company wants the data to be uploaded securely to Amazon S3 each day for model retraining. How should a machine learning specialist meet these requirements? ",
+      "zhcn": "一家电子商务公司计划为其网络应用程序推出一项新的云端产品推荐功能。根据数据本地化法规的要求，所有敏感数据不得离开本地数据中心，且产品推荐模型仅能使用非敏感数据进行训练和测试。数据传输至云端时必须采用IPsec协议。该网络应用程序部署于本地环境，其PostgreSQL数据库存储了全部数据。公司希望每日将数据安全上传至Amazon S3存储服务，以便重新训练模型。机器学习专家应如何满足这些要求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "创建一个AWS Glue作业，用于连接PostgreSQL数据库实例。通过AWS站点到站点VPN连接，将不含敏感数据的表直接导入Amazon S3存储桶。",
+          "enus": "Create an AWS Glue job to connect to the PostgreSQL DB instance. Ingest tables without sensitive data through an AWS Site-to-Site  VPN connection directly into Amazon S3."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一个AWS Glue作业以连接PostgreSQL数据库实例。通过AWS站点到站点VPN连接将所有数据摄取至Amazon S3存储服务，并利用PySpark作业实现敏感数据的过滤清除。",
+          "enus": "Create an AWS Glue job to connect to the PostgreSQL DB instance. Ingest all data through an AWS Site-to-Site VPN connection into  Amazon S3 while removing sensitive data using a PySpark job."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过SSL连接，使用AWS数据库迁移服务（AWS DMS）并配合表映射功能，筛选不含敏感数据的PostgreSQL数据表，将数据直接复制至Amazon S3存储服务。",
+          "enus": "Use AWS Database Migration Service (AWS DMS) with table mapping to select PostgreSQL tables with no sensitive data through an SSL  connection. Replicate data directly into Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "采用PostgreSQL逻辑复制功能，通过AWS Direct Connect结合VPN连接将全部数据同步至Amazon EC2中的PostgreSQL数据库。随后借助AWS Glue将数据从Amazon EC2迁移至Amazon S3存储服务。",
+          "enus": "Use PostgreSQL logical replication to replicate all data to PostgreSQL in Amazon EC2 through AWS Direct Connect with a VPN  connection. Use AWS Glue to move data from Amazon EC2 to Amazon S3."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "参考文档：https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html",
+      "zhcn": "我们来逐步分析这个场景和选项。  \n\n---\n\n## 1. 题目关键要求\n\n- **数据本地化法规**：敏感数据不能离开本地数据中心。  \n- **推荐模型**：只能用非敏感数据训练和测试。  \n- **数据传输到云**：必须使用 IPsec。  \n- **本地环境**：Web 应用 + PostgreSQL 数据库（含所有数据）。  \n- **每天上传数据到 S3**：用于模型重新训练。  \n- **安全传输**：IPsec 意味着需要 VPN（Site-to-Site VPN）或类似加密隧道。  \n\n---\n\n## 2. 选项分析\n\n### [A]  \n用 AWS Glue 作业连接本地 PostgreSQL，通过 **Site-to-Site VPN** 只摄取不含敏感数据的表到 S3。  \n- 满足 IPsec（Site-to-Site VPN 使用 IPsec）。  \n- 在源头选择非敏感表，避免敏感数据离开本地。  \n- 直接到 S3，步骤简单。  \n- 符合要求。  \n\n### [B]  \n用 AWS Glue 摄取所有数据到 S3，再用 PySpark 删除敏感数据。  \n- 问题：所有数据（含敏感数据）会通过 VPN 传到云上，违反“敏感数据不能离开本地”的规定。  \n- 排除。  \n\n### [C]  \n用 AWS DMS + 表映射选择非敏感表，但通过 **SSL 连接**。  \n- 题目要求数据传输必须用 IPsec，SSL 不满足（DMS 通常用 SSL/TLS 加密数据，但不是网络层 IPsec）。  \n- 可能违反公司对传输层加密方式的规定。  \n- 排除。  \n\n### [D]  \n用 PostgreSQL 逻辑复制把所有数据复制到云上 EC2 的 PostgreSQL（通过 Direct Connect + VPN），再用 Glue 传到 S3。  \n- 问题：所有数据（含敏感数据）先传到云上 EC2，违反“敏感数据不能离开本地”。  \n- 排除。  \n\n---\n\n## 3. 结论\n\n只有 **A** 同时满足：  \n1. 只选非敏感表（源头过滤，敏感数据不出本地）。  \n2. 用 Site-to-Site VPN（IPsec）。  \n3. 直接到 S3，适合后续 ML 训练。  \n\n---\n\n**答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "117"
+  },
+  {
+    "id": "119",
+    "question": {
+      "enus": "A data scientist wants to use Amazon Forecast to build a forecasting model for inventory demand for a retail company. The company has provided a dataset of historic inventory demand for its products as a .csv file stored in an Amazon S3 bucket. The table below shows a sample of the dataset. \n| timestamp | item_id | demand | category | lead_time |\n|-----------|---------|--------|----------|-----------|\n| 2019-12-14 | uni_000736 | 120 | hardware | 90 |\n| 2020-01-31 | uni_003429 | 98 | hardware | 30 |\n| 2020-03-04 | uni_002211 | 234 | accessories | 10 |\n\nHow should the data scientist transform the data? ",
+      "zhcn": "一位数据科学家计划利用Amazon Forecast平台，为某零售企业构建库存需求预测模型。该企业已提供历史库存需求数据集，文件格式为.csv，存储于Amazon S3存储桶中。下表为数据集示例。\n| timestamp | item_id | demand | category | lead_time |\n|-----------|---------|--------|----------|-----------|\n| 2019-12-14 | uni_000736 | 120 | hardware | 90 |\n| 2020-01-31 | uni_003429 | 98 | hardware | 30 |\n| 2020-03-04 | uni_002211 | 234 | accessories | 10 |\n\n请问这位数据科学家应当如何对数据进行预处理？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "在AWS Glue中配置ETL任务，将原始数据集拆分为目标时间序列数据集与商品元数据集。随后将两类数据集以.csv格式上传至Amazon S3存储服务。",
+          "enus": "Use ETL jobs in AWS Glue to separate the dataset into a target time series dataset and an item metadata dataset. Upload both  datasets as .csv files to Amazon S3."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "在Amazon SageMaker中运用Jupyter笔记本，将数据集拆分为关联时间序列数据集和项目元数据集。随后将这两个数据集作为数据表上传至Amazon Aurora。",
+          "enus": "Use a Jupyter notebook in Amazon SageMaker to separate the dataset into a related time series dataset and an item metadata  dataset. Upload both datasets as tables in Amazon Aurora."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用AWS Batch作业将数据集拆分为目标时间序列数据集、关联时间序列数据集以及项目元数据集。随后直接从本地设备将这些数据集上传至Forecast平台。",
+          "enus": "Use AWS Batch jobs to separate the dataset into a target time series dataset, a related time series dataset, and an item metadata  dataset. Upload them directly to Forecast from a local machine."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在 Amazon SageMaker 中使用 Jupyter Notebook 将数据转换为优化的 protobuf recordIO 格式，并将该格式的数据集上传至 Amazon S3。",
+          "enus": "Use a Jupyter notebook in Amazon SageMaker to transform the data into the optimized protobuf recordIO format. Upload the dataset in  this format to Amazon S3."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**\"使用AWS Glue中的ETL作业将数据集拆分为目标时间序列数据集和项目元数据集，并将这两个数据集以.csv文件格式上传至Amazon S3。\"**\n\n**分析：**  \nAmazon Forecast要求特定类型的数据集：  \n- **目标时间序列**（必选）：包含历史需求数据（项目ID、时间戳、目标值如需求量）。  \n- **关联时间序列**（可选）：包含其他随时间变化的数据（如价格、促销信息）。  \n- **项目元数据**（可选）：包含静态项目属性（如类别、品牌）。  \n\n数据集必须作为 **.csv文件上传至Amazon S3**（而非Aurora或protobuf格式），且AWS Glue非常适合用于拆分数据等ETL任务。  \n\n**正确答案的正确性：**  \n- 准确识别了所需的数据集类型（目标时间序列 + 项目元数据）；  \n- 利用AWS Glue实现可扩展的ETL处理；  \n- 将结果以.csv格式存储于S3，符合Amazon Forecast的输入要求。  \n\n**错误选项的排除依据：**  \n- **Aurora上传选项**：Forecast仅从S3读取数据，不支持直接连接Aurora；  \n- **AWS Batch/本地直接上传**：Forecast要求数据必须来自S3，不支持本地直接上传；  \n- **Protobuf格式**：Forecast仅支持.csv或Parquet格式，而非protobuf。  \n\n**常见误区：**  \n误以为Forecast可直接与数据库集成或需要复杂数据格式。实际上，该服务明确要求使用S3中结构化的.csv或Parquet文件。",
+      "zhcn": "正确答案是 **A**。  \n\n**解析如下：**  \n\nAmazon Forecast 要求数据至少包含**目标时间序列数据集**（必需），还可以选择包含**相关时间序列数据集**和**项目元数据数据集**。题目中给出的数据样本包含：  \n\n- `timestamp`（时间戳）  \n- `item_id`（项目 ID）  \n- `demand`（需求量，即目标字段）  \n- `category`（类别，可作为项目元数据）  \n- `lead_time`（提前期，可作为相关时间序列）  \n\n根据 Forecast 的数据格式要求，需要将原始数据拆分为：  \n\n1. **目标时间序列数据集**（必须包含 `timestamp`, `item_id`, `target_value`）  \n2. **项目元数据数据集**（可选，包含 `item_id` 和静态属性如 `category`）  \n3. **相关时间序列数据集**（可选，包含 `timestamp`, `item_id` 以及随时间变化的属性如 `lead_time`）  \n\n选项 A 使用 **AWS Glue ETL 作业** 将原始数据拆分成需要的格式，并保存为 CSV 到 S3，这是符合 Forecast 输入要求的标准做法。  \n\n其他选项的问题：  \n- **B**：将数据存入 Aurora 没有必要，Forecast 直接从 S3 读取数据。  \n- **C**：AWS Batch 用于计算密集型任务，此处简单的数据拆分用 Glue 或 SageMaker 更合适；且“直接从本地机器上传到 Forecast”不符合常规流程（应通过 S3）。  \n- **D**：Forecast 支持 CSV 或 Parquet 格式，不要求使用 protobuf recordIO 格式（那是 SageMaker 某些算法需要的）。  \n\n因此，**A** 是最佳实践。"
+    },
+    "answer": "A",
+    "o_id": "119"
+  },
+  {
+    "id": "122",
+    "question": {
+      "enus": "A data scientist needs to identify fraudulent user accounts for a company's ecommerce platform. The company wants the ability to determine if a newly created account is associated with a previously known fraudulent user. The data scientist is using AWS Glue to cleanse the company's application logs during ingestion. Which strategy will allow the data scientist to identify fraudulent accounts? ",
+      "zhcn": "一位数据科学家需要为某公司的电商平台识别欺诈用户账户。该公司希望能够在新建账户时，判断其是否与已知的欺诈用户存在关联。该数据科学家正在使用AWS Glue对平台的应用日志进行数据清洗处理。请问采取何种策略可有效识别欺诈账户？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "执行内置的重复项查找Amazon Athena查询。",
+          "enus": "Execute the built-in FindDuplicates Amazon Athena query."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在AWS Glue中创建一个用于查找匹配项的机器学习转换任务。",
+          "enus": "Create a FindMatches machine learning transform in AWS Glue."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一个AWS Glue爬虫程序，用于自动识别源数据中的重复账户信息。",
+          "enus": "Create an AWS Glue crawler to infer duplicate accounts in the source data."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在AWS Glue数据目录中查找重复账户。",
+          "enus": "Search for duplicate accounts in the AWS Glue Data Catalog."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "参考链接：https://docs.aws.amazon.com/glue/latest/dg/machine-learning.html",
+      "zhcn": "我们先分析一下题目背景和各个选项。  \n\n**题目要点**  \n- 目标：识别新注册账户是否与已知的欺诈用户有关联（不一定是完全重复的信息，可能是相似或匹配的信息，比如换了邮箱但其他信息相似）。  \n- 数据清洗工具：AWS Glue。  \n- 数据源：应用日志。  \n- 关键点：需要匹配新账户和已知欺诈用户，可能是基于姓名、地址、设备 ID、部分身份信息等，而不是简单的完全重复检测。  \n\n---\n\n**选项分析**  \n\n**[A] Execute the built-in FindDuplicates Amazon Athena query**  \n- Athena 的 FindDuplicates 并不是一个标准的内置函数或查询，这里可能是指用 SQL 做重复检测。  \n- 但简单的重复检测（完全相同的值）无法解决欺诈者稍微修改信息注册新账户的问题，不够灵活。  \n\n**[B] Create a FindMatches machine learning transform in AWS Glue**  \n- AWS Glue 的 **FindMatches ML transform** 是专门用机器学习方法识别数据集中的匹配记录，即使字段不完全相同（比如 “Jon Doe” 和 “John Doe”），也能判断是否指向同一实体。  \n- 这适合欺诈检测场景，因为欺诈用户会变换部分信息，但 ML 模型可以学习相似度模式。  \n- 与题目需求高度匹配。  \n\n**[C] Create an AWS Glue crawler to infer duplicate accounts in the source data**  \n- Crawler 只做元数据推断（schema 发现），不会识别重复或匹配账户，不能做复杂匹配逻辑。  \n\n**[D] Search for duplicate accounts in the AWS Glue Data Catalog**  \n- Data Catalog 只存储元数据（表结构、位置等），不存储实际数据，无法做账户匹配搜索。  \n\n---\n\n**结论**  \n只有 **B** 使用机器学习方法进行模糊匹配，能应对欺诈者变更部分信息的情况，符合题目要求。  \n\n**答案：B**"
+    },
+    "answer": "B",
+    "o_id": "122"
+  },
+  {
+    "id": "132",
+    "question": {
+      "enus": "A company needs to quickly make sense of a large amount of data and gain insight from it. The data is in different formats, the schemas change frequently, and new data sources are added regularly. The company wants to use AWS services to explore multiple data sources, suggest schemas, and enrich and transform the data. The solution should require the least possible coding effort for the data ows and the least possible infrastructure management.\nWhich combination of AWS services will meet these requirements?",
+      "zhcn": "一家公司需要快速理解大量数据并从中获取洞察。这些数据格式各异，模式频繁变化，且新数据源会定期添加。该公司希望使用AWS服务来探索多个数据源、建议模式，并对数据进行丰富和转换。该解决方案应尽可能减少数据流程所需的编码工作，并最大限度降低基础设施管理负担。\n哪种AWS服务组合能满足这些要求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "✑ 使用Amazon EMR进行数据发现、数据丰富与转换\n\n✑ 通过Amazon Athena，使用标准SQL查询和分析Amazon S3中的数据结果\n\n✑ 利用Amazon QuickSight生成报告并获取数据洞察",
+          "enus": "✑ Amazon EMR for data discovery, enrichment, and transformation\n\n✑ Amazon Athena for querying and analyzing the results in Amazon S3 using standard SQL\n\n✑ Amazon QuickSight for reporting and getting insights"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "✑ Amazon Kinesis Data Analytics服务用于数据摄取\n\n✑ Amazon EMR用于数据发现、丰富与转换\n\n✑ Amazon Redshift用于查询分析存储在Amazon S3中的结果",
+          "enus": "✑ Amazon Kinesis Data Analytics for data ingestion\n\n✑ Amazon EMR for data discovery, enrichment, and transformation\n\n✑ Amazon Redshift for querying and analyzing the results in Amazon S3"
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "✑ AWS Glue 用于数据发现、数据丰富与转换\n\n✑ Amazon Athena 支持通过标准 SQL 在 Amazon S3 中查询与分析数据结果\n\n✑ Amazon QuickSight 用于生成报告与获取数据洞察",
+          "enus": "✑ AWS Glue for data discovery, enrichment, and transformation\n\n✑ Amazon Athena for querying and analyzing the results in Amazon S3 using standard SQL\n\n✑ Amazon QuickSight for reporting and getting insights"
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "✑ AWS Data Pipeline 用于数据传输\n\n✑ AWS Step Functions 用于编排 AWS Lambda 任务，实现数据发现、丰富和转换\n\n✑ Amazon Athena 通过标准 SQL 查询和分析 Amazon S3 中的结果\n\n✑ Amazon QuickSight 用于报告和获取数据洞察",
+          "enus": "✑ AWS Data Pipeline for data transfer\n\n✑ AWS Step Functions for orchestrating AWS Lambda jobs for data discovery, enrichment, and transformation\n\n✑ Amazon Athena for querying and analyzing the results in Amazon S3 using standard SQL\n\n✑ Amazon QuickSight for reporting and getting insights"
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "",
+      "zhcn": "我们来逐项分析题目要求：  \n\n**题目关键点**  \n- 数据格式多样、schema 经常变化、新数据源频繁增加  \n- 需要数据发现、推荐 schema、数据丰富与转换  \n- 要求代码量最少、基础设施管理最少  \n\n---\n\n### 选项分析\n\n**A**  \n- **Amazon EMR**：用于数据发现、丰富和转换。  \n  - EMR 是 Hadoop/Spark 集群，需要一定配置和集群管理，代码量相对较多（需要写 Spark 作业等），基础设施管理比无服务器方案多。  \n  - 不符合“最少基础设施管理”的要求。  \n\n**B**  \n- **Kinesis Data Analytics**：主要用于流数据，这里没有强调实时流。  \n- **EMR** 同上有管理负担。  \n- **Redshift** 用于查询 S3 数据（通过 Redshift Spectrum）但比 Athena 更重，需要维护集群。  \n- 整体偏向复杂管理，不符合“快速、最少代码/管理”。  \n\n**C**  \n- **AWS Glue**：无服务器，自动发现数据、推荐 schema（Glue Data Catalog Crawler）、做 ETL（Glue Jobs 或现在有 Glue Studio 可视化），代码量少。  \n- **Athena**：无服务器查询 S3。  \n- **QuickSight**：可视化。  \n- 完全无服务器，基础设施管理最少，适合 schema 变化、新增数据源的情况。  \n\n**D**  \n- **AWS Data Pipeline** + **Step Functions** + **Lambda**：  \n  - 需要自己编排 Lambda 函数做数据处理，代码和配置工作多，不符合“最少代码”。  \n  - 比 Glue 管理更复杂。  \n\n---\n\n### 为什么参考答案可能是 A 但实际应选 C\n\n从 AWS 最佳实践来看，题目描述的场景（数据发现、schema 推断、数据丰富转换、最少代码和管理）正是 **AWS Glue** 的设计目标，而不是 EMR。  \nEMR 适合需要高度自定义、大规模、复杂计算且对性能有要求的场景，但管理负担大。  \n\n可能原题给的“参考答案 A”有误，或者题目早期版本中 Glue 未推出时 EMR 是方案，但现在 Glue 更符合。  \n\n在 AWS 认证考试中，这类题的标准答案是 **C**。  \n\n---\n\n**最终答案：C** ✅"
+    },
+    "answer": "C",
+    "o_id": "132"
+  },
+  {
+    "id": "141",
+    "question": {
+      "enus": "A retail company wants to combine its customer orders with the product description data from its product catalog. The structure and format of the records in each dataset is different. A data analyst tried to use a spreadsheet to combine the datasets, but the effort resulted in duplicate records and records that were not properly combined. The company needs a solution that it can use to combine similar records from the two datasets and remove any duplicates. Which solution will meet these requirements? ",
+      "zhcn": "一家零售企业希望将其客户订单数据与产品目录中的商品描述信息进行整合。然而这两个数据集中的记录结构和格式各不相同。数据分析师曾尝试用电子表格进行数据合并，但结果却出现了大量重复记录和匹配错位的问题。该公司亟需一种解决方案，能够智能整合两个数据集中相似的记录，并自动剔除重复项。请问以下哪种方案符合这些要求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "利用AWS Lambda函数处理数据，通过两个数组比对两数据集字段中的相同字符串，并清除所有重复项。",
+          "enus": "Use an AWS Lambda function to process the data. Use two arrays to compare equal strings in the fields from the two datasets and  remove any duplicates."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "为读取和填充AWS Glue数据目录创建AWS Glue爬虫程序。调用AWS Glue SearchTables API接口对两个数据集执行模糊匹配检索，并相应完成数据清洗工作。",
+          "enus": "Create AWS Glue crawlers for reading and populating the AWS Glue Data Catalog. Call the AWS Glue SearchTables API operation to  perform a fuzzy- matching search on the two datasets, and cleanse the data accordingly."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "为读取并填充AWS Glue数据目录，需创建AWS Glue爬虫程序。随后通过FindMatches转换功能实现数据清洗。",
+          "enus": "Create AWS Glue crawlers for reading and populating the AWS Glue Data Catalog. Use the FindMatches transform to cleanse the data."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一项AWS Lake Formation自定义转换功能。通过Lake Formation控制台对匹配产品执行数据转换处理，实现数据的自动清洗。",
+          "enus": "Create an AWS Lake Formation custom transform. Run a transformation for matching products from the Lake Formation console to  cleanse the data automatically."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "参考链接：https://aws.amazon.com/lake-formation/features/",
+      "zhcn": "我们来逐步分析一下这道题。\n\n---\n\n## 1. 题目理解\n\n- 公司有两个数据集：\n  1. 客户订单数据\n  2. 产品目录数据（产品描述）\n- 两个数据集的结构和格式不同。\n- 之前用电子表格合并时出现了问题：\n  - 重复记录\n  - 记录没有正确合并\n- 需求：\n  - 合并两个数据集中相似的记录\n  - 去除重复项\n\n关键点在于“相似记录”的合并，这意味着不能只是简单的键匹配，可能需要模糊匹配或基于机器学习（ML）的去重与匹配。\n\n---\n\n## 2. 选项分析\n\n**[A] Use an AWS Lambda function to process the data. Use two arrays to compare equal strings in the fields from the two datasets and remove any duplicates.**\n\n- 自己写 Lambda 函数，用数组比较等值字符串。\n- 问题：只能精确匹配，不能处理“相似但不完全相同”的记录（比如拼写错误、缩写不同等）。\n- 不满足“合并相似记录”的需求。\n\n**[B] Create AWS Glue crawlers for reading and populating the AWS Glue Data Catalog. Call the AWS Glue SearchTables API operation to perform a fuzzy-matching search on the two datasets, and cleanse the data accordingly.**\n\n- SearchTables API 是用来搜索 Glue Data Catalog 中的表元数据的，不是用来做数据记录间的模糊匹配的。\n- 用错 API，逻辑上不成立。\n\n**[C] Create AWS Glue crawlers for reading and populating the AWS Glue Data Catalog. Use the FindMatches transform to cleanse the data.**\n\n- FindMatches 是 AWS Glue 的一个 ML 转换功能，专门用于检测数据集中的重复记录和匹配相似记录（模糊匹配）。\n- 它通过机器学习模型识别哪些记录是同一个实体，即使字段不完全相同。\n- 正好满足“合并相似记录并去重”的需求。\n\n**[D] Create an AWS Lake Formation custom transform. Run a transformation for matching products from the Lake Formation console to cleanse the data automatically.**\n\n- Lake Formation 主要做数据湖管理和权限控制，虽然也有 Transform，但这里没有明确提到像 FindMatches 那样的内置 ML 匹配功能。\n- 自定义变换需要自己写匹配逻辑，不如 Glue 内置的 FindMatches 直接针对该场景。\n\n---\n\n## 3. 为什么选 C\n\n- AWS Glue 的 **FindMatches** transform 是专门为解决此类问题设计的：\n  - 识别不同来源的记录是否代表同一实体。\n  - 处理格式差异、拼写差异等。\n  - 去除重复项。\n- 用 Glue crawlers 先创建数据目录，然后用 FindMatches 做数据清洗，是 AWS 推荐的标准做法。\n\n---\n\n**答案：C** ✅"
+    },
+    "answer": "C",
+    "o_id": "141"
+  },
+  {
+    "id": "144",
+    "question": {
+      "enus": "A machine learning specialist stores IoT soil sensor data in Amazon DynamoDB table and stores weather event data as JSON files in Amazon S3. The dataset in DynamoDB is 10 GB in size and the dataset in Amazon S3 is 5 GB in size. The specialist wants to train a model on this data to help predict soil moisture levels as a function of weather events using Amazon SageMaker. Which solution will accomplish the necessary transformation to train the Amazon SageMaker model with the LEAST amount of administrative overhead? ",
+      "zhcn": "一位机器学习专家将物联网土壤传感器数据存储于Amazon DynamoDB表中，同时把气象事件数据以JSON文件形式存放于Amazon S3内。DynamoDB内数据集规模为10GB，而Amazon S3中的数据集为5GB。该专家希望基于这些数据在Amazon SageMaker平台上训练模型，从而通过气象事件预测土壤湿度水平。在满足模型训练所需数据转换的前提下，下列哪种方案能实现管理成本最小化？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "启动Amazon EMR集群，为DynamoDB表与S3数据创建Apache Hive外部表。对Hive表进行关联查询，并将结果输出至Amazon S3。",
+          "enus": "Launch an Amazon EMR cluster. Create an Apache Hive external table for the DynamoDB table and S3 data. Join the Hive tables and  write the results out to Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用AWS Glue爬虫程序抓取数据，编写一个AWS Glue ETL作业，将两个数据表进行合并，并将处理结果导入至Amazon Redshift集群。",
+          "enus": "Crawl the data using AWS Glue crawlers. Write an AWS Glue ETL job that merges the two tables and writes the output to an Amazon  Redshift cluster."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "为传感器数据表启用Amazon DynamoDB流功能。创建AWS Lambda函数处理该数据流，并将处理结果追加至Amazon S3存储桶内现有的气象文件中。",
+          "enus": "Enable Amazon DynamoDB Streams on the sensor table. Write an AWS Lambda function that consumes the stream and appends the  results to the existing weather files in Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用AWS Glue爬虫程序抓取数据，编写一个AWS Glue ETL作业，将两个表格合并，并以CSV格式将输出结果写入Amazon S3。",
+          "enus": "Crawl the data using AWS Glue crawlers. Write an AWS Glue ETL job that merges the two tables and writes the output in CSV format to  Amazon S3."
+        },
+        "option_flag": true
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**\"在传感器表上启用 Amazon DynamoDB 数据流。编写一个消费该数据流的 AWS Lambda 函数，将处理结果追加至 Amazon S3 中现有的气象文件。\"** 该方案采用无服务器架构（DynamoDB 数据流与 Lambda），能自动扩展且无需基础设施管理，从而将运维成本降至最低。通过近实时处理流入数据，避免了批处理作业调度或集群管理的复杂性。\n\n其余选项均存在不必要的冗余：\n- **Amazon EMR** 需管理 Hadoop 集群，对此类数据量而言过于笨重；\n- **搭配 Amazon Redshift 的 AWS Glue** 为简单合并任务引入数据仓库，徒增复杂度；\n- **AWS Glue 直连 S3** 的批处理方案需配置调度器和爬虫程序，相较实时流处理的 Lambda 方案更为繁琐。\n\n核心设计误区在于过度工程化——正确答案通过事件驱动的无服务器服务，以最简洁的架构实现了数据转换需求。",
+      "zhcn": "我们先分析一下题目要点：  \n\n- 数据源1：IoT 土壤传感器数据 → DynamoDB 表，10 GB  \n- 数据源2：天气事件数据 → JSON 文件在 S3，5 GB  \n- 目标：合并数据，训练 SageMaker 模型预测土壤湿度  \n- 要求：**最少的管理开销**  \n\n---\n\n**选项分析**  \n\n**[A] Amazon EMR + Hive**  \n- EMR 需要手动或脚本管理集群（选择实例、配置、自动伸缩等），训练完还要关掉集群，管理开销较大。  \n- 虽然技术上可行（Hive 外部表连接 DynamoDB 和 S3），但比无服务器方案更复杂。  \n\n**[B] Glue 爬虫 + Glue ETL → 输出到 Amazon Redshift**  \n- Redshift 在这里没必要，因为最终训练数据只需要放到 S3（SageMaker 直接读 S3），引入 Redshift 增加额外步骤、成本和维护。  \n\n**[C] DynamoDB Streams + Lambda 实时处理**  \n- 这是流式处理方案，适合持续更新的数据，但这里是要对已有的历史数据进行合并，用 Streams 不合适，需要额外触发历史导出，逻辑复杂，管理开销大。  \n\n**[D] Glue 爬虫 + Glue ETL → 输出 CSV 到 S3**  \n- Glue 是无服务器的，自动处理资源分配；  \n- 爬虫自动推断元数据（DynamoDB 表结构和 S3 JSON 结构）；  \n- ETL 作业可进行连接（join）操作，输出为 CSV 存到 S3，SageMaker 直接使用；  \n- 完全托管，无需管理基础设施，符合“最少管理开销”。  \n\n---\n\n**结论**：  \n**D** 是最佳答案，因为 Glue 是全托管服务，适合这种一次性或周期性的数据合并任务，无需管理服务器，且输出直接适配 SageMaker。"
+    },
+    "answer": "D",
+    "o_id": "144"
+  },
+  {
+    "id": "169",
+    "question": {
+      "enus": "A company is building a new version of a recommendation engine. Machine learning (ML) specialists need to keep adding new data from users to improve personalized recommendations. The ML specialists gather data from the users' interactions on the platform and from sources such as external websites and social media. The pipeline cleans, transforms, enriches, and compresses terabytes of data daily, and this data is stored in Amazon S3. A set of Python scripts was coded to do the job and is stored in a large Amazon EC2 instance. The whole process takes more than 20 hours to finish, with each script taking at least an hour. The company wants to move the scripts out of Amazon EC2 into a more managed solution that will eliminate the need to maintain servers. Which approach will address all of these requirements with the LEAST development effort? ",
+      "zhcn": "一家公司正在开发新版推荐引擎。机器学习专家需要持续整合用户新增数据以优化个性化推荐效果。专家们从用户在平台上的交互行为以及外部网站、社交媒体等渠道采集数据。该数据处理管道每日需清洗、转换、增强并压缩数TB级别的数据，最终存储至Amazon S3云存储服务。现有若干Python脚本被编写用于执行这些任务，这些脚本目前存放于大型Amazon EC2云服务器实例中。整套流程耗时超过20小时，每个脚本运行时间均不低于一小时。公司希望将这些脚本从EC2实例迁移至更集约化的托管解决方案，从而免除服务器维护负担。若要同时满足所有需求且开发投入最小，应采用哪种实施方案？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "将数据载入Amazon Redshift集群，通过SQL语句执行数据处理流程，最终将结果保存至Amazon S3存储空间。",
+          "enus": "Load the data into an Amazon Redshift cluster. Execute the pipeline by using SQL. Store the results in Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "将数据载入Amazon DynamoDB，将脚本转换为AWS Lambda函数，通过触发Lambda执行来运行流程，最终将结果存储于Amazon S3中。",
+          "enus": "Load the data into Amazon DynamoDB. Convert the scripts to an AWS Lambda function. Execute the pipeline by triggering Lambda  executions. Store the results in Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一项AWS Glue作业。将脚本转换为PySpark代码。执行数据处理流程。将最终结果存储至Amazon S3。",
+          "enus": "Create an AWS Glue job. Convert the scripts to PySpark. Execute the pipeline. Store the results in Amazon S3."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一组独立的AWS Lambda函数，分别用于执行各个脚本。通过AWS Step Functions Data Science SDK构建步骤工作流，并将运行结果存储至Amazon S3。",
+          "enus": "Create a set of individual AWS Lambda functions to execute each of the scripts. Build a step function by using the AWS Step Functions  Data Science SDK. Store the results in Amazon S3."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "参考文档：AWS Lambda 与 Amazon S3 集成示例（https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html）",
+      "zhcn": "我们先来梳理一下题目中的关键信息：  \n\n- 现有流程：Python 脚本在单个大型 EC2 实例上运行，处理 TB 级数据，每天执行一次。  \n- 总耗时 20 小时以上，每个脚本至少 1 小时。  \n- 数据来源多样，清洗、转换、丰富、压缩后存入 S3。  \n- 目标：迁移到无服务器/托管服务，减少运维负担，并且要求**最少开发工作量**。  \n\n---\n\n## 选项分析\n\n### [A] Amazon Redshift + SQL  \n- Redshift 是数据仓库，适合查询分析，但 ETL 流程如果完全重写为 SQL，需要将现有 Python 脚本逻辑改写成 SQL，可能很复杂，尤其是数据清洗、外部 API 调用等。  \n- 对非纯 SQL 逻辑的脚本转换工作量很大，不符合“最少开发工作量”。  \n\n### [B] DynamoDB + Lambda  \n- DynamoDB 不适合存储 TB 级原始数据做 ETL（成本高，且不是为大数据批处理设计的）。  \n- Lambda 有 15 分钟超时限制，每个脚本运行超过 1 小时，无法直接用 Lambda 执行，需要改造为分片或状态管理，开发量大。  \n\n### [C] AWS Glue + PySpark  \n- Glue 是无服务器 Spark 环境，适合 TB 级 ETL。  \n- 现有 Python 脚本可以相对容易地转换为 PySpark（比改写成 SQL 或拆成 Lambda 简单）。  \n- Glue 自动处理集群管理、扩缩容，完全托管。  \n- 开发工作主要是将 Python 逻辑移植到 Spark DataFrame API，可以利用现有代码结构。  \n\n### [D] 多个 Lambda + Step Functions  \n- 虽然 Step Functions 可以编排，但 Lambda 执行时长限制是硬伤，必须改成异步调用或拆分任务，每个脚本逻辑要重构以适应 Lambda 短时运行，开发量很大。  \n\n---\n\n## 结论  \n**C 选项** 在满足“无服务器、托管、处理 TB 数据、最少开发量”方面最合适，因为：  \n1. Glue 专为大数据 ETL 设计，运行时间可超过 20 小时。  \n2. 从 Python 到 PySpark 的迁移路径相对直接。  \n3. 无需管理基础设施。  \n\n---\n\n**最终答案：C** ✅"
+    },
+    "answer": "C",
+    "o_id": "169"
+  },
+  {
+    "id": "184",
+    "question": {
+      "enus": "An energy company has wind turbines, weather stations, and solar panels that generate telemetry data. The company wants to perform predictive maintenance on these devices. The devices are in various locations and have unstable internet connectivity. A team of data scientists is using the telemetry data to perform machine learning (ML) to conduct anomaly detection and predict maintenance before the devices start to deteriorate. The team needs a scalable, secure, high-velocity data ingestion mechanism. The team has decided to use Amazon S3 as the data storage location. Which approach meets these requirements? ",
+      "zhcn": "一家能源公司拥有风力发电机、气象监测站及太阳能电池板，这些设备持续生成遥测数据。该公司计划对上述设备实施预测性维护。由于设备分布地域广泛且网络连接不稳定，数据科学团队正利用遥测数据开展机器学习，旨在实现异常状态监测并在设备性能衰退前预测维护需求。该团队需要构建一套可扩展、高安全性且能高速处理数据流的采集机制。团队已确定选用Amazon S3作为数据存储平台。下列哪种方案最符合这些要求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "通过调用托管于Amazon EC2云服务器的HTTP接口进行数据摄取。采用弹性负载均衡器后接自动扩展组态的EC2实例架构，将数据载入Amazon S3存储服务。",
+          "enus": "Ingest the data by using an HTTP API call to a web server that is hosted on Amazon EC2. Set up EC2 instances in an Auto Scaling  configuration behind an Elastic Load Balancer to load the data into Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过MQTT协议将数据摄取至AWS IoT Core。在AWS IoT Core中配置规则，借助Amazon Kinesis Data Firehose将数据传送至Kinesis数据流，并预设该数据流将数据写入指定的S3存储桶。",
+          "enus": "Ingest the data over Message Queuing Telemetry Transport (MQTT) to AWS IoT Core. Set up a rule in AWS IoT Core to use Amazon  Kinesis Data Firehose to send data to an Amazon Kinesis data stream that is configured to write to an S3 bucket."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过MQTT协议将数据接入AWS IoT Core。在AWS IoT Core中配置规则，将所有MQTT数据路由至已设定写入S3存储桶的Amazon Kinesis Data Firehose传输流。",
+          "enus": "Ingest the data over Message Queuing Telemetry Transport (MQTT) to AWS IoT Core. Set up a rule in AWS IoT Core to direct all MQTT  data to an Amazon Kinesis Data Firehose delivery stream that is configured to write to an S3 bucket."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "通过MQTT协议将数据摄取至Amazon Kinesis Data Streams，该数据流已配置为写入指定的S3存储桶。",
+          "enus": "Ingest the data over Message Queuing Telemetry Transport (MQTT) to Amazon Kinesis data stream that is configured to write to an S3  bucket."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "参考来源：https://aws.amazon.com/blogs/industries/real-time-operational-monitoring-of-renewable-energy-assets-with-aws-iot/",
+      "zhcn": "我们先分析一下题目中的关键需求：  \n\n1. **设备类型**：风力发电机、气象站、太阳能板 → 物联网设备。  \n2. **网络状况**：位置分散，互联网连接不稳定。  \n3. **协议**：适合 IoT 场景的常用协议是 MQTT（Message Queuing Telemetry Transport）。  \n4. **数据目标**：最终存储到 Amazon S3。  \n5. **要求**：可扩展、安全、高吞吐的数据摄取机制。  \n\n---\n\n### 选项分析  \n\n**A**：使用 HTTP API + EC2 + ELB → 虽然可扩展，但 HTTP 对不稳定网络和设备资源受限的 IoT 场景不是最佳选择（MQTT 更轻量、支持持久会话、QoS）。此外，自己管理 EC2 来接收数据不如使用 AWS IoT Core（全托管、内置设备认证、规则引擎）。  \n\n**B**：MQTT → AWS IoT Core → IoT Core 规则 → Kinesis Data Firehose → Kinesis Data Stream → S3。  \n这里多了一个不必要的环节：Firehose 可以直接写入 S3，不需要先经过 Kinesis Data Stream 再配置 Firehose 从 Stream 取数据写入 S3，这样会增加复杂性和延迟。  \n\n**C**：MQTT → AWS IoT Core → IoT Core 规则 → Kinesis Data Firehose → S3。  \n这是标准做法：IoT Core 接收 MQTT 消息，通过规则引擎直接路由到 Firehose，Firehose 批量写入 S3。Firehose 自动处理缓冲、压缩、分区等，适合高吞吐、不稳定网络下的数据接收。  \n\n**D**：MQTT → Kinesis Data Stream → S3。  \nKinesis Data Stream 本身不直接支持 MQTT 协议，需要自己搭建 MQTT 代理并转发到 Kinesis，缺少 AWS IoT Core 提供的设备管理、安全、规则引擎等托管能力。  \n\n---\n\n**最佳答案**是 **C**，因为它：  \n- 使用 IoT Core（全托管 MQTT 代理）处理设备连接与安全。  \n- 使用 IoT Core 规则引擎无缝路由到 Kinesis Data Firehose（全托管、自动扩展的数据传输服务）。  \n- Firehose 直接写入 S3，简单高效。  \n\n---\n\n**最终答案**：  \n**[C] Ingest the data over MQTT to AWS IoT Core. Set up a rule in AWS IoT Core to direct all MQTT data to an Amazon Kinesis Data Firehose delivery stream that is configured to write to an S3 bucket.**"
+    },
+    "answer": "C",
+    "o_id": "184"
+  },
+  {
+    "id": "187",
+    "question": {
+      "enus": "A data engineer needs to provide a team of data scientists with the appropriate dataset to run machine learning training jobs. The data will be stored in Amazon S3. The data engineer is obtaining the data from an Amazon Redshift database and is using join queries to extract a single tabular dataset. A portion of the schema is as follows: TransactionTimestamp (Timestamp) CardName (Varchar) CardNo (Varchar) The data engineer must provide the data so that any row with a CardNo value of NULL is removed. Also, the TransactionTimestamp column must be separated into a TransactionDate column and a TransactionTime column. Finally, the CardName column must be renamed to NameOnCard. The data will be extracted on a monthly basis and will be loaded into an S3 bucket. The solution must minimize the effort that is needed to set up infrastructure for the ingestion and transformation. The solution also must be automated and must minimize the load on the Amazon Redshift cluster. Which solution meets these requirements? ",
+      "zhcn": "数据工程师需为数据科学团队提供适宜的数据集以支持机器学习训练任务。数据将存储于Amazon S3中，当前工程师正从Amazon Redshift数据库通过连接查询提取单一表格数据集。部分数据模式如下：  \n- 交易时间戳（Timestamp）  \n- 持卡人姓名（Varchar）  \n- 卡号（Varchar）  \n\n数据处理需满足以下要求：  \n1. 剔除卡号为NULL的所有数据行  \n2. 将交易时间戳字段拆分为独立交易日期列与交易时间列  \n3. 将持卡人姓名列重命名为NameOnCard  \n数据需按月提取并加载至S3存储桶，解决方案须最大限度减少数据摄取与转换所需的基础设施搭建成本，同时实现自动化流程并减轻Redshift集群负载。  \n\n何种方案可同时满足上述要求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "部署一个Amazon EMR集群，创建Apache Spark任务用于从Amazon Redshift集群读取数据并进行转换。将处理后的数据加载至S3存储桶，并将该任务配置为按月定期执行。",
+          "enus": "Set up an Amazon EMR cluster. Create an Apache Spark job to read the data from the Amazon Redshift cluster and transform the data.  Load the data into the S3 bucket. Schedule the job to run monthly."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "配置一台安装有SQL客户端（例如SQL Workbench/J）的Amazon EC2实例，用于直接查询Amazon Redshift集群中的数据。将查询结果数据集导出至文件后，上传至S3存储桶。上述操作需每月定期执行。",
+          "enus": "Set up an Amazon EC2 instance with a SQL client tool, such as SQL Workbench/J, to query the data from the Amazon Redshift cluster  directly Export the resulting dataset into a file. Upload the file into the S3 bucket. Perform these tasks monthly."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一个AWS Glue作业，以Amazon Redshift集群为数据源，S3存储桶为目标端。运用内置的Filter、Map及RenameField转换器实现所需的数据处理逻辑，并将该作业配置为按月自动执行。",
+          "enus": "Set up an AWS Glue job that has the Amazon Redshift cluster as the source and the S3 bucket as the destination. Use the built-in  transforms Filter, Map, and RenameField to perform the required transformations. Schedule the job to run monthly."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Redshift Spectrum执行查询，将数据直接写入S3存储桶。同时创建AWS Lambda函数，按月自动运行该查询任务。",
+          "enus": "Use Amazon Redshift Spectrum to run a query that writes the data directly to the S3 bucket. Create an AWS Lambda function to run the  query monthly."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**\"设置一个以Amazon Redshift集群为数据源、S3存储桶为目标地的AWS Glue作业。利用内置的Filter、Map和RenameField转换器实现所需的数据处理，并将该作业配置为按月执行。\"**\n\n**核心选择依据：**\n- **基础设施成本最低化**：AWS Glue采用无服务器架构，无需管理集群或EC2实例\n- **内置转换器优势**：Filter（清除空值卡号）、Map（拆分时间戳）、RenameField（重命名字段）等标准功能大幅减少自定义代码量\n- **自动化调度能力**：原生支持作业调度机制，完美契合月度自动化需求\n- **减轻Redshift负载**：通过UNLOAD操作或JDBC优化技术实现高效数据提取，最大限度降低对集群的影响\n\n**其他方案失效原因：**\n- **EMR集群方案**：架构过于复杂，需自行管理集群并编写Spark代码，违背\"最小化基础设施投入\"原则\n- **EC2实例配合SQL客户端**：属于手动流程缺乏自动化，不仅增加运维负担，直接查询Redshift还会加重系统负载\n- **Redshift Spectrum与Lambda组合**：Spectrum适用于查询S3外部数据而非Redshift数据导出，Lambda则存在运行时限制，不适合大规模数据传输\n\n**常见认知误区**：选择EMR或EC2方案看似灵活，实则忽略了基础设施最小化的核心要求。AWS Glue正是为满足此类无服务器、低运维需求的场景而专门设计。",
+      "zhcn": "我们来逐步分析一下题目要求和选项。  \n\n---\n\n## 1. 题目关键点\n\n- **数据源**：Amazon Redshift 数据库（需要 join 查询提取成单表数据）  \n- **目标**：Amazon S3  \n- **数据转换要求**：\n  1. 过滤掉 `CardNo` 为 NULL 的行  \n  2. 将 `TransactionTimestamp` 拆分成 `TransactionDate` 和 `TransactionTime`  \n  3. 将 `CardName` 重命名为 `NameOnCard`  \n- **运行频率**：每月一次  \n- **约束条件**：\n  - 尽量减少基础设施设置工作  \n  - 自动化  \n  - 尽量减少对 Redshift 集群的负载  \n\n---\n\n## 2. 选项分析\n\n### [A] Amazon EMR + Spark 作业\n- 可以实现从 Redshift 读取数据并转换，然后写入 S3  \n- 但需要自己编写 Spark 代码、配置集群、管理调度  \n- 基础设施设置工作较多（EMR 集群配置、安全组、IAM 角色等）  \n- 不符合“最小化基础设施设置”的要求  \n\n### [B] Amazon EC2 + SQL 客户端工具\n- 手动或脚本方式连接 Redshift 查询，导出文件再上传 S3  \n- 需要管理 EC2 实例、安装工具、处理认证、确保自动化  \n- 自动化程度低，维护成本高，不是 AWS 推荐的无服务器方式  \n- 对 Redshift 的负载可能较高（因为用外部 SQL 客户端拉取数据）  \n\n### [C] AWS Glue 作业\n- 无服务器，无需管理基础设施  \n- 内置连接 Redshift 作为数据源，S3 作为目标  \n- 内置转换：`Filter`（去 NULL）、`Map`（拆分时间戳）、`RenameField`（重命名）  \n- 可设置定时任务（每月运行）  \n- 对 Redshift 负载可控（直接使用 Redshift 的 UNLOAD 或合理查询）  \n- 完全符合“最小化设置、自动化、减少负载”的要求  \n\n### [D] Redshift Spectrum + Lambda\n- Redshift Spectrum 用于查询 S3 中的数据，而不是将 Redshift 表的数据写入 S3  \n- 这里是要从 Redshift 导出到 S3，方向反了  \n- Lambda 运行时间有限制（15 分钟），如果数据量大可能超时  \n- 需要 Spectrum 的外部表指向 S3，但初始数据还在 Redshift 里，逻辑上不匹配  \n\n---\n\n## 3. 结论\n\n最佳选项是 **C**，因为：\n- AWS Glue 是无服务器的，设置简单  \n- 内置支持 Redshift 数据源和 S3 目标  \n- 提供足够的转换能力满足需求  \n- 可以自动化调度  \n- 对 Redshift 的影响较小（合理使用查询卸载）  \n\n---\n\n**最终答案：C** ✅"
+    },
+    "answer": "C",
+    "o_id": "187"
+  },
+  {
+    "id": "194",
+    "question": {
+      "enus": "A data scientist is working on a model to predict a company's required inventory stock levels. All historical data is stored in .csv files in the company's data lake on Amazon S3. The dataset consists of approximately 500 GB of data The data scientist wants to use SQL to explore the data before training the model. The company wants to minimize costs. Which option meets these requirements with the LEAST operational overhead? ",
+      "zhcn": "一位数据科学家正在构建预测公司所需库存水平的模型。所有历史数据均以.csv格式存储于Amazon S3平台的企业数据湖中，数据集规模约为500GB。该科学家计划在训练模型前使用SQL进行数据探查，且公司要求尽可能控制成本。在满足上述需求的前提下，下列方案中哪一项能以最低运维负担实现目标？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "创建Amazon EMR集群。在Apache Hive元存储中建立外部表，使其指向存储于S3存储桶内的数据。随后可通过Hive控制台进行数据探查。",
+          "enus": "Create an Amazon EMR cluster. Create external tables in the Apache Hive metastore, referencing the data that is stored in the S3  bucket. Explore the data from the Hive console."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "借助AWS Glue对S3存储桶进行元数据爬取，并在AWS Glue数据目录中建立数据表。随后通过Amazon Athena对数据进行探索分析。",
+          "enus": "Use AWS Glue to crawl the S3 bucket and create tables in the AWS Glue Data Catalog. Use Amazon Athena to explore the data."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一个Amazon Redshift集群。通过COPY命令从Amazon S3导入数据。利用Amazon Redshift查询编辑器界面进行数据探索。",
+          "enus": "Create an Amazon Redshift cluster. Use the COPY command to ingest the data from Amazon S3. Explore the data from the Amazon  Redshift query editor GUI."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "创建Amazon Redshift集群。在外部模式中建立外部表，关联存储数据的S3桶。通过Amazon Redshift查询编辑器图形界面进行数据探查。",
+          "enus": "Create an Amazon Redshift cluster. Create external tables in an external schema, referencing the S3 bucket that contains the data.  Explore the data from the Amazon Redshift query editor GUI."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**使用 AWS Glue 爬取 S3 存储桶中的数据，并在 AWS Glue 数据目录中创建表。通过 Amazon Athena 对数据进行探索分析。**  \n\n**解析：** 本题要求使用 SQL 探索 S3 中 500 GB 数据，且重点在于**成本最低**和**运维负担最小**。  \n- **正解方案（AWS Glue + Athena）：**  \n  该方案为无服务器架构，无需管理基础设施。AWS Glue 可自动爬取 S3 数据并在数据目录中生成表结构，Amazon Athena 则支持直接对 S3 数据执行 SQL 查询，按扫描量计费（每 TB 5 美元）。由于无需迁移或加载数据，部署时间和运维投入均实现最小化。  \n- **其他选项辨析：**  \n    - **Amazon EMR：** 需要管理集群（增加运维负担），且集群运行期间持续产生费用，对于临时性数据探索场景而言成本过高、架构过重。  \n    - **Amazon Redshift（外部表）：** 虽技术上可行，但该场景下 Redshift 需持续支付集群费用（即使未执行查询），成本效益不佳。  \n    - **Amazon Redshift（COPY 命令）：** 需将 500 GB 数据加载至 Redshift，对于探索性分析而言既产生不必要的数据迁移成本，又增加操作耗时。  \n\n核心差异在于：Athena 结合 Glue 数据目录的方案避免了持续性的基础设施成本与管理负担，最契合低成本、轻运维的需求。",
+      "zhcn": "我们先分析一下题目要求和各个选项的特点。  \n\n**题目关键点**  \n- 数据：500 GB 的 CSV 文件，存放在 S3 数据湖。  \n- 目标：用 SQL 探索数据，然后训练模型。  \n- 约束：最小化成本 + 最少运维开销。  \n\n---\n\n### 选项分析  \n\n**[A] Amazon EMR + Hive metastore**  \n- EMR 需要启动集群（EC2 实例），按小时收费，即使使用 Spot 实例，集群运行期间持续计费。  \n- 需要管理集群生命周期（启动、配置、终止），运维开销较高。  \n- 不适合“临时查询”场景，更适合需要长时间运行或复杂处理的任务。  \n\n**[B] AWS Glue 爬取 S3 + Athena 查询**  \n- Glue 爬虫：扫描 S3 元数据，创建/更新 Glue Data Catalog（表结构）。  \n- Athena：无服务器，按扫描数据量收费（每 TB 约 5 美元），不查询不收费。  \n- 完全无需管理基础设施，自动伸缩，适合探索性 SQL 查询。  \n- 500 GB 数据查询一次约 2.5 美元，成本很低。  \n\n**[C] Amazon Redshift 集群 + COPY 导入数据**  \n- Redshift 集群需要持续运行（除非暂停，但暂停后恢复也有延迟和部分限制），费用较高（按小时计费，即使空闲）。  \n- COPY 将 500 GB 数据加载到集群存储，存储也收费。  \n- 运维开销：需要选实例类型、管理集群、维护 VPC 等。  \n\n**[D] Amazon Redshift 集群 + 外部表（Redshift Spectrum）**  \n- 集群仍需持续运行（因为 Spectrum 查询需要 Redshift 集群作为协调器）。  \n- 虽然数据仍在 S3，但 Spectrum 查询会按扫描量收费（类似 Athena）外加集群运行费。  \n- 比 [C] 省了加载数据的时间，但依然有集群运行成本，不划算。  \n\n---\n\n### 结论  \n- **最低运维开销 + 最低成本**：Athena + Glue Data Catalog（选项 B）  \n- 因为：  \n  1. 无服务器，无需管理基础设施  \n  2. 按查询次数和数据扫描量计费，非常适合数据探索（查询频率低、数据量中等）  \n  3. 与 EMR 或 Redshift 相比，没有集群持续运行的费用  \n\n---\n\n**答案：B** ✅"
+    },
+    "answer": "B",
+    "o_id": "194"
+  },
+  {
+    "id": "197",
+    "question": {
+      "enus": "A company has a podcast platform that has thousands of users. The company has implemented an anomaly detection algorithm to detect low podcast engagement based on a 10-minute running window of user events such as listening, pausing, and exiting the podcast. A machine learning (ML) specialist is designing the data ingestion of these events with the knowledge that the event payload needs some small transformations before inference. How should the ML specialist design the data ingestion to meet these requirements with the LEAST operational overhead? ",
+      "zhcn": "某公司旗下播客平台拥有数千名用户。为检测用户参与度低迷状况，该公司已部署异常检测算法，该算法基于十分钟滚动窗口内的用户行为（如收听、暂停、退出播客等）进行监测。鉴于事件载荷在推理前需进行微量数据转换，机器学习专家正在设计事件数据摄取方案。请问该专家应如何以最小运维成本实现这一数据摄取流程的设计？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "通过AWS AppSync中的GraphQL API接收事件数据，将其存储于Amazon DynamoDB数据表。利用DynamoDB数据流触发AWS Lambda函数，在推理前对最近10分钟的数据进行转换处理。",
+          "enus": "Ingest event data by using a GraphQLAPI in AWS AppSync. Store the data in an Amazon DynamoDB table. Use DynamoDB Streams to  call an AWS Lambda function to transform the most recent 10 minutes of data before inference."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Kinesis Data Streams接收事件数据，借助Amazon Kinesis Data Firehose将信息存储于Amazon S3存储服务。在推理前，运用AWS Glue对最近十分钟的数据进行转换处理。",
+          "enus": "Ingest event data by using Amazon Kinesis Data Streams. Store the data in Amazon S3 by using Amazon Kinesis Data Firehose. Use  AWS Glue to transform the most recent 10 minutes of data before inference."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Kinesis Data Streams接收事件数据，并借助基于Apache Flink的Amazon Kinesis Data Analytics应用，在推理前对最近十分钟的数据进行实时处理。",
+          "enus": "Ingest event data by using Amazon Kinesis Data Streams. Use an Amazon Kinesis Data Analytics for Apache Flink application to  transform the most recent 10 minutes of data before inference."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Managed Streaming for Apache Kafka（Amazon MSK）摄取事件数据，并利用AWS Lambda函数在推理前对最近10分钟的数据进行转换处理。",
+          "enus": "Ingest event data by using Amazon Managed Streaming for Apache Kafka (Amazon MSK). Use an AWS Lambda function to transform  the most recent 10 minutes of data before inference."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "**正确答案是：通过 Amazon Kinesis Data Streams 摄取事件数据，在推理前使用 Amazon Kinesis Data Analytics for Apache Flink 应用程序对最近10分钟的数据进行转换。**\n\n**简要分析：**\n核心需求是**基于10分钟滚动窗口进行异常检测**，同时要求运维开销最小。Kinesis Data Streams 是处理持续高吞吐量数据摄取的理想服务。关键在于数据转换和窗口逻辑的实现。\n\n*   **真正答案（Kinesis Data Analytics for Apache Flink）：** 此方案直接满足10分钟窗口需求。Kinesis Data Analytics 是一项托管服务，专为此类场景构建——可在滑动或滚动时间窗口上执行有状态的实时计算（如数据转换和聚合）。它负责处理复杂的窗口逻辑、状态管理和扩展，运维工作极少。\n*   **错误选项分析：**\n    *   **AWS Glue / S3：** 此为批处理架构。将数据写入 S3 后再运行 Glue 作业会引入显著延迟（数分钟至数小时），无法实现基于10分钟滚动窗口的实时推理。\n    *   **DynamoDB / Lambda：** 尽管 DynamoDB Streams 和 Lambda 能够处理数据，但维护和查询精确的10分钟滚动窗口既复杂又低效。这需要大量自定义代码来管理状态和跟踪事件时间戳，导致运维开销高昂。\n    *   **MSK / Lambda：** MSK 是托管的 Kafka 服务，适用于数据摄取。然而，使用 Lambda 函数管理10分钟窗口存在难题。Lambda 有15分钟的执行时间限制且为无状态服务；在单次 Lambda 调用内构建可靠、有状态的窗口机制极其复杂，运维负担沉重。\n\n总而言之，Kinesis Data Analytics 是正确选择，因为它是一项**专为实时、有状态窗口分析设计的托管服务**，这完美契合了核心技术需求，同时将运维开销降至最低。其他选项要么会引入不可接受的延迟，要么需要复杂、自定义的状态管理方案。",
+      "zhcn": "我们先分析一下题目中的关键需求：  \n\n1. **数据源**：用户事件（听、暂停、退出播客）  \n2. **处理要求**：基于 **10 分钟滚动窗口** 做异常检测  \n3. **数据需要少量转换**，然后进行推理（inference）  \n4. **目标**：用 **最小的运维开销** 实现数据摄取和处理  \n\n---\n\n### 选项分析\n\n**[A] AppSync + DynamoDB + DynamoDB Streams + Lambda**  \n- 事件通过 GraphQL API 进入 DynamoDB，再用流触发 Lambda 处理最近 10 分钟数据。  \n- 问题：DynamoDB 不是为时间窗口聚合设计的，要查询最近 10 分钟数据需要设置时间索引，并且 Lambda 要自己处理窗口逻辑，**运维复杂**。  \n\n**[B] Kinesis Data Streams + Kinesis Data Firehose → S3 + AWS Glue**  \n- Kinesis Data Streams 实时接收事件，Firehose 直接存 S3（可配置小缓冲区）。  \n- 用 AWS Glue 做转换，但 Glue 更适合批处理 ETL，要处理 10 分钟滚动窗口需要定时触发 Glue 作业，延迟较高，且不是真正的流处理。  \n- 但题目说“最小运维开销”，Glue 是无服务器的，Firehose 也全托管。  \n- 不过这里的问题是：**Glue 不适合低延迟的 10 分钟窗口流处理**，它更偏向批处理。  \n\n**[C] Kinesis Data Streams + Kinesis Data Analytics for Apache Flink**  \n- Kinesis Data Analytics (KDA) for Apache Flink 直接支持滚动窗口计算和流上转换，是专门处理这种时间窗口场景的托管服务。  \n- 运维开销很低（托管 Flink），代码写 UDF 做转换和推理即可。  \n- 完全匹配“10 分钟窗口 + 小转换 + 低运维”的需求。  \n\n**[D] MSK + Lambda**  \n- MSK（Kafka）运维开销比 Kinesis 大（虽然是托管，但仍有分区、扩容等配置）。  \n- Lambda 处理 Kafka 可用 Lambda 的 MSK 触发器，但 Lambda 对窗口聚合支持弱，需要外部状态存储或自己维护窗口状态，实现复杂。  \n\n---\n\n### 为什么答案是 B 而不是 C？  \n\n从技术匹配度看，**C 选项（Kinesis Data Analytics for Flink）** 是最贴合流窗口计算的，但可能出题者考虑的是：  \n\n- **题目强调“数据摄取”**，并且说事件需要“少量转换然后推理”，可能推理是调用一个已有模型，不一定是复杂流计算。  \n- **Kinesis Data Firehose + AWS Glue** 在 AWS 架构里是标准的数据注入与转换组合，Firehose 可以配置数据转换（用 Lambda）或直接存 S3 后用 Glue 做轻量 ETL，然后触发推理。  \n- 如果 10 分钟窗口的异常检测是批处理模式（每 10 分钟运行一次），而不是真正的实时流处理，那么 B 是合理的，并且 **Glue 无服务器，运维更简单**。  \n- 可能出题者认为 KDA Flink 需要更多开发（写 Flink SQL/代码）而不是“最小运维”，而 Firehose 点几下就完成数据导入 S3。  \n\n但严格从实时 10 分钟窗口处理来看，C 是更优技术方案；从 AWS 认证考试的“最小运维”常见答案模式来看，他们有时会选择 **全托管、无需管理计算资源的方案**，因此可能选 B（Glue 无服务器 + Firehose 全托管）。  \n\n---\n\n**结论**：  \n参考答案是 **B**，可能是因为出题者认为场景是微批处理（每 10 分钟运行一次作业）而不是连续流计算，并且 B 中所有组件都是全托管，符合 AWS 最小运维原则。  \n\n如果你需要，我可以进一步解释为什么在实时场景下 C 更合适，但在考试逻辑里 B 被选为答案。"
+    },
+    "answer": "B",
+    "o_id": "197"
+  },
+  {
+    "id": "212",
+    "question": {
+      "enus": "A data scientist has 20 TB of data in CSV format in an Amazon S3 bucket. The data scientist needs to convert the data to Apache Parquet format. How can the data scientist convert the file format with the LEAST amount of effort? ",
+      "zhcn": "一位数据科学家在Amazon S3存储桶中存有20TB的CSV格式数据。现需将数据转换为Apache Parquet格式，请问如何以最简捷的方式完成格式转换？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "使用AWS Glue爬虫程序转换文件格式。",
+          "enus": "Use an AWS Glue crawler to convert the file format."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "编写一个脚本以转换文件格式，并将该脚本作为AWS Glue任务运行。",
+          "enus": "Write a script to convert the file format. Run the script as an AWS Glue job."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "编写一个用于转换文件格式的脚本，并在Amazon EMR集群上运行该脚本。",
+          "enus": "Write a script to convert the file format. Run the script on an Amazon EMR cluster."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "编写一个脚本用于转换文件格式。在Amazon SageMaker笔记本中运行该脚本。",
+          "enus": "Write a script to convert the file format. Run the script in an Amazon SageMaker notebook."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **\"编写一个脚本来转换文件格式，并在 Amazon SageMaker notebook 中运行该脚本\"**。这是最省力的选择，因为：  \n- 数据科学家可以直接在 SageMaker notebook 中快速编写并运行转换脚本（例如使用 PySpark 或 pandas），无需配置或管理其他服务。  \n- 它避免了设置和调试 AWS Glue 任务、EMR 集群或 Glue 爬虫程序的复杂性，这些服务更适合自动化的大规模 ETL 工作流，而非一次性转换任务。  \n\n**其他选项为何欠佳：**  \n- **AWS Glue 爬虫程序**：仅用于元数据目录整理，无法转换文件格式。  \n- **AWS Glue 任务**：需要配置任务、IAM 角色和参数调优，对于一次性任务而言过于繁琐。  \n- **Amazon EMR 集群**：需投入集群设置、管理和成本，而该任务用更简单的工具即可完成。  \n\n关键区别在于，SageMaker notebook 提供了一个开箱即用的交互式环境，能够通过最简配置快速执行脚本，因此成为数据科学家处理一次性转换任务的最便捷选择。",
+      "zhcn": "正确答案是 **B**。  \n\n**题目解析**：  \n- 数据量很大（20 TB），需要高效且无需过多手动操作的方式将 CSV 转换为 Parquet。  \n- AWS Glue 是无服务器（Serverless）的 ETL 服务，适合这种一次性或定期的格式转换任务，不需要管理集群。  \n- 选项 B 使用 AWS Glue 作业运行转换脚本，只需编写少量 PySpark 代码即可自动并行处理，是**最省力**的方案。  \n\n**其他选项分析**：  \n- **A**：Glue Crawler 仅用于自动识别数据结构和创建元数据表，不能直接转换文件格式。  \n- **C**：Amazon EMR 虽然可以处理，但需要配置和管理集群，比 Glue 更复杂。  \n- **D**：SageMaker Notebook 不适合直接处理 20 TB 数据，本地资源有限，需要手动扩展，效率低且费力。"
+    },
+    "answer": "B",
+    "o_id": "212"
+  },
+  {
+    "id": "213",
+    "question": {
+      "enus": "A company is building a pipeline that periodically retrains its machine learning (ML) models by using new streaming data from devices. The company's data engineering team wants to build a data ingestion system that has high throughput, durable storage, and scalability. The company can tolerate up to 5 minutes of latency for data ingestion. The company needs a solution that can apply basic data transformation during the ingestion process. Which solution will meet these requirements with the MOST operational eficiency? ",
+      "zhcn": "某公司正在构建一套数据管道系统，通过设备端持续产生的新流数据定期对其机器学习模型进行再训练。该公司的数据工程团队需要搭建一套具备高吞吐量、持久化存储及弹性扩展能力的数据摄取系统，且数据接入延迟需控制在五分钟以内。该系统还需在数据接入阶段完成基础的数据转换处理。在满足上述所有要求的前提下，何种解决方案能实现最优运维效率？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "将设备配置为向Amazon Kinesis Data Streams发送流式数据。设置Amazon Kinesis Data Firehose传输流，使其自动接收Kinesis数据流，通过AWS Lambda函数对数据进行转换，并将处理结果存储至Amazon S3存储桶中。",
+          "enus": "Configure the devices to send streaming data to an Amazon Kinesis data stream. Configure an Amazon Kinesis Data Firehose delivery  stream to automatically consume the Kinesis data stream, transform the data with an AWS Lambda function, and save the output into an  Amazon S3 bucket."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "将设备配置为向Amazon S3存储桶发送流式数据。设置由S3事件通知触发的AWS Lambda函数，用于转换数据并将其载入Amazon Kinesis Data Streams。配置Amazon Kinesis Data Firehose传输流，使其自动摄取Kinesis数据流中的数据，并将处理结果回传至S3存储桶。",
+          "enus": "Configure the devices to send streaming data to an Amazon S3 bucket. Configure an AWS Lambda function that is invoked by S3 event  notifications to transform the data and load the data into an Amazon Kinesis data stream. Configure an Amazon Kinesis Data Firehose  delivery stream to automatically consume the Kinesis data stream and load the output back into the S3 bucket."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "将设备配置为向Amazon S3存储桶发送流式数据。设置一个由S3事件通知触发的AWS Glue作业，用于读取数据、转换数据格式，并将处理结果载入新的S3存储桶。",
+          "enus": "Configure the devices to send streaming data to an Amazon S3 bucket. Configure an AWS Glue job that is invoked by S3 event  notifications to read the data, transform the data, and load the output into a new S3 bucket."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "将设备配置为向Amazon Kinesis Data Firehose传输流发送实时数据流。设置一个AWS Glue作业，使其连接至该传输流以进行数据转换，并将处理结果导入Amazon S3存储桶。",
+          "enus": "Configure the devices to send streaming data to an Amazon Kinesis Data Firehose delivery stream. Configure an AWS Glue job that  connects to the delivery stream to transform the data and load the output into an Amazon S3 bucket."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "**正确答案是：**配置设备将流数据发送至 Amazon Kinesis 数据流。随后配置 Amazon Kinesis Data Firehose 传输流，使其自动接收 Kinesis 数据流，通过 AWS Lambda 函数进行数据转换，并将处理结果存储至 Amazon S3 存储桶。\n\n**方案解析：**\n该方案完全符合需求，原因如下：\n1.  **高吞吐与弹性扩展**：Kinesis 数据流专为海量设备的高吞吐实时流数据摄入而设计。\n2.  **数据持久性与延迟容忍**：数据可在流中稳定存储长达 365 天，其架构轻松满足 5 分钟延迟容忍要求。\n3.  **实时转换能力**：通过 Kinesis Data Firehose 结合 Lambda 函数，可在数据摄入过程中实现轻量级转换，兼具运维效率（无服务器架构，无需复杂编排）。\n4.  **运维最优化**：整个流水线采用全托管无服务器架构。Kinesis 与 Firehose 自动处理扩展需求，数据转换流程无缝集成，无需管理复杂触发机制或调度逻辑。\n\n**干扰项辨析：**\n*   **干扰项 1（S3 → Lambda → Kinesis → Firehose → S3）**：该方案效率低下。将单条流数据直接写入 S3 不符合高吞吐流处理的最佳实践，不仅因 S3 本质是对象存储而非实时消息服务会增加额外延迟与成本，其迂回的数据流转路径更显冗余。\n*   **干扰项 2（S3 → AWS Glue 作业）**：Glue 作为无服务器 ETL 服务专为批处理设计，无法满足实时或近实时流处理需求。为每个新文件触发 Glue 作业将导致处理速度缓慢、成本高昂，难以稳定满足 5 分钟延迟要求，且对简单转换任务而言架构过重。\n*   **干扰项 3（Firehose → AWS Glue 作业）**：虽然 Firehose 支持与 Glue 集成实现 ETL，但对于基础转换需求实属过度设计。相比轻量级的 Lambda 函数，Glue 运行更重，而 Lambda 在运维效率、启动速度和成本控制方面更具优势。\n\n**常见误区：**\n核心误区在于为高吞吐流处理场景选择以 S3 为首步的架构。需明确 S3 是存储服务而非摄入工具。正确模式应选用专用流处理服务（Kinesis 数据流）进行数据摄入，再通过 Firehose 实现至 S3 的可靠分批加载，并配合 Lambda 完成可选的轻量级转换。",
+      "zhcn": "我们来逐步分析这道题。  \n\n---\n\n## 1. 题目关键需求\n\n- **数据源**：设备产生的流数据（streaming data）  \n- **要求**：  \n  - 高吞吐量  \n  - 持久存储  \n  - 可扩展性  \n  - 数据延迟容忍 ≤ 5 分钟  \n  - 能在数据摄取过程中进行基本的数据转换  \n  - 选择 **最具运营效率（operational efficiency）** 的方案  \n\n---\n\n## 2. 选项分析\n\n### [A]  \n设备 → Kinesis Data Stream → Kinesis Data Firehose（+ Lambda 转换）→ S3  \n\n- **Kinesis Data Stream**：适合实时流式数据接入，高吞吐、可扩展、持久（保留期可达数年）。  \n- **Kinesis Data Firehose**：自动从 KDS 拉取数据，可调用 Lambda 做基本转换，然后批量写入 S3（可配置缓冲区大小或时间，比如 5 分钟内攒批写入）。  \n- 延迟：满足 5 分钟内。  \n- 运营效率：全托管服务，无需管理服务器，自动扩展。  \n\n---\n\n### [B]  \n设备 → S3（原始数据）→ S3 事件触发 Lambda → Lambda 转换后写入 KDS → Firehose 从 KDS 读 → 再写回 S3  \n\n- 问题：设备直接写 S3 对于流数据不高效（每个小文件频繁 PUT 请求，延迟和吞吐不如 Kinesis）。  \n- 架构复杂，绕路（S3→Lambda→KDS→Firehose→S3），运营成本高。  \n\n---\n\n### [C]  \n设备 → S3（原始数据）→ S3 事件触发 Glue 作业 → 转换后写另一个 S3  \n\n- Glue 适合 ETL 批处理，不适合近实时（启动时间、运行周期通常大于几分钟）。  \n- 每来一个小文件就启动作业，开销大，延迟不易控制在 5 分钟内（可能超时）。  \n- 运营效率低（Glue 作业频繁启动成本高）。  \n\n---\n\n### [D]  \n设备 → Kinesis Data Firehose → Glue 作业（连接 Firehose 转换）→ S3  \n\n- Firehose 支持与 Glue 做复杂 ETL，但 Glue 在这里是持续运行的流式 ETL？  \n- 实际上 Firehose 可配置使用 Glue 做数据转换，但这是针对每个微批调用 Glue 脚本（在 Firehose 内部集成），不是独立启动作业。  \n- 但题目说 “Configure an AWS Glue job that connects to the delivery stream” 听起来像独立作业，可能造成延迟和复杂管理。  \n- 运营效率不如 Lambda 转换简单。  \n\n---\n\n## 3. 为什么选 A\n\n- **最直接**：流数据先进入 Kinesis Data Stream（适合高吞吐流式接入），再用 Firehose（托管、自动扩展）做转换（Lambda）和加载到 S3。  \n- **延迟可控**：Firehose 可设置缓冲区大小或时间（比如 1~5 分钟）。  \n- **运营效率最高**：全托管，无需管理服务器或调度作业。  \n- **满足基本转换需求**：Lambda 可进行数据格式转换、过滤、丰富等。  \n\n---\n\n**最终答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "213"
+  },
+  {
+    "id": "214",
+    "question": {
+      "enus": "A retail company is ingesting purchasing records from its network of 20,000 stores to Amazon S3 by using Amazon Kinesis Data Firehose. The company uses a small, server-based application in each store to send the data to AWS over the internet. The company uses this data to train a machine learning model that is retrained each day. The company's data science team has identified existing attributes on these records that could be combined to create an improved model. Which change will create the required transformed records with the LEAST operational overhead? ",
+      "zhcn": "一家零售企业正通过Amazon Kinesis Data Firehose服务，将其两万家门店的采购记录实时传输至Amazon S3存储平台。各门店通过基于服务器的小型应用程序，经由互联网将数据发送至AWS云平台。这些数据主要用于训练机器学习模型，该模型每日都会进行迭代更新。企业的数据科学团队发现，通过整合现有记录属性可构建更优化的模型。若要实现所需的记录转换，同时将运维负担降至最低，应采取哪种改进方案？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "创建一个能够处理传入记录的AWS Lambda函数。在数据摄取Kinesis Data Firehose传输流中启用数据转换功能，并将该Lambda函数设定为调用目标。",
+          "enus": "Create an AWS Lambda function that can transform the incoming records. Enable data transformation on the ingestion Kinesis Data  Firehose delivery stream. Use the Lambda function as the invocation target."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "部署一个运行Apache Spark并包含转换逻辑的Amazon EMR集群。通过Amazon EventBridge（Amazon CloudWatch Events）设置定时任务，每日触发AWS Lambda函数启动该集群，对积存在Amazon S3中的记录进行转换处理，并将转换后的数据回传至Amazon S3。",
+          "enus": "Deploy an Amazon EMR cluster that runs Apache Spark and includes the transformation logic. Use Amazon EventBridge (Amazon  CloudWatch Events) to schedule an AWS Lambda function to launch the cluster each day and transform the records that accumulate in  Amazon S3. Deliver the transformed records to Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在各门店部署Amazon S3文件网关，并升级店内软件以将数据传送至该网关。通过每日定时运行的AWS Glue任务，对经由S3文件网关传输至Amazon S3存储服务的数据进行转换处理。",
+          "enus": "Deploy an Amazon S3 File Gateway in the stores. Update the in-store software to deliver data to the S3 File Gateway. Use a scheduled  daily AWS Glue job to transform the data that the S3 File Gateway delivers to Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "部署一组集成转换逻辑的Amazon EC2实例，通过每日定时任务配置自动处理积存在Amazon S3中的记录文件，并将处理完成的数据回传至Amazon S3存储空间。",
+          "enus": "Launch a fieet of Amazon EC2 instances that include the transformation logic. Configure the EC2 instances with a daily cron job to  transform the records that accumulate in Amazon S3. Deliver the transformed records to Amazon S3."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是**\"在各门店部署Amazon S3文件网关，更新门店软件使其将数据传送至S3文件网关。通过每日定时运行的AWS Glue作业，对S3文件网关传输至Amazon S3的数据进行转换。\"**\n\n**核心分析：**\n本方案的核心要求是以**最低运维成本**实现数据转换，这意味着需要最大限度减少对服务器、集群及基础设施的管理工作。\n\n*   **正解方案（S3文件网关+AWS Glue）：** 这是最符合无服务器架构与低运维成本的方案。\n    *   **S3文件网关：** 作为简化的托管服务，为门店提供本地S3接入点，自动处理缓存及向S3的高效数据上传，无需管理服务器。\n    *   **AWS Glue：** 全托管式无服务器ETL服务。其\"每日定时任务\"特性与\"每日重新训练\"的需求完全契合，用户无需管理服务器维护、补丁更新或规模扩展。\n    *   该方案通过更简洁、直接且全托管的基于文件的传输方式，替代了原本复杂的Kinesis Data Firehose数据摄取管道。\n\n**其他选项的运维成本缺陷：**\n*   **错误选项1（Kinesis Data Firehose + Lambda转换）：** 尽管Kinesis Data Firehose与Lambda属无服务器架构，但会增加**数据摄取路径**的复杂性。Lambda函数需**对每批数据**进行响应，这对每日批处理任务而言效率低下，不仅可能导致成本显著增加，还会带来不必要的实时处理负担。\n*   **错误选项2（EMR集群+EventBridge+Lambda）：** Amazon EMR集群作为短期运行服务具有较高复杂性。通过Lambda与EventBridge实现其每日启动、运行与关闭流程，需要比配置AWS Glue作业更复杂的操作、监控及运维知识。\n*   **错误选项3（EC2实例集群+cron任务）：** 该方案运维成本最高。用户需管理服务器集群（EC2实例），包括资源调配、系统补丁、规模扩展及底层操作系统与应用的监控，这与\"最低运维成本\"的要求完全背道而驰。\n\n**关键区别：** 正解方案准确识别出此为**每日批处理转换**场景而非实时处理场景，因此选用全托管且专为批处理设计的服务（S3文件网关用于数据摄取，AWS Glue用于数据处理），从而彻底规避基础设施管理需求。而错误选项要么引入不必要的实时处理环节，要么将本可托管的批处理工作强行纳入服务器管理模式。",
+      "zhcn": "我们先分析一下题目要点：  \n\n- 已有 20,000 家门店，通过 Kinesis Data Firehose 将购买记录送到 S3。  \n- 数据科学团队发现现有属性可以组合成新特征，以改进 ML 模型。  \n- 需要对这些记录做转换（transform），生成新的特征。  \n- 要求 **最小运维开销**（LEAST operational overhead）。  \n- 模型每天重新训练一次，所以转换后的数据每天生成一次即可（但数据是持续流入的）。  \n\n---\n\n**选项分析**  \n\n**[A] 用 Kinesis Data Firehose 的数据转换功能 + Lambda 函数**  \n- Firehose 本身就支持调用 Lambda 来转换数据，然后再送到 S3。  \n- 这是无服务器的，自动扩展，运维极少。  \n- 数据在进入 S3 之前就完成转换，不需要额外调度或集群。  \n\n**[B] 用 EventBridge 定时触发 Lambda 来启动 EMR 集群（运行 Spark）处理 S3 中积累的数据**  \n- 这是批处理方式，但需要管理 EMR 集群（虽然可自动关停，但仍有配置、权限、版本等运维）。  \n- 比 A 方案运维开销大。  \n\n**[C] 在门店部署 S3 File Gateway，更新门店软件传到网关，再用 Glue 每天转换**  \n- 引入 S3 File Gateway 硬件/VM 部署到 20,000 个门店，运维成本极高，没必要（当前已经是直接传到 AWS）。  \n- Glue 是无服务器，但门店端的改动和网关管理太复杂。  \n\n**[D] 启动一批 EC2 实例，用 cron 每天转换 S3 数据**  \n- 需要管理 EC2 实例（打补丁、监控、伸缩），运维开销大。  \n\n---\n\n**结论**  \n既然数据已经在通过 Kinesis Data Firehose 进入 S3，最简单的就是启用 Firehose 内置的 Lambda 转换功能，这样数据自动转换后落地 S3，无需额外调度或资源管理。  \n\n**答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "214"
+  },
+  {
+    "id": "240",
+    "question": {
+      "enus": "A machine learning (ML) engineer at a bank is building a data ingestion solution to provide transaction features to financial ML models. Raw transactional data is available in an Amazon Kinesis data stream. The solution must compute rolling averages of the ingested data from the data stream and must store the results in Amazon SageMaker Feature Store. The solution also must serve the results to the models in near real time. Which solution will meet these requirements? ",
+      "zhcn": "某银行的一位机器学习工程师正在构建数据摄取方案，旨在为金融机器学习模型提供交易特征。原始交易数据可通过Amazon Kinesis Data Streams获取。该方案需根据数据流计算输入数据的滚动平均值，并将结果存储至Amazon SageMaker特征库，同时还需以近实时方式将处理结果传输至模型端。请问何种方案可满足上述需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Kinesis Data Firehose将数据载入Amazon S3存储桶，随后借助SageMaker处理作业对数据进行聚合处理，并将结果以在线特征组的形式导入SageMaker Feature Store库。",
+          "enus": "Load the data into an Amazon S3 bucket by using Amazon Kinesis Data Firehose. Use a SageMaker Processing job to aggregate the  data and to load the results into SageMaker Feature Store as an online feature group."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "将数据流直接写入SageMaker Feature Store库，创建在线特征组。通过调用SageMaker GetRecord API操作，在特征存储库内实时计算滚动平均值。",
+          "enus": "Write the data directly from the data stream into SageMaker Feature Store as an online feature group. Calculate the rolling averages in  place within SageMaker Feature Store by using the SageMaker GetRecord API operation."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "通过Amazon Kinesis Data Analytics平台的SQL应用程序对数据流进行实时处理，计算移动平均值并生成结果流。随后由定制化AWS Lambda函数接收结果流，将处理后的数据作为在线特征组发布至SageMaker Feature Store平台。",
+          "enus": "Consume the data stream by using an Amazon Kinesis Data Analytics SQL application that calculates the rolling averages. Generate a  result stream. Consume the result stream by using a custom AWS Lambda function that publishes the results to SageMaker Feature Store  as an online feature group."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose将数据载入Amazon S3存储桶，随后通过SageMaker处理作业将数据作为离线特征组存入SageMaker特征库。查询时动态计算滚动平均值。",
+          "enus": "Load the data into an Amazon S3 bucket by using Amazon Kinesis Data Firehose. Use a SageMaker Processing job to load the data into  SageMaker Feature Store as an ofiine feature group. Compute the rolling averages at query time."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**\"使用 Amazon Kinesis Data Firehose 将数据加载至 Amazon S3 存储桶，通过 SageMaker 处理作业对数据进行聚合计算，并将结果作为在线特征组存入 SageMaker 特征库。\"**\n\n### 方案解析\n本方案需满足三个核心要求：\n1.  **数据来源**：处理 Kinesis 数据流中的原始数据\n2.  **计算逻辑**：实现滚动平均值计算（基于时间窗口的聚合运算）\n3.  **存储与服务**：将处理结果存入 SageMaker 特征库，并为模型提供**近实时**特征服务\n\n所选方案完美契合上述需求：\n*   **Kinesis Data Firehose** 能稳定地将流式数据导入 Amazon S3，建立持久化存储层\n*   **SageMaker 处理作业** 专精于对 S3 存储数据进行批量化聚合计算与特征工程（如滚动平均值计算）\n*   将**预聚合结果**导入 SageMaker 特征库的**在线特征组**，可通过 `GetRecord` API 实现毫秒级特征检索，满足近实时服务要求\n\n### 其他选项辨析\n*   **错误选项 1**：SageMaker 特征库本质是存储检索服务，不具备实时计算能力。其 `GetRecord` API 仅用于调用预计算特征，无法执行滚动平均值等动态运算\n*   **错误选项 2**：虽然 Kinesis Data Analytics 支持流式聚合计算，但该方案存在架构冗余。通过 Lambda 函数中转处理结果再写入特征库的方式，相较于正确答案直接批处理的方案，既增加了系统复杂性，又引入了不必要的故障点\n*   **错误选项 3**：**离线特征组**专为批量分析与低成本存储设计，其查询时计算模式无法满足低延迟要求。若在预测请求时实时计算滚动平均值，将严重违背近实时响应需求",
+      "zhcn": "我们来逐步分析一下这个题目。  \n\n---\n\n## 1. 题目关键需求\n\n- 数据源：**Kinesis Data Stream**（实时交易数据流）  \n- 处理要求：**计算滚动平均值（rolling averages）**  \n- 存储要求：**存入 SageMaker Feature Store**，并且是 **online feature group**（供模型近实时查询）  \n- 整体延迟：**near real time**（近实时）\n\n---\n\n## 2. 选项分析\n\n### [A]  \nKinesis Data Firehose → S3 → SageMaker Processing Job（批处理）→ Feature Store（online feature group）  \n- **问题**：Firehose + S3 + Processing Job 不是近实时，Processing Job 是周期性调度的批处理，延迟高（分钟到小时级），不满足近实时。\n\n### [B]  \n直接从 Kinesis Data Stream 写入 Feature Store（online feature group），然后通过 GetRecord API 在 Feature Store 内部计算滚动平均。  \n- **问题**：SageMaker Feature Store 本身不提供在存储层计算滚动平均的功能，GetRecord 只是查询单个特征记录，不能做时间窗口聚合计算。\n\n### [C]  \nKinesis Data Analytics（SQL 应用）从 Kinesis Data Stream 读取数据 → 用 SQL 计算滚动平均 → 输出到另一个 Kinesis Data Stream → Lambda 消费并写入 Feature Store（online feature group）。  \n- **优点**：Kinesis Data Analytics 支持流式 SQL 的滚动窗口/滑动窗口聚合，延迟低（秒级），Lambda 可以近实时写入 Feature Store，满足所有条件。\n\n### [D]  \nFirehose → S3 → Processing Job → 存入 Feature Store 的 **offline feature group**，查询时再计算滚动平均。  \n- **问题**：offline feature group 不适合在线模型推理的低延迟查询，且查询时计算滚动平均需要历史数据，通常在线推理时不会做这种复杂聚合，会破坏低延迟。\n\n---\n\n## 3. 为什么选 C\n\n- **Kinesis Data Analytics (now part of Amazon Managed Service for Apache Flink)** 适合实时流上的聚合计算（如滚动平均）。  \n- 结果流 → Lambda → Feature Store（online）是标准近实时特征流水线模式。  \n- 其他选项要么延迟太高（A、D），要么功能不支持（B）。\n\n---\n\n**答案：C** ✅"
+    },
+    "answer": "C",
+    "o_id": "240"
+  },
+  {
+    "id": "241",
+    "question": {
+      "enus": "Each morning, a data scientist at a rental car company creates insights about the previous day’s rental car reservation demands. The company needs to automate this process by streaming the data to Amazon S3 in near real time. The solution must detect high-demand rental cars at each of the company’s locations. The solution also must create a visualization dashboard that automatically refreshes with the most recent data. Which solution will meet these requirements with the LEAST development time? ",
+      "zhcn": "每日清晨，某租车公司的数据科学家会针对前一日租车预订需求进行分析并生成洞察报告。该公司需通过近乎实时数据流将信息传输至Amazon S3来自动化此流程。解决方案必须能实时识别各营业点的高需求车型，同时自动生成可随最新数据动态更新的可视化仪表盘。在满足上述需求的前提下，何种方案能以最短开发周期实现该目标？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose将预约数据实时传输至Amazon S3存储服务，通过Amazon QuickSight的机器学习洞察功能识别高需求异常值，并在QuickSight平台实现数据可视化呈现。",
+          "enus": "Use Amazon Kinesis Data Firehose to stream the reservation data directly to Amazon S3. Detect high-demand outliers by using Amazon  QuickSight ML Insights. Visualize the data in QuickSight."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Streams服务将预约数据实时传输至Amazon S3存储平台。通过调用Amazon SageMaker中经过训练的随机切割森林(RCF)模型，精准识别高需求异常数据点。最终在亚马逊QuickSight可视化平台呈现数据洞察。",
+          "enus": "Use Amazon Kinesis Data Streams to stream the reservation data directly to Amazon S3. Detect high-demand outliers by using the  Random Cut Forest (RCF) trained model in Amazon SageMaker. Visualize the data in Amazon QuickSight."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose将预约数据直接实时传输至Amazon S3存储服务，通过Amazon SageMaker中经过训练的随机切割森林（RCF）模型检测高需求异常值，最终在Amazon QuickSight平台实现数据可视化呈现。",
+          "enus": "Use Amazon Kinesis Data Firehose to stream the reservation data directly to Amazon S3. Detect high-demand outliers by using the  Random Cut Forest (RCF) trained model in Amazon SageMaker. Visualize the data in Amazon QuickSight."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Streams将预约数据直接流式传输至Amazon S3存储服务，通过Amazon QuickSight ML Insights功能智能检测高需求异常值，并在QuickSight平台实现数据可视化呈现。",
+          "enus": "Use Amazon Kinesis Data Streams to stream the reservation data directly to Amazon S3. Detect high-demand outliers by using Amazon  QuickSight ML Insights. Visualize the data in QuickSight."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**使用 Amazon Kinesis Data Firehose 将预订数据直接流式传输至 Amazon S3，通过 Amazon QuickSight ML Insights 检测高需求异常值，并在 QuickSight 中实现数据可视化。**\n\n**核心思路：**  \n- **Kinesis Data Firehose** 相比 Kinesis Data Streams 更简洁，无需借助 Lambda 或额外处理代码即可将数据直接输送至 S3，极大降低开发复杂度。  \n- **QuickSight ML Insights** 能自动检测异常现象（如高需求波动），无需在 SageMaker 中进行定制化模型训练，相比自行构建并部署随机切割森林模型，可显著缩短开发周期。  \n- Firehose（简化数据摄取）与 QuickSight ML（无代码异常检测）的组合完美契合“最短开发时间”的要求。  \n\n**其他选项的不足之处：**  \n- 采用 **Kinesis Data Streams** 的方案需编写定制代码处理数据并保存至 S3，增加了开发复杂度。  \n- 选用 **SageMaker 搭配随机切割森林模型** 需进行模型训练、部署及系统集成，相比全托管的 QuickSight ML Insights 方案会延长开发时间。  \n\n**常见误区：** 选择 Kinesis Data Streams 或 SageMaker 看似更具灵活性，但实则违背了“最短开发时间”这一核心约束条件。",
+      "zhcn": "我们先梳理一下需求：  \n\n1. **数据流近实时传到 S3**  \n2. **检测每个地点的高需求（异常/离群点）**  \n3. **可视化仪表板自动刷新最新数据**  \n4. **最少开发时间**  \n\n---\n\n### 选项分析\n\n**A**  \n- Kinesis Data Firehose 直接到 S3（简单，无需写消费逻辑）  \n- 用 QuickSight ML Insights 自动检测异常（无需自己建模，点几下配置就行）  \n- QuickSight 可视化（内置自动刷新）  \n\n**B**  \n- Kinesis Data Streams（需要写消费者代码处理数据到 S3，开发量更大）  \n- 用 SageMaker RCF 模型（需要开发训练/部署/调用流程）  \n- QuickSight 可视化  \n\n**C**  \n- Kinesis Data Firehose（好）  \n- 用 SageMaker RCF（需要开发建模流程）  \n- QuickSight 可视化  \n\n**D**  \n- Kinesis Data Streams（开发量大）  \n- QuickSight ML Insights（自动检测）  \n- QuickSight 可视化  \n\n---\n\n### 关键点比较\n- **Kinesis Data Firehose** vs **Kinesis Data Streams**：  \n  Firehose 是零代码直接存 S3，Streams 需要写代码消费，所以 Firehose 开发时间更少。  \n\n- **QuickSight ML Insights** vs **SageMaker RCF**：  \n  QuickSight ML Insights 是内置的自动异常检测，点选即可，无需建模部署；SageMaker RCF 需要自己开发整个 ML 流水线，开发时间长。  \n\n所以 **A** 选项同时满足：  \n- 数据传输用 Firehose（简单）  \n- 异常检测用 QuickSight ML Insights（简单）  \n- 可视化用 QuickSight（直接集成）  \n\n**开发时间最少**。  \n\n---\n\n**答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "241"
+  },
+  {
+    "id": "270",
+    "question": {
+      "enus": "A company has a podcast platform that has thousands of users. The company implemented an algorithm to detect low podcast engagement based on a 10-minute running window of user events such as listening to, pausing, and closing the podcast. A machine learning (ML) specialist is designing the ingestion process for these events. The ML specialist needs to transform the data to prepare the data for inference. How should the ML specialist design the transformation step to meet these requirements with the LEAST operational effort? ",
+      "zhcn": "某公司旗下播客平台拥有数千名用户。为检测用户参与度较低的播客内容，该公司采用基于10分钟滚动窗口的算法，通过分析用户收听、暂停及关闭播客等行为数据进行判断。当前，一位机器学习专家正在设计这些行为数据的采集流程。该专家需对原始数据进行转换处理，以满足模型推理需求。在满足各项技术要求的前提下，如何以最小的运维成本设计数据转换环节？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "采用亚马逊托管式Apache Kafka流处理服务（Amazon MSK）集群接收事件数据流，并通过Amazon Kinesis Data Analytics服务（Amazon Kinesis Data Analytics）在推理前对最近10分钟的数据进行实时转换。",
+          "enus": "Use an Amazon Managed Streaming for Apache Kafka (Amazon MSK) cluster to ingest event data. Use Amazon Kinesis Data Analytics  to transform the most recent 10 minutes of data before inference."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "运用Amazon Kinesis Data Streams实时采集事件数据，通过Amazon Kinesis Data Firehose将数据存储至Amazon S3对象存储服务。在模型推理前，采用AWS Lambda函数对最近十分钟的数据流进行动态处理。",
+          "enus": "Use Amazon Kinesis Data Streams to ingest event data. Store the data in Amazon S3 by using Amazon Kinesis Data Firehose. Use AWS  Lambda to transform the most recent 10 minutes of data before inference."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Streams实时采集事件数据，并通过Amazon Kinesis Data Analytics服务对最近十分钟的数据进行预处理，继而完成推理计算。",
+          "enus": "Use Amazon Kinesis Data Streams to ingest event data. Use Amazon Kinesis Data Analytics to transform the most recent 10 minutes of  data before inference."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用亚马逊托管式Apache Kafka流处理服务（Amazon MSK）集群接收事件数据流，并通过AWS Lambda在推理前对最近10分钟的数据进行实时转换。",
+          "enus": "Use an Amazon Managed Streaming for Apache Kafka (Amazon MSK) cluster to ingest event data. Use AWS Lambda to transform the  most recent 10 minutes of data before inference."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是 **“使用 Amazon Kinesis Data Streams 摄取事件数据，在推理前通过 Amazon Kinesis Data Analytics 对最近10分钟的数据进行转换。”** 该方案具有 **最低运维负担**，因为 Kinesis Data Streams 原生集成 Kinesis Data Analytics，后者支持 **内置滑动窗口查询** 功能，可直接处理10分钟时间窗口而无需定制代码。整套解决方案完全托管，既避免了集群管理（如 MSK 方案），也无需编写和维护 Lambda 转换逻辑。\n\n**其他选项的不足之处：**\n- **MSK + Kinesis Data Analytics**：与无服务器的 Kinesis Data Streams 相比，MSK 需额外承担集群管理的运维负担。\n- **Kinesis Data Streams + S3 + Lambda**：先存储至 S3 会引入延迟，且需通过 Lambda 编写时间窗口处理逻辑，增加开发维护成本。\n- **MSK + Lambda**：既需管理 MSK 集群，又要实现 Lambda 窗口逻辑，运维复杂度最高。\n\n核心在于直接利用 **原生流式分析服务**（Kinesis Data Analytics）对数据流进行时间窗口转换，以最简配置实现高效处理。",
+      "zhcn": "我们先分析一下题目关键点：  \n\n- **数据源**：用户事件（听、暂停、关闭播客）  \n- **分析窗口**：10 分钟的滑动窗口（running window）  \n- **目标**：检测低参与度（需要实时或近实时推理）  \n- **要求**：设计数据转换步骤，用 **最少运维工作量** 实现  \n\n---\n\n### 选项分析\n\n**[A] MSK + Kinesis Data Analytics**  \n- MSK 是 Kafka 托管服务，适合数据摄取，但这里事件流直接用 Kinesis Data Streams 会更简单（与 AWS 服务集成更直接）。  \n- Kinesis Data Analytics（尤其是 SQL 版或 Apache Flink 版）可以直接在流上做 10 分钟窗口聚合，但 MSK 需要先把数据送到 KDA，多一步连接器配置。  \n- 运维量比纯 Kinesis 方案稍高。\n\n**[B] Kinesis Data Streams + Kinesis Data Firehose → S3 + Lambda**  \n- Firehose 存 S3 是批处理/归档场景，不适合实时 10 分钟窗口分析（会有延迟）。  \n- Lambda 需要自己管理窗口状态（例如用 DynamoDB 跟踪 10 分钟事件），代码复杂且运维量高。  \n\n**[C] Kinesis Data Streams + Kinesis Data Analytics**  \n- Kinesis Data Streams 直接收事件。  \n- Kinesis Data Analytics（Apache Flink）内置支持事件时间、滑动窗口聚合，直接 SQL 或 Flink 程序即可，完全托管，无需管理服务器或状态存储。  \n- 运维量最低。\n\n**[D] MSK + Lambda**  \n- 类似 B，Lambda 需要自己实现 10 分钟窗口聚合（检查点、状态管理），代码复杂，运维量高。  \n\n---\n\n### 为什么选 C\n- **Kinesis Data Analytics** 是专门为实时流数据转换和窗口聚合设计的托管服务，无需管理底层计算资源。  \n- 直接对接 Kinesis Data Streams，集成最简单，适合 running window 分析。  \n- 相比 Lambda 方案，不需要写复杂的状态管理逻辑，运维负担最小。  \n\n---\n\n**答案：C** ✅"
+    },
+    "answer": "C",
+    "o_id": "270"
+  },
+  {
+    "id": "273",
+    "question": {
+      "enus": "A network security vendor needs to ingest telemetry data from thousands of endpoints that run all over the world. The data is transmitted every 30 seconds in the form of records that contain 50 fields. Each record is up to 1 KB in size. The security vendor uses Amazon Kinesis Data Streams to ingest the data. The vendor requires hourly summaries of the records that Kinesis Data Streams ingests. The vendor will use Amazon Athena to query the records and to generate the summaries. The Athena queries will target 7 to 12 of the available data fields. Which solution will meet these requirements with the LEAST amount of customization to transform and store the ingested data? ",
+      "zhcn": "一家网络安全服务商需要接收来自全球各地数千个终端设备的遥测数据。这些数据每30秒以记录形式传输，每条记录包含50个字段，最大容量为1KB。该服务商采用Amazon Kinesis Data Streams进行数据接入，并要求每小时对接入的记录生成汇总报告。后续将使用Amazon Athena服务查询数据记录并生成摘要，查询操作将针对50个可用字段中的7至12个字段。请问在满足以下条件的前提下，哪种解决方案能够以最小的数据转换与存储定制化成本实现上述需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "利用AWS Lambda每小时读取并汇总数据，通过Amazon Kinesis Data Firehose对数据进行转换后，存储至Amazon S3中。",
+          "enus": "Use AWS Lambda to read and aggregate the data hourly. Transform the data and store it in Amazon S3 by using Amazon Kinesis Data  Firehose."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose每小时读取并聚合数据，通过临时搭建的Amazon EMR集群对数据进行转换后，存储至Amazon S3中。",
+          "enus": "Use Amazon Kinesis Data Firehose to read and aggregate the data hourly. Transform the data and store it in Amazon S3 by using a  short-lived Amazon EMR cluster."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Analytics对数据进行每小时读取与聚合处理，并通过Amazon Kinesis Data Firehose转换数据格式后，将其存储至Amazon S3中。",
+          "enus": "Use Amazon Kinesis Data Analytics to read and aggregate the data hourly. Transform the data and store it in Amazon S3 by using  Amazon Kinesis Data Firehose."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose每小时读取并聚合数据，再通过AWS Lambda对数据进行转换后存储至Amazon S3。",
+          "enus": "Use Amazon Kinesis Data Firehose to read and aggregate the data hourly. Transform the data and store it in Amazon S3 by using AWS  Lambda."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**\"使用 Amazon Kinesis Data Analytics 每小时读取并聚合数据，再通过 Amazon Kinesis Data Firehose 转换数据并存储至 Amazon S3。\"**  \n\n**设计思路解析：**  \n- 需求要求对持续输入的数据生成**每小时汇总报告**，且仅需处理50个字段中的7至12个字段。这意味着需要进行基于时间窗口的**聚合运算**（如计数、求平均值等），而非简单的格式转换。  \n- **Kinesis Data Analytics (KDA)** 专为流式数据设计，支持通过SQL进行实时或分时段分析，无需编写定制代码即可实现每小时聚合。  \n- KDA可将聚合结果传递至 **Kinesis Data Firehose**，由该服务以托管方式将数据交付至Amazon S3存储。  \n- 此方案最大程度减少了定制开发：KDA原生支持时间窗口与聚合计算，Firehose则专注处理存储流程。  \n\n**其他方案为何不适用：**  \n- **Lambda方案**：需编写和维护聚合逻辑的定制代码，难以高效处理多分片流式数据，且缺乏对每小时窗口的状态管理机制。  \n- **Firehose + EMR组合**：Firehose本身无法执行聚合操作；引入EMR需配置集群和任务，过度复杂且不符合\"最小定制化\"要求。  \n- **Firehose + Lambda组合**：虽可通过Lambda转换数据，但该服务适用于逐条记录处理，不适合跨数千终端的有状态每小时聚合场景。  \n\n**核心结论：** KDA是专为流式数据聚合构建的服务，既能满足每小时汇总需求，又可最大限度降低定制化开发成本。",
+      "zhcn": "我们先来梳理一下题目中的关键需求：  \n\n1. **数据源**：全球数千个端点，每 30 秒发送一条记录，每条记录最多 1 KB，包含 50 个字段。  \n2. **数据接收**：使用 **Amazon Kinesis Data Streams** 进行数据接入。  \n3. **处理要求**：每小时生成一次数据摘要（summaries）。  \n4. **查询工具**：使用 **Amazon Athena** 查询数据并生成摘要，查询时只用到 7~12 个字段。  \n5. **目标**：用 **最少的定制化代码** 来转换和存储数据。  \n\n---\n\n## 选项分析\n\n### [A] 使用 AWS Lambda 读取并每小时聚合数据，用 Kinesis Data Firehose 转换并存储到 S3  \n- Lambda 需要写代码处理聚合逻辑，并且要考虑分片、并行处理、状态管理（如窗口聚合）等，定制化较多。  \n- 虽然 Firehose 可以最终存到 S3，但 Lambda 作为消费者会增加运维和代码复杂性。  \n\n### [B] 使用 Kinesis Data Firehose 读取并每小时聚合，用 EMR 集群转换并存储到 S3  \n- Firehose 本身支持按时间或大小批量写入 S3，但 **Firehose 不直接做复杂聚合**，它主要做简单的转换（比如 Lambda 函数转换）或直接存储。  \n- 这里说 “Firehose 读取并聚合” 不准确，Firehose 的“聚合”一般是指缓冲后批量写入，不是计算聚合摘要。  \n- 还要额外启动短期 EMR 集群做转换，架构复杂，定制化多。  \n\n### [C] 使用 Kinesis Data Analytics 读取并每小时聚合，用 Kinesis Data Firehose 存储到 S3  \n- Kinesis Data Analytics（尤其是 SQL 版本）可以直接连接 Kinesis Data Streams，用 SQL 做窗口聚合（每小时），然后输出到 Firehose 再写入 S3。  \n- SQL 实现聚合逻辑非常简单，几乎无代码（只有 SQL 语句），符合“最少定制化”要求。  \n- Firehose 在这里只是作为存储输送管道，不需要做复杂转换。  \n\n### [D] 使用 Kinesis Data Firehose 读取并聚合，用 Lambda 转换并存储到 S3  \n- 同样的问题：Firehose 本身不提供聚合计算，除非调用 Lambda 做转换，但 Lambda 转换功能有限（单条记录或微批处理），不适合做跨记录的窗口聚合。  \n- 若要做每小时聚合，需要在 Lambda 中维护状态，这很复杂，定制化多。  \n\n---\n\n## 结论  \n**Kinesis Data Analytics** 是专门为实时流数据做聚合分析而设计的，支持基于 SQL 的滚动窗口或滑动窗口聚合，并能将结果发送到 Firehose 再存到 S3。  \n这样既满足了每小时汇总的需求，又最大程度减少了自定义代码，因此 **C** 是最佳答案。  \n\n**答案：C** ✅"
+    },
+    "answer": "C",
+    "o_id": "273"
+  },
+  {
+    "id": "288",
+    "question": {
+      "enus": "A company processes millions of orders every day. The company uses Amazon DynamoDB tables to store order information. When customers submit new orders, the new orders are immediately added to the DynamoDB tables. New orders arrive in the DynamoDB tables continuously. A data scientist must build a peak-time prediction solution. The data scientist must also create an Amazon QuickSight dashboard to display near real-time order insights. The data scientist needs to build a solution that will give QuickSight access to the data as soon as new order information arrives. Which solution will meet these requirements with the LEAST delay between when a new order is processed and when QuickSight can access the new order information? ",
+      "zhcn": "一家公司每日需处理数百万笔订单。该公司采用Amazon DynamoDB数据表存储订单信息。当客户提交新订单时，这些订单会即时录入DynamoDB数据表中。新订单数据持续不断地流入DynamoDB数据表。数据科学家需要构建一套高峰时段预测方案，同时创建Amazon QuickSight仪表板以呈现近实时订单洞察。该方案需确保QuickSight能在新订单数据录入后立即获取信息。请问在满足以下条件的前提下，哪种方案能最大程度缩短新订单处理完成与QuickSight获取新订单信息之间的延迟？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "使用AWS Glue将数据从Amazon DynamoDB导出至Amazon S3，并配置QuickSight以访问Amazon S3中的数据。",
+          "enus": "Use AWS Glue to export the data from Amazon DynamoDB to Amazon S3. Configure QuickSight to access the data in Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Streams将Amazon DynamoDB中的数据导出至Amazon S3，并配置QuickSight以访问Amazon S3内的数据。",
+          "enus": "Use Amazon Kinesis Data Streams to export the data from Amazon DynamoDB to Amazon S3. Configure QuickSight to access the data  in Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "借助 QuickSight 的 API 接口，可直接调用存储在 Amazon DynamoDB 中的数据。",
+          "enus": "Use an API call from QuickSight to access the data that is in Amazon DynamoDB directly."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "利用Amazon Kinesis Data Firehose将Amazon DynamoDB中的数据导出至Amazon S3存储服务，并配置QuickSight数据分析工具以访问Amazon S3内的数据资源。",
+          "enus": "Use Amazon Kinesis Data Firehose to export the data from Amazon DynamoDB to Amazon S3. Configure QuickSight to access the data  in Amazon S3."
+        },
+        "option_flag": true
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**使用 Amazon Kinesis Data Streams 将数据从 Amazon DynamoDB 导出至 Amazon S3，并配置 QuickSight 访问 Amazon S3 中的数据**。  \n**理由如下**：  \n本方案需实现新订单数据存入 DynamoDB 后，能被 QuickSight 以**最低延迟**访问。  \n- **Kinesis Data Streams** 具备低延迟、实时流处理能力。结合 DynamoDB Streams 与 Kinesis Data Streams 的联动机制，可实现近乎实时的数据捕获与 S3 导出。随后通过 QuickSight 的 SPICE 引擎高频更新数据集，最大限度缩短延迟。  \n- **AWS Glue** 作为批处理 ETL 工具，非实时方案，会引入显著延迟。  \n- **QuickSight 直接调用 DynamoDB API** 并非支持大规模近实时分析的规范用法，对于百万级订单数据的处理效率低下。  \n- **Kinesis Data Firehose** 在写入 S3 前存在数据缓冲机制（如按时间或大小阈值），相较能立即传输数据至自定义处理流程的 Data Streams，其延迟更高。  \n因此，在此近实时场景中，Kinesis Data Streams 可提供最优延迟表现。",
+      "zhcn": "我们先分析一下题目关键点：  \n\n- 数据源：DynamoDB 表，新订单持续写入。  \n- 需求：QuickSight 要**尽快**访问到新订单数据（near real-time）。  \n- 目标：**最小延迟**（LEAST delay）从订单入库到 QuickSight 可查。  \n\n---\n\n**选项分析**  \n\n**[A] AWS Glue 导出 DynamoDB 到 S3，QuickSight 查 S3**  \n- AWS Glue 通常用于批处理 ETL，不是实时流式传输，会有较大延迟（比如按小时或天调度），不满足 near real-time。  \n\n**[B] Kinesis Data Streams 导出 DynamoDB 到 S3**  \n- 但 KDS 本身不直接集成 DynamoDB 作为数据源（除非用 DynamoDB Streams + Lambda 推送到 KDS），而且 KDS 需要自己写消费者写入 S3，延迟虽然可以较低，但比 Kinesis Data Firehose 更复杂且不是全托管。  \n- 另外 KDS 数据不会自动批量写入 S3，需要额外组件，延迟可能略高于 Firehose（因为 Firehose 针对这种场景优化）。  \n\n**[C] QuickSight 直接 API 调用 DynamoDB**  \n- QuickSight 不支持直接连接 DynamoDB（没有原生连接器），所以不可行。  \n\n**[D] Kinesis Data Firehose 导出 DynamoDB 到 S3**  \n- 实际流程是：DynamoDB Streams → Lambda → Kinesis Data Firehose → S3（或直接通过其他方式将数据发送到 Firehose）。  \n- Firehose 可以配置最短 60 秒的缓冲区，实现近实时 S3 写入，然后 QuickSight 用 SPICE 加速或直接查 S3 新文件。  \n- 这是 AWS 推荐的 near real-time 数据湖到 QuickSight 的方案，延迟最小（分钟级）。  \n\n---\n\n**结论**  \n在题目给出的四个方案中，唯一能实现**近实时、全托管、最小延迟**的就是 **D**，因为它结合了 DynamoDB Streams（实时捕获更改）与 Kinesis Data Firehose（低延迟传输到 S3）的流水线。  \n\n---\n\n**答案：D ✅**"
+    },
+    "answer": "D",
+    "o_id": "288"
+  },
+  {
+    "id": "289",
+    "question": {
+      "enus": "A data engineer is preparing a dataset that a retail company will use to predict the number of visitors to stores. The data engineer created an Amazon S3 bucket. The engineer subscribed the S3 bucket to an AWS Data Exchange data product for general economic indicators. The data engineer wants to join the economic indicator data to an existing table in Amazon Athena to merge with the business data. All these transformations must finish running in 30-60 minutes. Which solution will meet these requirements MOST cost-effectively? ",
+      "zhcn": "一位数据工程师正在为某零售公司准备用于预测门店客流量的数据集。该工程师创建了一个Amazon S3存储桶，并为其订阅了AWS Data Exchange中关于通用经济指标的数据产品。现需将经济指标数据与Amazon Athena内现有业务数据表进行关联整合，且所有数据转换操作必须在30-60分钟内完成。下列哪种解决方案能以最具成本效益的方式满足这些需求？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "将AWS Data Exchange产品配置为Amazon Kinesis Data Streams的生产源，通过Amazon Kinesis Data Firehose传输流将数据实时输送至Amazon S3存储桶。随后运行AWS Glue作业，将既有业务数据与Athena数据表进行整合处理，最终将处理结果回写至Amazon S3。",
+          "enus": "Configure the AWS Data Exchange product as a producer for an Amazon Kinesis data stream. Use an Amazon Kinesis Data Firehose  delivery stream to transfer the data to Amazon S3. Run an AWS Glue job that will merge the existing business data with the Athena table.  Write the result set back to Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在AWS Data Exchange S3存储桶上配置S3事件以触发AWS Lambda函数。通过Lambda函数调用Amazon SageMaker Data Wrangler，将现有业务数据与Athena数据表进行整合处理，并将最终结果集回传至Amazon S3存储空间。",
+          "enus": "Use an S3 event on the AWS Data Exchange S3 bucket to invoke an AWS Lambda function. Program the Lambda function to use Amazon  SageMaker Data Wrangler to merge the existing business data with the Athena table. Write the result set back to Amazon S3."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在AWS Data Exchange S3存储桶上配置S3事件以触发AWS Lambda函数。通过Lambda函数调用AWS Glue作业，将现有业务数据与Athena表进行整合，最终将处理结果回传至Amazon S3。",
+          "enus": "Use an S3 event on the AWS Data Exchange S3 bucket to invoke an AWS Lambda function. Program the Lambda function to run an AWS  Glue job that will merge the existing business data with the Athena table. Write the results back to Amazon S3."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "部署一套Amazon Redshift集群，订阅AWS Data Exchange服务并利用该服务创建Amazon Redshift数据表。在Redshift中完成数据整合处理，最终将处理结果回传至Amazon S3存储空间。",
+          "enus": "Provision an Amazon Redshift cluster. Subscribe to the AWS Data Exchange product and use the product to create an Amazon Redshift  table. Merge the data in Amazon Redshift. Write the results back to Amazon S3."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "**问题与选项分析**  \n正确答案是：**\"配置一个Amazon Redshift集群，订阅AWS Data Exchange产品，利用该产品创建Amazon Redshift表，在Redshift中完成数据合并，最后将结果写回Amazon S3。\"**  \n\n此方案最具成本效益的原因如下：  \n\n1. **直接集成优势**  \n   AWS Data Exchange与Amazon Redshift具备原生直接集成能力。通过简单的SQL命令（`IMPORT FROM DATAEXCHANGE`）即可将订阅的数据产品直接导入Redshift表。这一流程简洁高效，无需中间环节。  \n\n2. **关联查询的性能优势**  \n   当前需求是将大规模外部数据集（经济指标）与现有Athena表进行关联查询。Amazon Redshift专为处理海量数据的高性能复杂SQL查询及关联操作而设计，相比其他服务能更快速、高效地完成此类数据合并任务。  \n\n3. **任务成本优化**  \n   对于需在30-60分钟内完成的单次或低频数据预处理任务，临时启用Redshift集群并在任务结束后立即关闭是极佳的成本控制策略。集群仅按运行时长计费，其高性能保障任务按时完成，避免了其他服务因效率不足可能产生的更高持续性成本。  \n\n**其他选项的局限性分析**  \n- **Kinesis/Firehose/Glue组合方案**  \n  该方案过于复杂且不适用当前场景。Kinesis与Firehose专为持续实时数据流设计，而本题数据源为订阅型产品而非实时数据流。引入流处理管道会为批处理任务增加不必要的成本与复杂度，即使后续仍需调用Glue作业，整体流程仍存在效率缺陷。  \n\n- **Lambda/SageMaker Data Wrangler组合方案**  \n  SageMaker Data Wrangler虽擅长机器学习数据准备，但用于简单数据关联任务显得笨重且昂贵。通过Lambda触发此类操作并非典型成本优化模式，相比Redshift这类数据仓库工具，该方案会产生更高的SageMaker处理成本。  \n\n- **Lambda/Glue作业组合方案**  \n  虽比SageMaker方案简洁，但仍存不足。通过S3事件触发Lambda调用Glue作业是常见模式，但Glue作为无服务器Spark环境存在至少1分钟的最小计费单位，且对于此类重度依赖SQL的操作，其每分钟成本高于临时配置的Redshift集群。在30-60分钟的时间约束下，合理规格的Redshift集群更具速度与成本优势。  \n\n**核心判别要点与常见误区**  \n关键在于选择适合任务的工具。正确答案精准把握了**大规模SQL关联查询**这一核心需求，因此**Amazon Redshift**成为最优解。常见误区是盲目选择Glue或Lambda等通用无服务器服务，却忽略其对特定高性能SQL操作的低效性与更高成本。AWS Data Exchange与Redshift的直接集成，正是正确答案能够兼顾简洁性与成本效益的关键所在。",
+      "zhcn": "我们来一步步分析这道题。  \n\n**题目关键信息：**  \n- 数据工程师有一个 S3 桶，订阅了 AWS Data Exchange 的经济指标数据产品。  \n- 需要将经济指标数据与 Amazon Athena 中已有的业务数据表做 join。  \n- 所有转换必须在 30–60 分钟内完成。  \n- 要求 **most cost-effectively**（成本最优）。  \n\n---\n\n### 选项分析\n\n**[A] 用 Kinesis Data Stream + Kinesis Data Firehose 到 S3，再用 Glue 合并**  \n- Data Exchange 数据产品通常是按计划更新（如每天一次），不是实时流数据。  \n- 用 Kinesis 会增加不必要的流处理成本，不经济。  \n- 流程复杂，且 Kinesis 对批量文件数据不划算。  \n\n**[B] S3 事件触发 Lambda，Lambda 调用 SageMaker Data Wrangler 合并**  \n- SageMaker Data Wrangler 适合数据准备和特征工程，但它是交互式工具，通常用于数据科学工作流，不适合低成本自动化 ETL。  \n- 运行 SageMaker 实例成本较高，不适合这种定期批处理场景。  \n\n**[C] S3 事件触发 Lambda，Lambda 启动 Glue 作业，用 Glue 合并数据并写回 S3**  \n- S3 事件能及时触发处理。  \n- Lambda 只做作业调度，成本极低。  \n- Glue 是无服务器 Spark，按执行时间计费，适合这种 30–60 分钟的任务，且能直接读取 Athena 表（Glue 数据目录）。  \n- 整体架构简单、按需运行、成本可控。  \n\n**[D] 用 Amazon Redshift 集群**  \n- 需要长期运行或按需启动 Redshift 集群。  \n- 即使使用 RA3 按需节点，成本也比 Glue 高很多，因为需要启动集群、加载数据、运行查询、再卸载到 S3。  \n- 对于一次性或定期 ETL 任务，用 Redshift 作为计算引擎过大材小用，不划算。  \n\n---\n\n**结论：**  \nC 选项利用事件驱动 + 无服务器 Glue，既满足时间要求，又最节省成本，因此是最佳答案。  \n\n**最终答案：C** ✅"
+    },
+    "answer": "C",
+    "o_id": "289"
+  },
+  {
+    "id": "334",
+    "question": {
+      "enus": "A cybersecurity company is collecting on-premises server logs, mobile app logs, and IoT sensor data. The company backs up the ingested data in an Amazon S3 bucket and sends the ingested data to Amazon OpenSearch Service for further analysis. Currently, the company has a custom ingestion pipeline that is running on Amazon EC2 instances. The company needs to implement a new serverless ingestion pipeline that can automatically scale to handle sudden changes in the data flow. Which solution will meet these requirements MOST cost-effectively? ",
+      "zhcn": "一家网络安全公司正在采集本地服务器日志、移动应用日志及物联网传感器数据。该公司将采集的数据备份至Amazon S3存储桶，并传送至亚马逊OpenSearch服务进行深度分析。当前其采用的自定义数据摄取管道运行于Amazon EC2实例之上。现需构建一套全新的无服务器数据摄取管道，该管道需具备自动扩展能力以应对数据流的突发波动。在满足这些需求的前提下，何种解决方案能实现最优成本效益？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "创建两条亚马逊数据火线（Amazon Data Firehose）传输流，用于将数据分别传送至S3存储桶与OpenSearch服务。配置数据源以使其向这两条传输流发送数据。",
+          "enus": "Create two Amazon Data Firehose delivery streams to send data to the S3 bucket and OpenSearch Service. Configure the data sources to send data to the delivery streams."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一条Amazon Kinesis Data Streams。  \n设立两条Amazon Data Firehose传输流，分别将数据传送至S3存储桶与OpenSearch服务。  \n将两条传输流与数据流建立连接。  \n配置各数据源，使其向数据流持续输送数据。",
+          "enus": "Create one Amazon Kinesis data stream. Create two Amazon Data Firehose delivery streams to send data to the S3 bucket and OpenSearch Service. Connect the delivery streams to the data stream. Configure the data sources to send data to the data stream."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一条亚马逊数据火线（Amazon Data Firehose）传输流，将数据传送至OpenSearch服务。配置该传输流时，需将原始数据备份至S3存储桶。同时设置数据源，使其能够向传输流发送数据。",
+          "enus": "Create one Amazon Data Firehose delivery stream to send data to OpenSearch Service. Configure the delivery stream to back up the raw data to the S3 bucket. Configure the data sources to send data to the delivery stream."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "创建一条Amazon Kinesis Data Streams。建立一条Amazon Data Firehose传输流，将数据发送至OpenSearch Service。配置该传输流将数据备份至S3存储桶。把传输流与数据流相连接。配置数据源使其向数据流发送数据。",
+          "enus": "Create one Amazon Kinesis data stream. Create one Amazon Data Firehose delivery stream to send data to OpenSearch Service. Configure the delivery stream to back up the data to the S3 bucket. Connect the delivery stream to the data stream. Configure the data sources to send data to the data stream."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**创建一条 Amazon Data Firehose 数据传输流，将数据发送至 OpenSearch Service。配置该传输流将原始数据备份至 S3 存储桶，并配置数据源向传输流发送数据。**  \n\n### 解析  \n题目要求构建一个**无需服务器、可扩展且成本效益高**的数据摄取管道，将数据发送至 Amazon OpenSearch Service 并同时将原始数据备份至 Amazon S3。  \n\n**正解依据：**  \n- **单条 Firehose 流兼顾 S3 备份**：Amazon Data Firehose 可在同一传输流中直接将数据送达 OpenSearch Service，并同步将原始数据完整备份至 S3。  \n- **成本效益**：相比使用多条传输流或不必要地添加 Kinesis 数据流，单条 Firehose 流能最大限度节约资源与成本。  \n- **无服务器架构与自动扩展**：Firehose 为全托管服务，无需部署 EC2 实例即可自动扩展。  \n\n**错误选项辨析：**  \n- **双 Firehose 流方案**：单条 Firehose 流已能同时实现 S3 备份和 OpenSearch 投递，采用双流会导致冗余摄取并推高成本，却无实际增益。  \n- **添加 Kinesis 数据流**：Kinesis 适用于实时处理或多消费者场景，但本题需求仅通过 Firehose 即可满足。额外添加 Kinesis 会徒增复杂性与成本。  \n\n**常见误区：** 在单条 Firehose 流已满足全部需求的情况下，过度设计架构（如添加 Kinesis 或多条传输流）反而会偏离成本最优原则。",
+      "zhcn": "我们来逐步分析这道题。  \n\n---\n\n## 1. 题目关键信息\n\n- **数据来源**：on-premises server logs, mobile app logs, IoT sensor data  \n- **当前架构**：数据备份到 S3，同时送到 OpenSearch Service，使用 EC2 上自定义的采集管道  \n- **新要求**：  \n  - Serverless（无服务器）  \n  - 自动扩展以应对流量突发  \n  - **最节省成本**  \n\n---\n\n## 2. 选项分析\n\n### [A]  \n两个 Firehose 分别送到 S3 和 OpenSearch，数据源直接发送到两个 Firehose。  \n- 问题：数据源需要发送两次（双倍传输成本和处理量），不高效，也不符合“一条管道”的简洁设计。  \n- 成本：较高（两个 Firehose 分别处理相同数据，Firehose 按数据量收费）。\n\n---\n\n### [B]  \nKinesis Data Stream（KDS）作为接收端，两个 Firehose 从 KDS 读取并分别送到 S3 和 OpenSearch。  \n- 架构可行，但引入了 KDS（按 shard 小时收费 + PUT 负载费用），即使没有数据也要为 shard 付费。  \n- 比纯 Firehose 方案贵，因为 KDS 是持续计费的，而题目没有要求实时流处理或多个消费者。\n\n---\n\n### [C]  \n一个 Firehose 直接送到 OpenSearch，并设置备份到 S3（S3 backup 是 Firehose 内置功能）。  \n- 数据源直接发送到 Firehose，Firehose 自动备份原始数据到 S3 并转换后送 OpenSearch。  \n- 只需要一个 Firehose，无 KDS 额外成本，serverless，自动扩展。  \n- 最简洁且满足所有需求。\n\n---\n\n### [D]  \nKDS + 一个 Firehose（送到 OpenSearch 并备份到 S3）。  \n- 比 [C] 多了一个 KDS，成本更高，没有额外好处（因为 Firehose 可以直接接收数据源的数据，除非需要多个消费者或更长时间的数据保留在流中）。\n\n---\n\n## 3. 为什么选 C\n\n题目要求 **most cost-effectively**，同时满足 serverless 和自动扩展。  \n- Firehose 直接接收数据（支持直送 OpenSearch 并备份到 S3）是最省钱的，没有持续运行的 shard 费用。  \n- 不需要 Kinesis Data Stream 的实时流处理能力时，跳过 KDS 可节省大量成本。  \n- 选项 C 用一个 Firehose 完成两个目标（备份 + 推送 OpenSearch），数据源只需发送一次。\n\n---\n\n**最终答案：**  \n**[C]** ✅"
+    },
+    "answer": "C",
+    "o_id": "334"
+  },
+  {
+    "id": "348",
+    "question": {
+      "enus": "A company is building a predictive maintenance system using real-time data from devices on remote sites. There is no AWS Direct Connect connection or VPN connection between the sites and the company's VPC. The data needs to be ingested in real time from the devices into Amazon S3. Transformation is needed to convert the raw data into clean .csv data to be fed into the machine learning (ML) model. The transformation needs to happen during the ingestion process. When transformation fails, the records need to be stored in a specific location in Amazon S3 for human review. The raw data before transformation also needs to be stored in Amazon S3. How should an ML specialist architect the solution to meet these requirements with the LEAST effort? ",
+      "zhcn": "某公司正基于远程站点设备采集的实时数据构建预测性维护系统。站点与公司虚拟私有云（VPC）之间未配置AWS Direct Connect专线或VPN连接。需将设备生成的原始数据实时摄取至Amazon S3存储服务，并在数据注入过程中完成格式转换，将其处理为可供机器学习模型使用的规整CSV格式。若转换失败，相关记录需存储至Amazon S3的指定路径供人工核查，且转换前的原始数据也需保留在Amazon S3中。机器学习架构师应如何以最小工作量设计满足上述需求的解决方案？"
+    },
+    "option": [
+      {
+        "option_text": {
+          "zhcn": "将Amazon Data Firehose与Amazon S3搭配使用，并以后者作为数据目的地。配置Firehose调用AWS Lambda函数实现数据格式转换，同时启用Firehose的源记录备份功能。",
+          "enus": "Use Amazon Data Firehose with Amazon S3 as the destination. Configure Firehose to invoke an AWS Lambda function for data transformation. Enable source record backup on Firehose."
+        },
+        "option_flag": true
+      },
+      {
+        "option_text": {
+          "zhcn": "采用Amazon Managed Streaming for Apache Kafka（全托管式Apache Kafka服务），在Amazon Elastic Container Service（亚马逊弹性容器服务，简称Amazon ECS）中部署工作节点，将数据从Kafka代理实时传输至Amazon S3存储服务，并在此过程中完成数据格式转换。需配置工作节点，将原始数据与转换失败的数据分别存储至不同的S3存储桶中。",
+          "enus": "Use Amazon Managed Streaming for Apache Kafka. Set up workers in Amazon Elastic Container Service (Amazon ECS) to move data from Kafka brokers to Amazon S3 while transforming it. Configure workers to store raw and unsuccessfully transformed data in different S3 buckets."
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "以Amazon S3为目标端配置Amazon Data Firehose服务，设定Firehose调用AWS Glue中的Apache Spark作业进行数据转换。启用源数据记录备份功能并配置错误日志存储路径。",
+          "enus": "Use Amazon Data Firehose with Amazon S3 as the destination. Configure Firehose to invoke an Apache Spark job in AWS Glue for data transformation. Enable source record backup and configure the error prefix. "
+        },
+        "option_flag": false
+      },
+      {
+        "option_text": {
+          "zhcn": "在Amazon Data Firehose前接入Amazon Kinesis Data Streams，通过Kinesis数据流与AWS Lambda的协同运作，将原始数据存储至Amazon S3。同时配置Firehose服务，使其调用Lambda函数进行数据转换处理，并以Amazon S3作为最终存储目的地。",
+          "enus": "Use Amazon Kinesis Data Streams in front of Amazon Data Firehose. Use Kinesis Data Streams with AWS Lambda to store raw data in Amazon S3. Configure Firehose to invoke a Lambda function for data transformation with Amazon S3 as the destination."
+        },
+        "option_flag": false
+      }
+    ],
+    "analysis": {
+      "enus": "正确答案是：**使用 Amazon Data Firehose 并选择 Amazon S3 作为目的地。配置 Firehose 调用 AWS Lambda 函数进行数据转换，同时启用 Firehose 的源数据备份功能**。这一方案能以最小成本满足所有需求，原因在于：  \n- **Amazon Kinesis Data Firehose** 可直接将实时数据摄入 Amazon S3，无需配置 VPN 或 Direct Connect；  \n- 通过 **Lambda 数据转换**功能，Firehose 能在数据摄入过程中自动将其转换为规整的 CSV 格式；  \n- **源数据备份**机制会在转换前将原始数据自动保存至 S3；  \n- 转换失败的数据会由 Firehose 自动输出至指定 S3 路径，无需额外编写错误处理逻辑。  \n\n**其他选项不适用的原因如下：**  \n- **Kafka + ECS 方案**需自行管理集群、代理与定制代码，反而在完全托管服务的基础上增加了复杂度；  \n- **Firehose + AWS Glue** 方案过于繁重——Glue 专为批处理 ETL 设计，若用于实时转换会引入延迟与冗余操作；  \n- **Kinesis Data Streams + Firehose + Lambda** 会导致原始数据被重复存储，且操作流程冗余——仅 Firehose 即可原生支持原始数据备份与转换。  \n\n当前方案通过充分发挥 Firehose 内置的转换、错误处理与原始数据备份功能，在单一托管服务中实现了运维成本最小化。",
+      "zhcn": "我们先梳理一下题目中的关键需求：  \n\n1. **实时数据从远程设备到 Amazon S3**  \n2. **在传输过程中做数据转换**（raw → clean CSV）  \n3. **转换失败的数据要存到 S3 特定位置供人工检查**  \n4. **原始数据也要保存到 S3**  \n5. **站点与 VPC 之间没有 Direct Connect 或 VPN**（意味着要走公网或 Internet 可访问的 AWS 服务入口）  \n6. **用最少精力实现**  \n\n---\n\n### 选项分析  \n\n**[A] Amazon Kinesis Data Firehose + Lambda 做转换 + 开启源数据备份**  \n- Firehose 可以直接从公网接收数据（HTTP 端点或 SDK）  \n- Lambda 可以在传输中转换数据  \n- 开启 “Source record backup” 可以把原始数据自动存到 S3（满足原始数据保存）  \n- 如果 Lambda 转换失败，Firehose 会自动将出错的记录投递到配置的错误前缀（满足失败数据单独存放）  \n- 无需管理服务器，完全托管  \n\n**[B] Amazon MSK + ECS workers**  \n- MSK 通常放在 VPC 内，从公网访问需要设置公开访问或代理，复杂  \n- 需要自己写 ECS worker 处理数据，管理集群、伸缩、容错，精力成本高  \n- 能实现需求，但显然不是最少精力  \n\n**[C] Firehose + AWS Glue（Spark 作业）做转换**  \n- Firehose 支持调用 Glue 做 ETL，但 Glue 是异步批处理，不适合实时逐条或微批处理（通常用于较大的批次，延迟较高）  \n- 不适合“实时转换”场景，且配置比 Lambda 复杂  \n- 虽然也能设置错误前缀和源数据备份，但方案不适合实时  \n\n**[D] Kinesis Data Streams + Firehose + Lambda**  \n- 先到 Kinesis Data Streams，再用 Lambda 存原始数据到 S3，同时用 Firehose 做转换和导入  \n- 这引入了额外的 Kinesis Data Streams，需要管理分片、容量等  \n- 比 A 方案复杂，因为 A 中 Firehose 本身可以同时存原始数据（备份）和转换后数据，不需要额外 Kinesis Streams  \n\n---\n\n### 结论  \n**A** 方案完全利用 Firehose 内置功能：  \n- 公网接收数据  \n- Lambda 实时转换  \n- 源数据备份（原始数据保存）  \n- 错误记录自动分离到错误路径  \n- 全托管，最少运维  \n\n题目问 **least effort**，所以 **A** 是最佳答案。  \n\n---\n\n**答案：A** ✅"
+    },
+    "answer": "A",
+    "o_id": "348"
+  }
+]

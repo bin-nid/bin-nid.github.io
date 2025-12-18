@@ -4827,7 +4827,7 @@
           "zhcn": "✑ 使用Amazon EMR进行数据发现、数据丰富与转换\n\n✑ 通过Amazon Athena，使用标准SQL查询和分析Amazon S3中的数据结果\n\n✑ 利用Amazon QuickSight生成报告并获取数据洞察",
           "enus": "✑ Amazon EMR for data discovery, enrichment, and transformation\n\n✑ Amazon Athena for querying and analyzing the results in Amazon S3 using standard SQL\n\n✑ Amazon QuickSight for reporting and getting insights"
         },
-        "option_flag": true
+        "option_flag": false
       },
       {
         "option_text": {
@@ -4841,7 +4841,7 @@
           "zhcn": "✑ AWS Glue 用于数据发现、数据丰富与转换\n\n✑ Amazon Athena 支持通过标准 SQL 在 Amazon S3 中查询与分析数据结果\n\n✑ Amazon QuickSight 用于生成报告与获取数据洞察",
           "enus": "✑ AWS Glue for data discovery, enrichment, and transformation\n\n✑ Amazon Athena for querying and analyzing the results in Amazon S3 using standard SQL\n\n✑ Amazon QuickSight for reporting and getting insights"
         },
-        "option_flag": false
+        "option_flag": true
       },
       {
         "option_text": {
@@ -4855,7 +4855,7 @@
       "enus": "",
       "zhcn": "我们来逐项分析题目要求：  \n\n**题目关键点**  \n- 数据格式多样、schema 经常变化、新数据源频繁增加  \n- 需要数据发现、推荐 schema、数据丰富与转换  \n- 要求代码量最少、基础设施管理最少  \n\n---\n\n### 选项分析\n\n**A**  \n- **Amazon EMR**：用于数据发现、丰富和转换。  \n  - EMR 是 Hadoop/Spark 集群，需要一定配置和集群管理，代码量相对较多（需要写 Spark 作业等），基础设施管理比无服务器方案多。  \n  - 不符合“最少基础设施管理”的要求。  \n\n**B**  \n- **Kinesis Data Analytics**：主要用于流数据，这里没有强调实时流。  \n- **EMR** 同上有管理负担。  \n- **Redshift** 用于查询 S3 数据（通过 Redshift Spectrum）但比 Athena 更重，需要维护集群。  \n- 整体偏向复杂管理，不符合“快速、最少代码/管理”。  \n\n**C**  \n- **AWS Glue**：无服务器，自动发现数据、推荐 schema（Glue Data Catalog Crawler）、做 ETL（Glue Jobs 或现在有 Glue Studio 可视化），代码量少。  \n- **Athena**：无服务器查询 S3。  \n- **QuickSight**：可视化。  \n- 完全无服务器，基础设施管理最少，适合 schema 变化、新增数据源的情况。  \n\n**D**  \n- **AWS Data Pipeline** + **Step Functions** + **Lambda**：  \n  - 需要自己编排 Lambda 函数做数据处理，代码和配置工作多，不符合“最少代码”。  \n  - 比 Glue 管理更复杂。  \n\n---\n\n### 为什么参考答案可能是 A 但实际应选 C\n\n从 AWS 最佳实践来看，题目描述的场景（数据发现、schema 推断、数据丰富转换、最少代码和管理）正是 **AWS Glue** 的设计目标，而不是 EMR。  \nEMR 适合需要高度自定义、大规模、复杂计算且对性能有要求的场景，但管理负担大。  \n\n可能原题给的“参考答案 A”有误，或者题目早期版本中 Glue 未推出时 EMR 是方案，但现在 Glue 更符合。  \n\n在 AWS 认证考试中，这类题的标准答案是 **C**。  \n\n---\n\n**最终答案：C** ✅"
     },
-    "answer": "A",
+    "answer": "C",
     "o_id": "132"
   },
   {
@@ -10937,7 +10937,7 @@
       },
       {
         "option_text": {
-          "zhcn": "通过自动模型调优（AMT）对csv_weight超参数与scale_pos_weight超参数进行调校。优化目标设定为：{\"HyperParameterTuningJobObjective\": {\"MetricName\": \"validation'll\", \"Type\": \"Maximize\"}}。",
+          "zhcn": "通过自动模型调优（AMT）对csv_weight超参数与scale_pos_weight超参数进行调校。优化目标设定为：{\"HyperParameterTuningJobObjective\": {\"MetricName\": \"validation:f1\", \"Type\": \"Maximize\"}}。",
           "enus": "Tune the csv_weight hyperparameter and the scale_pos_weight hyperparameter by using automatic model tuning (AMT). Optimize on  {\"HyperParameterTuningJobObjective\": {\"MetricName\": \"validation:f1\", \"Type\": \"Maximize\"}}."
         },
         "option_flag": true
